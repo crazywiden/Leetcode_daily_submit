@@ -19,7 +19,7 @@ queries = [ ["a", "c"], ["b", "a"], ["a", "e"], ["a", "a"], ["x", "x"] ].
 
 
 # best part of this problem is to transform this problem to a graph problem
-# use Union Find -- 
+# use Union Find -- also create a dictionary to perform union and find, which is genius
 # reference: https://zxi.mytechroad.com/blog/graph/leetcode-399-evaluate-division/
 class Solution:
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
@@ -55,4 +55,4 @@ class Solution:
                 UnionFindDict[y_parent] = (x_parent, x_val/(y_val * val))
         res = [divide(x, y) if x in UnionFindDict and y in UnionFindDict else -1 for x, y in queries]
         return res
-        
+
