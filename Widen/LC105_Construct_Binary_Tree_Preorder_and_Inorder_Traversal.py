@@ -1,5 +1,6 @@
 """
 LC105 -- Construct Binary Tree from Preorder and Inorder Traversal
+This quesition was asked in ThoughtSpot screen interview
 Given preorder and inorder traversal of a tree, construct the binary tree.
 
 Note:
@@ -58,40 +59,26 @@ class Solution:
 
 
 
-# method 2 --  use dictionary to speed up
-class Solution:
-    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
-        pindex2index = {x:i for i, x in enumerate(inorder)}
-        self.pindex = 0
-        return self.helper(preorder, inorder, 0, len(preorder) - 1, pindex2index)
-    
-    def helper(self, preorder, inorder, start, end, mapping):
-        if start > end:
-            return None
+# method 2 
+# used two tricks:
+# 1. use hash map to speed up search efficiency
+# 2. use iter/next to simplify code
+
+class Solution(object):
+    def buildTree(self, preorder, inorder):
+        l = len(inorder)
+        inor_dict = {i:idx for idx, i in enumerate(inorder)}
+        pre_iter = iter(preorder)
         
-        to_ret = TreeNode(preorder[self.pindex])
-        
-        old_pindex = self.pindex
-        
-        
-        left_start, left_end = start, mapping[preorder[old_pindex]] - 1
-        if left_start <= left_end:
-            self.pindex += 1
-            to_ret.left = self.helper(preorder, inorder,
-                                      left_start, left_end, mapping)
-        else:
-            to_ret.left = None
-        
-        right_start, right_end = mapping[preorder[old_pindex]] + 1, end
-        
-        if right_start <= right_end:
-            self.pindex += 1
-            to_ret.right = self.helper(preorder, inorder,
-                                   right_start, right_end, mapping)
-        else:
-            to_ret.right = None
-        
-        return to_ret
+        def helper(start, end):
+            if start > end: 
+                return None
+            num = next(pre_iter)
+            root = TreeNode(num)
+            idx = inor_dict[num]
+            root.left = helper(start, idx)
+            root.right = helper(idx+1, end)
+        return helper(0, l-1)
 
 
 
