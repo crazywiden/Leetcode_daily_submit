@@ -16,3 +16,43 @@ equations = [ ["a", "b"], ["b", "c"] ],
 values = [2.0, 3.0],
 queries = [ ["a", "c"], ["b", "a"], ["a", "e"], ["a", "a"], ["x", "x"] ]. 
 """
+
+
+# best part of this problem is to transform this problem to a graph problem
+# use Union Find -- 
+# reference: https://zxi.mytechroad.com/blog/graph/leetcode-399-evaluate-division/
+class Solution:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        def find(node):
+            if node != UnionFindDict[node][0]:
+                parent, val = find(UnionFindDict[node][0])
+                UnionFindDict[node] = (parent, val * UnionFindDict[node][1])
+            return UnionFindDict[node]
+        
+        def divide(node1, node2):
+            parent1, val1 = find(node1)
+            parent2, val2 = find(node2)
+            if parent1 != parent2:
+                return -1
+            return val1/val2
+            
+        # each key is a node
+        # each value is a tuple
+        #   value[0] is parent of this node
+        #   value[1] is the distance from child to parent
+        UnionFindDict = {}
+        for (child, parent), val in zip(equations, values):
+            if (child not in UnionFindDict) and (parent not in UnionFindDict):
+                UnionFindDict[child] = (parent, val)
+                UnionFindDict[parent] = (parent, 1.0)
+            elif child not in UnionFindDict:
+                UnionFindDict[child] = (parent, val)
+            elif parent not in UnionFindDict:
+                UnionFindDict[parent] = (child, 1.0/val)
+            else: # perform union find
+                x_parent, x_val = find(child)
+                y_parent, y_val = find(parent)
+                UnionFindDict[y_parent] = (x_parent, x_val/(y_val * val))
+        res = [divide(x, y) if x in UnionFindDict and y in UnionFindDict else -1 for x, y in queries]
+        return res
+        
