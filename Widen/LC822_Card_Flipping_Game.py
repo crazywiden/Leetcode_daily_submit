@@ -47,8 +47,23 @@ class Solution:
            
 
 # method 2
-# Runtime: 152 ms, faster than 20.97% of Python3 online submissions for Card Flipping Game.
-# Memory Usage: 13.9 MB, less than 100.00% of Python3 online submissions for Card Flipping Game.
+# same algorithm but way faster and neat!!
+# programming is a long way to go
+class Solution:
+    def flipgame(self, fronts: List[int], backs: List[int]) -> int:
+        
+        
+        # solution 1: lee215
+        # runtime:
+        """
+        If fronts[i] == backs[i], it means that fronts[i] is sure to appear on the table, no matter how we flap this card.
+        In case that fronts[i] and backs[i] are same, fronts[i] become impossible to be good number, so I add it to a set same.
 
+        If fronts[i] != backs[i], we can always hide either number by flapping it to back.
 
+        Then loop on all numbers and return the minimum.
+        """
+        same = {x for x, y in zip(fronts, backs) if x == y}
+        
+        return min([i for i in fronts + backs if i not in same] or [0])
 
