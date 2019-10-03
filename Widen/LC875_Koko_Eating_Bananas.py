@@ -29,7 +29,7 @@ Output: 23
 # Memory Usage: 15 MB, less than 11.11% of Python3 online submissions for Koko Eating Bananas.
 
 class Solution:
-    def minEatingSpeed(self, piles: List[int], H: int) -> int:
+    def minEatingSpeed(self, piles, H) -> int:
         def check_feasible(K):
             return sum([1 + (p-1)//K for p in piles]) <= H
         low, high = 1, max(piles)
@@ -40,3 +40,4 @@ class Solution:
             else:
                 low = mid + 1
         return low
+
