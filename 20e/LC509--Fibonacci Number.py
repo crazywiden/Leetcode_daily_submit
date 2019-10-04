@@ -1,5 +1,5 @@
 '''
-Time complexity: O(2^n),888 ms,27.27%？
+Time complexity: O(2^n),888 ms,27.27%
 Space complexity: O(n),13.8 MB,5.54%
 '''
 #method1: recursion
@@ -12,7 +12,7 @@ class Solution:
 
 '''
 Time complexity: O(n),40 ms,94.57%
-Space complexity: O(n),13.7 MB,5.54%
+Space complexity: O(1),13.7 MB,5.54%
 '''
 #method2: iteration(matrix calculation)
 class Solution:
