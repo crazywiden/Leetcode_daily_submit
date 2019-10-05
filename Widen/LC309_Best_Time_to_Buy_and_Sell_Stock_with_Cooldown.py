@@ -15,7 +15,7 @@ Explanation: transactions = [buy, sell, cooldown, buy, sell]
 # method -- use two array to do dp, very clever
 # reference: https://www.cnblogs.com/lightwindy/p/8532035.html
 # time complexity - O(N)
-# space complexity - 0(N) we can further modify this to make it O(1)
+# space complexity - 0(1)
 # Runtime: 44 ms, faster than 87.66% of Python3 online submissions for Best Time to Buy and Sell Stock with Cooldown.
 # Memory Usage: 14 MB, less than 13.64% of Python3 online submissions for Best Time to Buy and Sell Stock with Cooldown.
 class Solution:
