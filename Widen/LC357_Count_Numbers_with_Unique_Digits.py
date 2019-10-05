@@ -13,6 +13,8 @@ Explanation: The answer should be the total numbers in the range of 0 ≤ x < 10
 # Runtime: 32 ms, faster than 88.89% of Python3 online submissions for Count Numbers with Unique Digits.
 # Memory Usage: 13.9 MB, less than 50.00% of Python3 online submissions for Count Numbers with Unique Digits.
 
+
+
 class Solution:
     def countNumbersWithUniqueDigits(self, n: int) -> int:
         if n == 0:
