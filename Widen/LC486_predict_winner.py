@@ -79,3 +79,14 @@ class Solution:
         dp = [[-1 for _ in range(len(nums))] for _ in range(len(nums))]
         final_score = helper(0, len(nums)-1)
         return final_score*2 >= sum(nums)
+
+
+# so brilliant idea!!
+# https://leetcode.com/problems/predict-the-winner/discuss/96832/c-dp-solution-with-explanation
+# need a lot of math derivation... definitely can't think of in a short time period
+
+
+
+
+
+
