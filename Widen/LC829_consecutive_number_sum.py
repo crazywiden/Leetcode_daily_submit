@@ -58,6 +58,13 @@ class Solution:
 
 
 
+
+# not figure it out now...
+# If N = i * j, then we want to find i consecutive numbers with average j
+# For example, 15 = 3 * 5, then 4 + 5 + 6, 3 numbers with average 5; 
+# and 15 = 5 * 3, then 1 + 2 + 3 + 4 + 5, 5 numbers with average 3
+# But one constraint is that i must be odd, since if i is even k + 1, k + 2, ... k + i. 
+# The average = (ik + (1 + i)*i/2) / i = k + (1 + i) / 2, cannot be an integer.
 class Solution:
     def consecutiveNumbersSum(self, N: int) -> int:
         if N == 1: 
