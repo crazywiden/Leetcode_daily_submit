@@ -23,7 +23,8 @@ Input: N = 21, K = 17, W = 10
 Output: 0.73278
 """
 
-# dp with memory fails...
+# dp with memory fails... TLE 
+
 # now I am familar with dfs with memory, but still need to work more on dp
 # Runtime: 88 ms, faster than 63.41% of Python3 online submissions for New 21 Game.
 # Memory Usage: 14 MB, less than 100.00% of Python3 online submissions for New 21 Game.
@@ -32,7 +33,7 @@ class Solution:
         # Write your code here.
         if K == 0 or N >= K + W: 
             return 1.0
-        dp = [1.0] + [0.0] * N
+        dp = [1.0] + [0.0] * N  # dp[i] is the probabilty to get i point
         Wsum = 1.0
         for i in range(1, N + 1):
             dp[i] = Wsum / W
