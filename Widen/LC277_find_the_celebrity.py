@@ -47,6 +47,29 @@ class Solution(object):
                 return celebrity
         return -1
                         
-                
+
+# method 2 -- reference :https://www.cnblogs.com/grandyang/p/5310649.html
+# soooo smart!! why can't I think of this
+# Runtime: 1152 ms, faster than 97.52% of Python online submissions for Find the Celebrity.
+# Memory Usage: 11.9 MB, less than 43.33% of Python online submissions for Find the Celebrity.
+
+class Solution(object):
+    def findCelebrity(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        res = 0
+        for i in range(n):
+            if knows(res, i):
+                res = i
+        for i in range(res):
+            if (knows(res, i)) or (not knows(i, res)):
+                return -1
+        for i in range(res+1, n):
+            if (not knows(i, res)):
+                return -1
+        return res
+                        
         
         
