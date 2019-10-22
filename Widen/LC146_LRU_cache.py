@@ -11,6 +11,11 @@ Follow up:
 Could you do both operations in O(1) time complexity?
 """
 
+# method 1 -- use a dictionary to mimic a two-directional queue...
+# used mutable head and tail... so much pain...
+# better use fixed head and tail
+# Runtime: 248 ms, faster than 41.66% of Python3 online submissions for LRU Cache.
+# Memory Usage: 22.7 MB, less than 6.06% of Python3 online submissions for LRU Cache.
 class LRUCache:
 
     def __init__(self, capacity: int):
@@ -19,22 +24,22 @@ class LRUCache:
         self.head = -1
         self.tail = -1
         self.len = 0
-    
+        self.counter = 1
     def update_to_end(self, key):
         # update previous node and post node
         if self.hash_queue[key][1] != -1:
             prev = self.hash_queue[key][1]
             self.hash_queue[prev][2] = self.hash_queue[key][2]
+        else:
+            self.head = self.hash_queue[key][2]
         if self.hash_queue[key][2] != -1:
             post = self.hash_queue[key][2]
             self.hash_queue[post][1] = self.hash_queue[key][1]
             
         self.hash_queue[self.tail][2] = key
         self.hash_queue[key][1] = self.tail
-        self.head = self.hash_queue[key][2]
         self.hash_queue[key][2] = -1
         self.tail = key
-        
         
     def get(self, key: int) -> int:
         if key not in self.hash_queue:
@@ -49,23 +54,26 @@ class LRUCache:
     def put(self, key: int, value: int) -> None:
         if key in self.hash_queue:
             self.hash_queue[key][0] = value
-            if self.hash_queue[key][2] != -1:
+            if key != self.tail:
                 self.update_to_end(key)
         else:
             if self.len >= self.capacity:
                 first_ele = self.hash_queue.pop(self.head)
+                assert first_ele[1] == -1, "not head"
                 second_ele = first_ele[2]
                 if second_ele != -1:
                     self.hash_queue[second_ele][1] = -1
                 self.head = second_ele
                 self.len -= 1
+                
             if self.len == 0:
-            	self.tail = -1
+                self.tail = -1
             
             self.hash_queue[key] = [value, -1, -1]
             self.hash_queue[key][1] = self.tail
-            if self.tail != -1:
+            if self.len != 0:
                 self.hash_queue[self.tail][2] = key
+                self.hash_queue[key][2] = -1
             else:
                 self.head = key
             self.tail = key
