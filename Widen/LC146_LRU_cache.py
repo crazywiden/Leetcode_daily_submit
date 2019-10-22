@@ -15,81 +15,74 @@ class LRUCache:
 
     def __init__(self, capacity: int):
         self.capacity = capacity
-        # key is key
-        # value is at tuple. value[0] -- value, value[1] -- prev key, value[2] -- post key
-        self.hash = dict()
+        self.hash_queue = {}
         self.head = -1
         self.tail = -1
         self.len = 0
-
-    def get(self, key: int) -> int:
-        if key not in self.hash:
-            return -1
-        ele = self.hash[key]
-        prev, post = ele[1], ele[2]
-        
-        if prev != -1:
-            self.hash[prev][2] = post
-        if post != -1:
-            self.hash[post][1] = prev
+    
+    def update_to_end(self, key):
+        # update previous node and post node
+        if self.hash_queue[key][1] != -1:
+            prev = self.hash_queue[key][1]
+            self.hash_queue[prev][2] = self.hash_queue[key][2]
+        if self.hash_queue[key][2] != -1:
+            post = self.hash_queue[key][2]
+            self.hash_queue[post][1] = self.hash_queue[key][1]
             
-        self.hash[key][1] = self.tail
-        self.hash[key][2] = -1
-        return ele[0]
+        self.hash_queue[self.tail][2] = key
+        self.hash_queue[key][1] = self.tail
+        self.head = self.hash_queue[key][2]
+        self.hash_queue[key][2] = -1
+        self.tail = key
+        
+        
+    def get(self, key: int) -> int:
+        if key not in self.hash_queue:
+            return -1
+        
+        if key == self.tail:
+            return self.hash_queue[key][0]
+        
+        self.update_to_end(key)
+        return self.hash_queue[key][0]
 
     def put(self, key: int, value: int) -> None:
-        if self.len >= self.capacity:
-            head = self.hash.pop(self.head)
-            self.head = head[2]
-            self.len -= 1
-        if key not in self.hash:
-            self.hash[key] = [-1, -1, -1]
+        if key in self.hash_queue:
+            self.hash_queue[key][0] = value
+            if self.hash_queue[key][2] != -1:
+                self.update_to_end(key)
+        else:
+            if self.len >= self.capacity:
+                first_ele = self.hash_queue.pop(self.head)
+                second_ele = first_ele[2]
+                if second_ele != -1:
+                    self.hash_queue[second_ele][1] = -1
+                self.head = second_ele
+                self.len -= 1
+            if self.len == 0:
+            	self.tail = -1
             
-        self.hash[key][0] = value
-        self.hash[key][1] = self.tail
-        self.hash[key][2] = -1
-        self.tail = key
-        if self.len == 0:
-            self.head = key
-        if key not in self.hash:
+            self.hash_queue[key] = [value, -1, -1]
+            self.hash_queue[key][1] = self.tail
+            if self.tail != -1:
+                self.hash_queue[self.tail][2] = key
+            else:
+                self.head = key
+            self.tail = key
             self.len += 1
-
+        
+            
             
 
 # Your LRUCache object will be instantiated and called as such:
-# obj = LRUCache(capacity)
-# param_1 = obj.get(key)
-# obj.put(key,value)
+cache = LRUCache(1)
+cache.put(2, 1)
+cache.get(2)
+print(cache.hash_queue, cache.head, cache.tail)
+cache.put(3, 2)
+cache.get(2)
+cache.get(3)
 
-            
-
-# Your LRUCache object will be instantiated and called as such:
-# obj = LRUCache(capacity)
-# param_1 = obj.get(key)
-# obj.put(key,value)
-
-            
-
-# Your LRUCache object will be instantiated and called as such:
-# obj = LRUCache(capacity)
-# param_1 = obj.get(key)
-# obj.put(key,value)
-
-# Your LRUCache object will be instantiated and called as such:
-obj = LRUCache(2)
-obj.put(1,1)
-obj.put(2,2)
-print(obj.hash, obj.head, obj.tail)
-print(obj.get(1))
-print(obj.hash, obj.head, obj.tail)
-obj.put(3,3)
-print(obj.hash, obj.head, obj.tail)
-obj.put(4,4)
-print(obj.hash, obj.head, obj.tail)
-obj.get(1)
-print(obj.hash, obj.head, obj.tail)
-print(obj.get(3))
-print(obj.get(4))
 
 
 
