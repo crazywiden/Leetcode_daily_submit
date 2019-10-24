@@ -15,6 +15,7 @@ Output: 1
 
 # priority queue algorithm
 # need to study more about it
+# reference: https://blog.csdn.net/danspace1/article/details/86076499
 # Runtime: 52 ms, faster than 98.38% of Python online submissions for Meeting Rooms II.
 # Memory Usage: 15 MB, less than 100.00% of Python online submissions for Meeting Rooms II.
 class Solution(object):
