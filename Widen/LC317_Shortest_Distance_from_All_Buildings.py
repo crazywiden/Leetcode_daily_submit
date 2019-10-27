@@ -116,7 +116,11 @@ class Solution(object):
 # Runtime: 84 ms, faster than 81.91% of Python online submissions for Shortest Distance from All Buildings.
 # Memory Usage: 11.7 MB, less than 100.00% of Python online submissions for Shortest Distance from All Buildings.
 '''
-Use hit to record how many times a 0 grid has been reached and use distSum to record the sum of distance from all 1 grids to this 0 grid. A powerful pruning is that during the BFS we use count1 to count how many 1 grids we reached. If count1 < buildings then we know not all 1 grids are connected are we can return -1 immediately, which greatly improved speed (beat 100% submissions).
+Use hit to record how many times a 0 grid has been reached 
+and use distSum to record the sum of distance from all 1 grids to this 0 grid. 
+A powerful pruning is that during the BFS we use count1 to count how many 1 grids we reached. 
+If count1 < buildings then we know not all 1 grids are connected are we can return -1 immediately, 
+which greatly improved speed (beat 100% submissions).
 '''
 
 class Solution(object):
