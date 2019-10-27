@@ -10,7 +10,7 @@ Insert a character into s to get t
 Delete a character from s to get t
 Replace a character of s to get t
 Example 1:
-
+s
 Input: s = "ab", t = "acb"
 Output: true
 Explanation: We can insert 'c' into s to get t.
