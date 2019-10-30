@@ -35,6 +35,62 @@ class Solution:
         return abs(loc1[0] - loc2[0]) + abs(loc1[1] - loc2[1])
 
 
+# Hungarian without external package
+# sooooo impressive!
+# Runtime: 36 ms, faster than 100.00% of Python3 online submissions for Campus Bikes II.
+# Memory Usage: 13.9 MB, less than 100.00% of Python3 online submissions for Campus Bikes II.
+import heapq
+class Solution(object):
+    def hung(self,neighbs,used,usedBikes,match,i):
+        if i in used:
+            return False
+        used[i] = True
+        for neigh in neighbs[i]:
+            if neigh in usedBikes or neighbs[i][neigh]>0:
+                continue
+            usedBikes[neigh] = True
+            if neigh not in match or self.hung(neighbs,used,usedBikes,match,match[neigh]):
+                match[neigh] = i
+                return True
+        return False
+    def assignBikes(self, workers, bikes):
+        """
+        :type workers: List[List[int]]
+        :type bikes: List[List[int]]
+        :rtype: int
+        """
+        neighbs = {i:{} for i in xrange(len(workers))}
+        match,heap = {},[]
+        for i,worker in enumerate(workers):
+            minD = 3000
+            for j,bike in enumerate(bikes):
+                minD = min(minD,abs(worker[0]-bike[0])+abs(worker[1]-bike[1]))
+            for j,bike in enumerate(bikes):
+                neighbs[i][j] = abs(worker[0]-bike[0])+abs(worker[1]-bike[1])-minD
+        for i,worker in enumerate(workers):
+            while True:
+                used,usedBikes = {},{}
+                if self.hung(neighbs,used,usedBikes,match,i):
+                    break
+                minD = 3000
+                for j in used:
+                    for k in neighbs[j]:
+                        if neighbs[j][k]>0:
+                            if neighbs[j][k]<minD:
+                                minD = neighbs[j][k]
+                for j in xrange(len(workers)):
+                    for k in xrange(len(bikes)):
+                        if ((j in used)^(k in usedBikes)):
+                            if j in used:
+                                neighbs[j][k] -= minD
+                            else:
+                                neighbs[j][k] += minD
+        ans = 0
+        for j in match:
+            i = match[j]
+            ans += abs(workers[i][0]-bikes[j][0])+abs(workers[i][1]-bikes[j][1])
+        return ans
+
 # another dfs with memory
 # Runtime: 108 ms, faster than 92.67% of Python3 online submissions for Campus Bikes II.
 # Memory Usage: 14.5 MB, less than 25.00% of Python3 online submissions for Campus Bikes II.
@@ -64,6 +120,7 @@ class Solution:
             return mindis
         
         return dfs(0, bikes)
+
 
 # method -- dfs
 # TLE
