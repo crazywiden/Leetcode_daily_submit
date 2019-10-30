@@ -35,6 +35,35 @@ class Solution:
         return abs(loc1[0] - loc2[0]) + abs(loc1[1] - loc2[1])
 
 
+# another dfs with memory
+# Runtime: 108 ms, faster than 92.67% of Python3 online submissions for Campus Bikes II.
+# Memory Usage: 14.5 MB, less than 25.00% of Python3 online submissions for Campus Bikes II.
+import math
+class Solution:
+    def assignBikes(self, workers: List[List[int]], bikes: List[List[int]]) -> int:
+        def Manhattan(p1, p2):
+            return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+        # make the list to tuple so that its hashable
+        bikes = tuple(tuple(bike) for bike in bikes)
+        memo = {}
+        
+        def dfs(w, bikes):
+            if w == len(workers): 
+                return 0
+            if bikes in memo: 
+                return memo[bikes]
+            mindis = math.inf
+            
+            for b, bike in enumerate(bikes):
+                dis = Manhattan(workers[w], bike)
+                if dis < mindis:
+                    dis += dfs(w+1, bikes[:b] + bikes[b+1:])
+                    if dis < mindis:
+                        mindis = dis
+            memo[bikes] = mindis
+            return mindis
+        
+        return dfs(0, bikes)
 
 # method -- dfs
 # TLE
