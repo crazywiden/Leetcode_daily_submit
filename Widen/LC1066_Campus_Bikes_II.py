@@ -53,23 +53,25 @@ class Solution(object):
                 match[neigh] = i
                 return True
         return False
+
     def assignBikes(self, workers, bikes):
         """
         :type workers: List[List[int]]
         :type bikes: List[List[int]]
         :rtype: int
         """
-        neighbs = {i:{} for i in xrange(len(workers))}
-        match,heap = {},[]
-        for i,worker in enumerate(workers):
+        neighbs = {i:{} for i in range(len(workers))}
+        match,heap = {}, []
+        for i, worker in enumerate(workers):
             minD = 3000
-            for j,bike in enumerate(bikes):
-                minD = min(minD,abs(worker[0]-bike[0])+abs(worker[1]-bike[1]))
-            for j,bike in enumerate(bikes):
+            for j, bike in enumerate(bikes):
+                minD = min(minD, abs(worker[0]-bike[0])+abs(worker[1]-bike[1]))
+            for j, bike in enumerate(bikes):
                 neighbs[i][j] = abs(worker[0]-bike[0])+abs(worker[1]-bike[1])-minD
-        for i,worker in enumerate(workers):
+
+        for i, worker in enumerate(workers):
             while True:
-                used,usedBikes = {},{}
+                used, usedBikes = {}, {}
                 if self.hung(neighbs,used,usedBikes,match,i):
                     break
                 minD = 3000
@@ -78,9 +80,9 @@ class Solution(object):
                         if neighbs[j][k]>0:
                             if neighbs[j][k]<minD:
                                 minD = neighbs[j][k]
-                for j in xrange(len(workers)):
-                    for k in xrange(len(bikes)):
-                        if ((j in used)^(k in usedBikes)):
+                for j in range(len(workers)):
+                    for k in range(len(bikes)):
+                        if ((j in used) or (k in usedBikes)):
                             if j in used:
                                 neighbs[j][k] -= minD
                             else:
