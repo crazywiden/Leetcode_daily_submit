@@ -31,45 +31,45 @@ Explanation: The same letters are at least distance 2 from each other.
 # Runtime: 148 ms, faster than 35.69% of Python3 online submissions for Rearrange String k Distance Apart.
 # Memory Usage: 14.4 MB, less than 50.00% of Python3 online submissions for Rearrange String k Distance Apart.
 import heapq
-class Solution:
-    def rearrangeString(self, s: str, k: int) -> str:
-        if len(s) == 0:
-            return ""
-        if len(s) == 1:
-            return s
-        if k == 0:
-            return s
+# class Solution:
+#     def rearrangeString(self, s: str, k: int) -> str:
+#         if len(s) == 0:
+#             return ""
+#         if len(s) == 1:
+#             return s
+#         if k == 0:
+#             return s
         
-        freq = {}
-        for i in range(len(s)):
-            if s[i] not in freq:
-                freq[s[i]] = 1
-            else:
-                freq[s[i]] += 1
-        if len(freq) < k:
-            return ""
+#         freq = {}
+#         for i in range(len(s)):
+#             if s[i] not in freq:
+#                 freq[s[i]] = 1
+#             else:
+#                 freq[s[i]] += 1
+#         if len(freq) < k:
+#             return ""
         
-        freq_queue = [[-value, key] for key, value in freq.items()]
-        heapq.heapify(freq_queue)
-        ans = ""
-        is_final = False
-        while freq_queue:
-            if len(freq_queue) < k:
-                if is_final:
-                    return ""
-                else:
-                    is_final = True
-            new_ele = []
-            for i in range(min(k, len(freq_queue))):
-                ele = heapq.heappop(freq_queue)
-                new_ele.append(ele)
-            for i in range(len(new_ele)):
-                new_ele[i][0] += 1
-                ans += new_ele[i][1]
-                if new_ele[i][0] != 0:
-                    heapq.heappush(freq_queue, new_ele[i])
+#         freq_queue = [[-value, key] for key, value in freq.items()]
+#         heapq.heapify(freq_queue)
+#         ans = ""
+#         is_final = False
+#         while freq_queue:
+#             if len(freq_queue) < k:
+#                 if is_final:
+#                     return ""
+#                 else:
+#                     is_final = True
+#             new_ele = []
+#             for i in range(min(k, len(freq_queue))):
+#                 ele = heapq.heappop(freq_queue)
+#                 new_ele.append(ele)
+#             for i in range(len(new_ele)):
+#                 new_ele[i][0] += 1
+#                 ans += new_ele[i][1]
+#                 if new_ele[i][0] != 0:
+#                     heapq.heappush(freq_queue, new_ele[i])
                     
-        return ans
+#         return ans
 
 
 
@@ -99,4 +99,7 @@ class Solution:
                 if i >= n:
                     i = (i - 1) % k
         return "".join(res)
+
+
+
             
