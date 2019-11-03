@@ -67,4 +67,27 @@ class Solution:
             res += str(cnt)
         return res
 
+
+# backtracking with memo
+# Runtime: 168 ms, faster than 91.39% of Python3 online submissions for Generalized Abbreviation.
+# Memory Usage: 20.8 MB, less than 100.00% of Python3 online submissions for Generalized Abbreviation.
+class Solution:
+    def generateAbbreviations(self, word: str) -> List[str]:
+        memo = collections.defaultdict(list)
+        memo[''].append('')
+        def dfs(word):
+            if word in memo:
+                return memo[word]
+            
+            for suf in dfs(word[1:]):
+                memo[word].append(word[0] + suf)
+            
+            for i in range(1, len(word) + 1):
+                for suf in dfs(word[i:]):
+                    if not suf or suf[0] not in '123456789':
+                        memo[word].append(str(i) + suf)
+                        
+            return memo[word]
+        return dfs(word)
+
             
