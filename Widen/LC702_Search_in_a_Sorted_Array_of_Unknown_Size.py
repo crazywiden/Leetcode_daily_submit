@@ -6,8 +6,8 @@ You may assume all integers in the array are less than 10000, and if you access 
 """
 
 
-Runtime: 36 ms, faster than 97.98% of Python3 online submissions for Search in a Sorted Array of Unknown Size.
-Memory Usage: 13.8 MB, less than 100.00% of Python3 online submissions for Search in a Sorted Array of Unknown Size.
+# Runtime: 36 ms, faster than 97.98% of Python3 online submissions for Search in a Sorted Array of Unknown Size.
+# Memory Usage: 13.8 MB, less than 100.00% of Python3 online submissions for Search in a Sorted Array of Unknown Size.
 class Solution:
     def search(self, reader, target):
         """
