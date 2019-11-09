@@ -92,6 +92,69 @@ class Solution:
         else:
             return False
 
+# if add two more important pruning, it will pass
+import collections
+import re
+class Solution:
+    def minAbbreviation(self, target: str, dictionary: List[str]) -> str:
+        # first find all possible abbreviation in target
+        # using dfs with memory
+        if len(dictionary) == 0:
+            return str(len(target))
+        dictionary = [d for d in dictionary if len(d) == len(target)]
+        
+        memo = collections.defaultdict(list)
+        memo[""].append("")
+        def dfs(word):
+            if word in memo:
+                return memo[word]
+            # keep the first letter
+            for suf in dfs(word[1:]):
+                memo[word].append(word[0] + suf)
+                
+            # use the first few letter as abbreviation
+            for i in range(1, len(word) + 1):
+                for suf in dfs(word[i:]):
+                    if (not suf) or (suf[0] not in "1234567890"):
+                        memo[word].append(str(i) + suf)
+            return memo[word]
+        target_abbr = dfs(target)
+    
+        target_heap = [(len(abbr), abbr) for abbr in target_abbr]
+        target_heap = sorted(target_heap, key=lambda x:(x[0], x[1]))
+        
+        if len(dictionary) == 0:
+            return target_heap[0][1]
+        is_match = False
+        while len(target_heap)!=0 and (not is_match):
+            tmp_res = target_heap.pop(0)
+            for i in range(len(dictionary)):
+                if self.check_match(tmp_res[1], dictionary[i]):
+                    is_match = False
+                    break
+                is_match = True
+        if is_match:
+            return tmp_res[1]
+        
+    def check_match(self, abbr, word):
+        w = 0
+        a = 0
+        while w < len(word) and a < len(abbr):
+            if abbr[a].isdigit() and abbr[a] != '0':
+                e = a
+                while e < len(abbr) and abbr[e].isdigit(): e += 1
+                num = int(abbr[a:e])
+                a = e
+                w += num
+            else:
+                if word[w] != abbr[a]:
+                    return False
+
+                w += 1
+                a += 1
+
+        return w == len(word) and a == len(abbr)
+        
 # new method
 # Runtime: 388 ms, faster than 38.78% of Python3 online submissions for Minimum Unique Word Abbreviation.
 # Memory Usage: 26.9 MB, less than 100.00% of Python3 online submissions for Minimum Unique Word Abbreviation.
@@ -124,7 +187,8 @@ class Solution:
         # 0. filter the dictionary
         l = len(target)
         dictionary = [d for d in dictionary if len(d)==l]
-        if not dictionary: return str(l)
+        if not dictionary: 
+        	return str(l)
         
         # 1. list all the abbreviations
         abbr = [] # store all the abbr.
