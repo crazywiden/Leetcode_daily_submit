@@ -155,6 +155,7 @@ class Solution:
 
         return w == len(word) and a == len(abbr)
         
+        
 # new method
 # Runtime: 388 ms, faster than 38.78% of Python3 online submissions for Minimum Unique Word Abbreviation.
 # Memory Usage: 26.9 MB, less than 100.00% of Python3 online submissions for Minimum Unique Word Abbreviation.
