@@ -35,4 +35,23 @@ class Solution:
             elif prices[i] < min_price:
                 max_price, min_price = prices[i], prices[i]
         return diff
-                
+
+# Runtime: 64 ms, faster than 97.11% of Python3 online submissions for Best Time to Buy and Sell Stock.
+# Memory Usage: 13.9 MB, less than 86.21% of Python3 online submissions for Best Time to Buy and Sell Stock.
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if len(prices) == 0:
+            return 0
+        max_so_far = prices[0]
+        min_so_far = prices[0]
+        rtn = 0
+        for i in range(1, len(prices)):
+            if prices[i] < min_so_far:
+                rtn = max(rtn, max_so_far - min_so_far)
+                min_so_far = prices[i]
+                max_so_far = prices[i]
+            else:
+                max_so_far = max(max_so_far, prices[i])
+        rtn = max(rtn, max_so_far-min_so_far)
+        return rtn
+        
