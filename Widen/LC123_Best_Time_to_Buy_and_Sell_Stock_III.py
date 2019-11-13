@@ -50,10 +50,6 @@ class Solution:
         # define state
         global_profit = [[0 for _ in range(k)] for _ in range(N)]
         local_profit = [[0 for _ in range(k)] for _ in range(N)]
-        # initialize
-        # for i in range(k):
-        #     local_profit[0][i] = -prices[0]
-            
         # update
         for i in range(1, N):
             for j in range(k):
@@ -151,3 +147,29 @@ class Solution:
             if price - secondMin >= secondProfit:
                 secondProfit = price - secondMin
         return secondProfit 
+
+
+
+
+# another dp
+# Runtime: 88 ms, faster than 68.34% of Python3 online submissions for Best Time to Buy and Sell Stock III.
+# Memory Usage: 13.9 MB, less than 72.73% of Python3 online submissions for Best Time to Buy and Sell Stock III.
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if not prices:
+            return 0
+        l = len(prices)
+        k = 2
+        dp = [[0] * l for _ in range(k+1)]
+        for i in range(1, k+1):
+            # money spent at first day
+            prev = dp[i - 1][0] - prices[0]
+            for j in range(1, l):
+                # money spent if sell stock today
+                deal = prev + prices[j]
+                # compare money spent if don't sell stock today with sell stock today
+                dp[i][j] = max(dp[i][j - 1], deal)
+                # compare i - 1 deals during j days, and don't buy stock today
+                # with i - 1 deals during j days, and buy stock today
+                prev = max(prev, dp[i - 1][j] - prices[j])
+        return dp[-1][-1]
