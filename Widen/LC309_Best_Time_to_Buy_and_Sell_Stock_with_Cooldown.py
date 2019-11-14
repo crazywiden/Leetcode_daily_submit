@@ -31,4 +31,5 @@ class Solution:
             prev_sell = sell
             sell = max(prev_buy + price, prev_sell)
         return sell
+
         
