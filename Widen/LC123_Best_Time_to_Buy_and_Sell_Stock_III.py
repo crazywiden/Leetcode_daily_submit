@@ -58,9 +58,6 @@ class Solution:
                 else:
                     local_profit[i][j] = max(global_profit[i-1][j-1], local_profit[i-1][j])-prices[i-1]+prices[i]
                 global_profit[i][j] = max(global_profit[i-1][j], local_profit[i][j])
-                # print("local: ", local_profit)
-                # print("global: ", global_profit)
-                # print("========")
         return global_profit[-1][-1]
 
 
