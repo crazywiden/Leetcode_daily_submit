@@ -10,6 +10,7 @@ Return all critical connections in the network in any order.
 
 # reference: https://blog.csdn.net/lawfile/article/details/101124841
 # reference: https://www.cnblogs.com/nullzx/p/7968110.html
+
 # Runtime: 2580 ms, faster than 44.87% of Python3 online submissions for Critical Connections in a Network.
 # Memory Usage: 84.9 MB, less than 100.00% of Python3 online submissions for Critical Connections in a Network.
 from collections import defaultdict
