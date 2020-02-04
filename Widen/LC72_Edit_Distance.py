@@ -25,10 +25,6 @@ inention -> enention (replace 'i' with 'e')
 enention -> exention (replace 'n' with 'x')
 exention -> exection (replace 'n' with 'c')
 exection -> execution (insert 'u')
-Accepted
-220,711
-Submissions
-538,130
 """
 
 # normal dp
