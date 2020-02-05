@@ -40,5 +40,33 @@ class Solution:
                 return True
         return False
 
+class Solution:
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        
+        if len(nums) < 2:
+            return False
+        
+        fast_sum = nums[0] + nums[1]
+        low_sum = 0
+        remainders = set([])
+        for i in range(2, len(nums)):
+            fast_sum += nums[i]
+            low_sum += nums[i-2]
+            if k != 0:
+                remainders.add(low_sum % k)
+                tmp = fast_sum % k
+                if tmp in remainders:
+                    return True
+            elif fast_sum == low_sum:
+                return True
+        
+        if k == 0:
+            if fast_sum == 0:
+                return True
+            return False
+        elif fast_sum % k == 0:
+            return True
+        return False
+
 
 
