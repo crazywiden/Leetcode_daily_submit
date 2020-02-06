@@ -39,10 +39,12 @@ class Solution:
             elif dp[remainder] + 1 < i:
                 return True
         return False
-
+        
+# Runtime: 224 ms, faster than 82.38% of Python3 online submissions for Continuous Subarray Sum.
+# Memory Usage: 13 MB, less than 100.00% of Python3 online submissions for Continuous Subarray Sum.
 class Solution:
     def checkSubarraySum(self, nums: List[int], k: int) -> bool:
-        
+
         if len(nums) < 2:
             return False
         
