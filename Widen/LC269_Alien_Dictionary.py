@@ -35,8 +35,55 @@ Output: ""
 
 Explanation: The order is invalid, so return "".
 """
+# revisit -- still many ken
+# Runtime: 24 ms, faster than 97.67% of Python3 online submissions for Alien Dictionary.
+# Memory Usage: 12.7 MB, less than 100.00% of Python3 online submissions for Alien Dictionary.
+class Solution:
+    def alienOrder(self, words: List[str]) -> str:
+        graph = self.gen_graph(words)
+        return self.topological_sort(graph)
+    def gen_graph(self, words):
+        # create node
+        graph = {}
+        for word in words:
+            for l in word:
+                graph[l] = set([])
+        
+        # create edge
+        for i in range(len(words) - 1):
+            index = 0
+            while index < len(words[i]) and index < len(words[i+1]):
+                if words[i][index] != words[i+1][index]:
+                    graph[words[i][index]].add(words[i+1][index])
+                    break  # this line is important and easy to forget
+                index += 1
+            
+        return graph
+    
+    def topological_sort(self, graph):
+        in_degree = {node:0 for node in graph}
+        for node in graph:
+            for child in graph[node]:
+                in_degree[child] += 1
+        ans = ""
+        q = [node for node in in_degree if in_degree[node]==0]
+        while len(q) != 0:
+            new_node = q.pop()
+            ans += new_node
+            for node in graph[new_node]:
+                in_degree[node] -= 1
+                if in_degree[node] == 0:
+                    q.append(node)
+        if len(ans) != len(graph):
+            return ""
+        return ans
+                    
+        
+
+
+
 # met this problem in a interview of ThoughtSpot
-# topological sorting -- use of stack
+# topological sorting -- use of bfs
 # time complexity -- O(V+E), V is number of vertices and E is the number of edges
 # Runtime: 44 ms, faster than 44.37% of Python3 online submissions for Alien Dictionary.
 # Memory Usage: 13.8 MB, less than 12.50% of Python3 online submissions for Alien Dictionary.
