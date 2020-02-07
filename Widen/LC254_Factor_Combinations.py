@@ -89,8 +89,34 @@ class Solution:
 
 
 
-
-
+# Runtime: 1432 ms, faster than 22.41% of Python3 online submissions for Factor Combinations.
+# Memory Usage: 12.7 MB, less than 100.00% of Python3 online submissions for Factor Combinations.
+class Solution:
+    def getFactors(self, n: int) -> List[List[int]]:
+        if n <= 2:
+            return []
+        
+        res = []
+        factors = []
+        for i in range(2, n):
+            if n % i == 0:
+                factors.append(i)
+                
+        self.dfs(res, [], factors, n)
+        return res
+    
+    def dfs(self, res, tmp, A, n):
+        if n < 1:
+            return 
+        if n == 1:
+            res.append(tmp.copy())
+            return 
+        
+        for i in range(len(A)):
+            tmp.append(A[i])
+            self.dfs(res, tmp, A[i:], n / A[i])
+            tmp.pop()
+        
 
 
 
