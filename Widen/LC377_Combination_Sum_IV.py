@@ -34,3 +34,32 @@ class Solution:
                 if i >= num:
                     dp[i] += dp[i - num]
         return dp.pop()
+
+
+# add dfs with memeory method
+# Runtime: 44 ms, faster than 57.82% of Python3 online submissions for Combination Sum IV.
+# Memory Usage: 15.7 MB, less than 22.22% of Python3 online submissions for Combination Sum IV.
+class Solution:
+    def combinationSum4(self, nums: List[int], target: int) -> int:
+        self.memo = {} # key is a target, value is num of combination sum of that target
+        self.dfs(nums, target)
+        return self.memo[target]
+    
+    def dfs(self, A, target):
+        if target < 0:
+            return 0
+        
+        if target in self.memo:
+            return self.memo[target]
+        
+        cnt = 0
+        for i in range(len(A)):
+            if A[i] == target:
+                cnt += 1
+            elif A[i] < target:
+                cnt += self.dfs(A, target-A[i])
+            
+        self.memo[target] = cnt
+        return cnt
+
+
