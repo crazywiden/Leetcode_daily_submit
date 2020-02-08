@@ -64,5 +64,49 @@ class Solution:
                     node = node.children[digit]
             res = max(int(tmp_max, 2), res)
         return res
+
+
+# Runtime: 344 ms, faster than 61.67% of Python3 online submissions for Maximum XOR of Two Numbers in an Array.
+# Memory Usage: 94.8 MB, less than 100.00% of Python3 online submissions for Maximum XOR of Two Numbers in an Array.
+# little modification of original TrieNode
+# it turns out we don't need to create a class to represent a node some times
+# and it could be very fast, too
+def num2bin(num):
+    bin_num = bin(num)[2:]
+    return "0" * (31 - len(bin_num)) + bin_num
+
+class TrieTree:
+    def __init__(self):
+        self.root = {}
+    def insert(self, num):
+        node = self.root
+        num = num2bin(num)
+        for n in num:
+            if n not in node:
+                node[n] = {}
+            node = node[n]
             
+class Solution:
+    def findMaximumXOR(self, nums: List[int]) -> int:
+        Trie = TrieTree()
+        for num in nums:
+            Trie.insert(num)
+        res = 0
+        for num in nums:
+            tmp_max = ""
+            node = Trie.root 
+            num = num2bin(num)
+            for n in num:
+                xor_with_one = "1" if n == "0" else "0"
+                if xor_with_one in node:
+                    tmp_max += "1"
+                    node = node[xor_with_one]
+                else:
+                    tmp_max += "0"
+                    node = node[n]
+            res = max(res, int(tmp_max, 2))
+        return res
+    
+    
+    
         
