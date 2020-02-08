@@ -71,7 +71,7 @@ class Solution:
         n_row, n_col = len(board), len(board[0])
         for i in range(n_row):
             for j in range(n_col):
-                visited = set([(i,j)])
+                visited = set([(i, j)])
                 l = board[i][j]
                 self.search(board, i, j, visited, Trie.root.children.get(l), res)
         return res
