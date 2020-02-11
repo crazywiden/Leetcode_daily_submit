@@ -44,9 +44,8 @@ class Solution:
 
 # method 2: union find
 # pay attention to loop
-# Runtime: 100 ms, faster than 93.32% of Python3 online submissions for Graph Valid Tree.
+# Runtime: 92 ms, faster than 86.90% of Python3 online submissions for Graph Valid Tree.
 # Memory Usage: 13.9 MB, less than 100.00% of Python3 online submissions for Graph Valid Tree.
-
 from collections import defaultdict
 class Solution:
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
@@ -91,7 +90,33 @@ class Solution:
         # print(self.union_set)
         
 
-
-
+# union find with path compression
+# Runtime: 88 ms, faster than 95.63% of Python3 online submissions for Graph Valid Tree.
+# Memory Usage: 13.7 MB, less than 100.00% of Python3 online submissions for Graph Valid Tree.
+class Solution:
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        self.graph = [i for i in range(n)]
+        num_components = n
+        for x, y in edges:
+            father_x = self.find(x)
+            father_y = self.find(y)
+            if father_x != father_y:
+                self.graph[father_x] = father_y
+                num_components -= 1 
+            else:
+                return False
+        return num_components == 1
+    
+    def find(self, node):
+        tmp = node
+        while tmp != self.graph[tmp]:
+            tmp = self.graph[tmp]
+        father = tmp
+        root = node
+        while self.graph[root] != father:
+            tmp = self.graph[root]
+            self.graph[root] = father
+            root = tmp
+        return father
 
 
