@@ -24,6 +24,53 @@ Output: [[3,3],[-2,4]]
 (The answer [[-2,4],[3,3]] would also be accepted.)
 """
 
+
+# quick select version
+# time complexity -- O(N)
+class Solution(object):
+    def kClosest(self, points, K):
+        dist = lambda i: points[i][0]**2 + points[i][1]**2
+
+        def sort(i, j, K):
+            # Partially sorts A[i:j+1] so the first K elements are
+            # the smallest K elements.
+            if i >= j: return
+
+            # Put random element as A[i] - this is the pivot
+            k = i + (j-i)//2
+            points[i], points[k] = points[k], points[i]
+
+            mid = partition(i, j)
+            if K < mid - i + 1:
+                sort(i, mid - 1, K)
+            elif K > mid - i + 1:
+                sort(mid + 1, j, K - (mid - i + 1))
+
+        def partition(i, j):
+            # Partition by pivot A[i], returning an index mid
+            # such that A[i] <= A[mid] <= A[j] for i < mid < j.
+            oi = i
+            pivot = dist(i)
+            i += 1
+
+            while True:
+                while i < j and dist(i) < pivot:
+                    i += 1
+                while i <= j and dist(j) >= pivot:
+                    j -= 1
+                if i >= j: break
+                points[i], points[j] = points[j], points[i]
+
+            points[oi], points[j] = points[j], points[oi]
+            return j
+
+        sort(0, len(points) - 1, K)
+        return points[:K]
+
+
+
+# heap version
+# time complexity -- O(nlogn)
 # Runtime: 740 ms, faster than 68.13% of Python3 online submissions for K Closest Points to Origin.
 # Memory Usage: 18.1 MB, less than 5.80% of Python3 online submissions for K Closest Points to Origin.
 import heapq
@@ -47,4 +94,7 @@ class Solution:
             new_p = heapq.heappop(closest_p)
             res.append(new_p[1])
         return res
+
+
+
             
