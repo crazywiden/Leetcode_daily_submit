@@ -37,7 +37,5 @@ class Solution:
             return 0
         return res
 
-# sorted
-# time complexity -- O(nlogn)
 
 
