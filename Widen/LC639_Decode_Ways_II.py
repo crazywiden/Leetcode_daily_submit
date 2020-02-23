@@ -26,7 +26,6 @@ The input string will only contain the character '*' and digits '0' - '9'.
 
 # that's hard
 # hard to enumerate all cases
-
 # Runtime: 1492 ms, faster than 22.18% of Python3 online submissions for Decode Ways II.
 # Memory Usage: 342 MB, less than 50.00% of Python3 online submissions for Decode Ways II.
 class Solution:
