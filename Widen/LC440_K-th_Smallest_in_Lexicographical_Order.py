@@ -40,7 +40,7 @@ class Solution:
     def find_gap(self, n, left, right):
         gap = 0
         while left <= n:
-            gap += max(0, min(n+1, right) - left)
+            gap += min(n+1, right) - left
             left *= 10
             right *= 10
         return gap
