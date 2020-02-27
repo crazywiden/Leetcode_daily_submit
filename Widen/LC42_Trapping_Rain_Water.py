@@ -35,4 +35,34 @@ class Solution:
             
         return res
             
-            
+# add space complexity -- O(1) version
+# Runtime: 36 ms, faster than 99.82% of Python3 online submissions for Trapping Rain Water.
+# Memory Usage: 13.3 MB, less than 97.67% of Python3 online submissions for Trapping Rain Water.
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        n = len(height)
+        if n == 0:
+            return 0
+        left, right = 0, n-1
+        left_max, right_max = height[left], height[right]
+        res = 0
+        while left <= right:
+            if left_max < right_max:
+                
+                left_max = max(left_max, height[left])
+                res += left_max - height[left]
+                left += 1 
+                # if left_max > height[left]:
+                #     res += left_max - height[left]
+                # else:
+                #     left_max = height[left]
+            else:
+                right_max = max(right_max, height[right])
+                res += right_max - height[right]
+                right -= 1
+                # if right_max > height[right]:
+                #     res += right_max - height[right]
+                # else:
+                #     right_max = height[right]
+            # print(res)
+        return res
