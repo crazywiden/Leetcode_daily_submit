@@ -45,6 +45,41 @@ class Solution:
             first = first.next
         return head.next
 
-# method2 -- divide and conquer
+
+# merge2list
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        if len(lists) == 0:
+            return None
+        if len(lists) == 1:
+            return lists[0]
+        
+        res = self.merge2lists(lists[0], lists[1])
+        for i in range(2, len(lists)):
+            new_l = lists[i]
+            res = self.merge2lists(res, new_l)
+        return res
+    
+    def merge2lists(self, l1, l2):
+        if not l1:
+            return l2
+        if not l2:
+            return l1
+        res = ListNode(0)
+        res_head = res
+        while l1 and l2:
+            if l1.val < l2.val:
+                res.next = l1
+                l1 = l1.next
+            else:
+                res.next = l2
+                l2 = l2.next 
+            res = res.next 
+        if l1:
+            res.next = l1
+        if l2:
+            res.next = l2
+        return res_head.next 
+
 
 
