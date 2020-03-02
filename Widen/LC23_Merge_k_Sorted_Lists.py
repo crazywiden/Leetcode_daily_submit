@@ -47,6 +47,8 @@ class Solution:
 
 
 # merge2list
+# Runtime: 4528 ms, faster than 9.38% of Python3 online submissions for Merge k Sorted Lists.
+# Memory Usage: 16 MB, less than 100.00% of Python3 online submissions for Merge k Sorted Lists.
 class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
         if len(lists) == 0:
