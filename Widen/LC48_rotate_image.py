@@ -36,10 +36,42 @@ class Solution:
         Do not return anything, modify matrix in-place instead.
         """
         n = len(matrix)
-        outer = int(n/2)
+        # outer = int(n/2)
+        outer = n // 2 # don't use int(), it's very slow
         boundary = n - 1
         for i in range(outer):
             inner = n - i*2
             for j in range(i, i+inner-1):
                 matrix[j][boundary-i], matrix[boundary-i][boundary-j], matrix[boundary-j][i], matrix[i][j] = matrix[i][j], matrix[j][boundary-i], matrix[boundary-i][boundary-j], matrix[boundary-j][i]
+
+# Runtime: 32 ms, faster than 73.99% of Python3 online submissions for Rotate Image.
+# Memory Usage: 12.7 MB, less than 100.00% of Python3 online submissions for Rotate Image.
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        n_edge = len(matrix)
+        if n_edge == 0:
+            return 
+        row = 0
+        row_thres = n_edge - row - 1
+        while row < row_thres:
+            for i in range(row, row_thres):
+                x1, y1 = row, i
+                x2, y2 = i, row_thres
+                x3, y3 = row_thres, n_edge-i-1
+                x4, y4 = n_edge-i-1, row
+                
+                tmp1 = matrix[x1][y1]
+                matrix[x1][y1] = matrix[x4][y4]
+                tmp2 = matrix[x2][y2]
+                matrix[x2][y2] = tmp1
+                tmp3 = matrix[x3][y3]
+                matrix[x3][y3] = tmp2
+                matrix[x4][y4] = tmp3
+                
+            row += 1
+            row_thres = n_edge - row - 1
+        
                 
