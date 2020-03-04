@@ -37,7 +37,7 @@ class Solution:
         """
         n = len(matrix)
         # outer = int(n/2)
-        outer = n // 2 # don't use int(), it's very slow
+        outer = n // 2 # don't use int(), it's very slowt
         boundary = n - 1
         for i in range(outer):
             inner = n - i*2
