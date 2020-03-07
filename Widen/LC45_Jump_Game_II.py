@@ -16,6 +16,26 @@ Note:
 You can assume that you can always reach the last index.
 """
 
+# better method -- greedy
+# sooooo smart!!
+# tutorial: https://blog.csdn.net/qq_17550379/article/details/83109778
+# Runtime: 84 ms, faster than 99.66% of Python3 online submissions for Jump Game II.
+# Memory Usage: 14.9 MB, less than 8.33% of Python3 online submissions for Jump Game II.
+
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        step, prev, curr = 0, -1, 0
+        n = len(nums)
+        for idx, num in enumerate(nums):
+            if curr >= n-1:
+                return step
+            elif prev < idx and idx <= curr:
+                prev, step = curr, step + 1
+            curr = max(curr, num+idx)
+        
+
+
+
 # simple dp
 # time complexity -- O(N * max(nums)), TLE
 class Solution:
