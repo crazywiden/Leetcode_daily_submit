@@ -36,3 +36,44 @@ class Solution:
             new_dp[9] = dp[2] + dp[4]
             dp = new_dp.copy()
         return (sum(dp) - 1) % (10**9 + 7)
+
+
+# dfs solution
+# Runtime: 3016 ms, faster than 10.41% of Python3 online submissions for Knight Dialer.
+# Memory Usage: 41 MB, less than 5.88% of Python3 online submissions for Knight Dialer.
+class Solution:
+    def knightDialer(self, N: int) -> int:
+        if N == 0:
+            return 0
+        if N == 1:
+            return 10
+        
+        graph = {
+            1: [6, 8],
+            2: [7, 9],
+            3: [4, 8],
+            4: [3, 9, 0],
+            6: [1, 7, 0],
+            7: [2, 6],
+            8: [1, 3],
+            9: [2, 4],
+            0: [4, 6]
+        }
+        self.memo = {}
+        MOD = 10**9 + 7
+        res = 0
+        for key in graph:
+            res += self.dfs(graph, key, N-1)
+        return res % MOD
+
+    def dfs(self, graph, key, step):
+        if step == 0:
+            return 1
+        if (key, step) in self.memo:
+            return self.memo[(key, step)]
+        res = 0
+        for nxt in graph[key]:
+            res += self.dfs(graph, nxt, step-1)
+        self.memo[(key, step)] = res
+        return res
+    
