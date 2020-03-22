@@ -1,0 +1,17 @@
+#LCP 2. Deep Dark Fraction
+#time complexity O(n), 28 ms, 90.86%
+#space complexity O(1), 13.3 MB, 5.19%
+#why no need for reduction: 
+#a + b, if a is an integer and b is a fraction in lowest terms
+#then a + b must be a fraction in lowest terms
+class Solution:
+    def fraction(self, cont: List[int]) -> List[int]:
+        l = len(cont)-1
+        n = cont[l]
+        m = 1
+        for i in range(l-1,-1,-1):
+            temp = n
+            n = cont[i]*n+m
+            m = temp
+            print(temp,n,m)
+        return[n, m]
