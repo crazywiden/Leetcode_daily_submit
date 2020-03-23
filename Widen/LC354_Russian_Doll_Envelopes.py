@@ -17,7 +17,7 @@ Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] =>
 # transform the problem into LIS 
 # so brilliant!
 # time complexity O(n log n)
-# note: didn't use a package bisect so the rank doesen't look good
+# note: didn't use a package bisect so the rank doesen't look good 
 # Runtime: 196 ms, faster than 19.93% of Python3 online submissions for Russian Doll Envelopes.
 # Memory Usage: 15.3 MB, less than 20.00% of Python3 online submissions for Russian Doll Envelopes.
 class Solution:
