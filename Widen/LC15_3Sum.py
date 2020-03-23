@@ -17,6 +17,49 @@ A solution set is:
 ]
 """
 
+# first sort then two pointers
+# time complexity -- O(N^2)
+# Runtime: 2344 ms, faster than 7.20% of Python3 online submissions for 3Sum.
+# Memory Usage: 16.3 MB, less than 100.00% of Python3 online submissions for 3Sum.
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        # for each element, find two sum
+        nums = sorted(nums)
+        res = []
+        for i in range(len(nums)):
+            if i > 0 and nums[i] == nums[i-1]:
+                continue
+            two_sum_res = self.find_two_sum(nums[i+1:], -nums[i])
+            if len(two_sum_res) == 0:
+                continue
+            for ele in two_sum_res:
+                res.append([nums[i]] + ele)
+        return res
+    
+    def find_two_sum(self, arr, target):
+        if len(arr) < 2:
+            return []
+        left, right = 0, len(arr)-1
+        res = []
+        while left < right:
+            while left > 0 and left < len(arr) and arr[left-1] == arr[left]:
+                left += 1
+            while right < len(arr) - 1 and right >= 0 and arr[right] == arr[right+1]:
+                right -= 1
+            if left >= right:
+                break
+            if arr[left] + arr[right] == target:
+                res.append([arr[left], arr[right]])
+                left += 1
+                right -= 1
+            elif arr[left] + arr[right] < target:
+                left += 1
+            elif arr[left] + arr[right] > target:
+                right -= 1
+        return res
+                
+        
+        
 
 # first idea: fix one then use 2sum
 # time complexity -- O(n^2)

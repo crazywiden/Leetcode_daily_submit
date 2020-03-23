@@ -56,6 +56,8 @@ class Solution:
 # for a complete binary tree, the number of node should be less than the index
 # where the index of left child of each node should be 2*index + 1
 #       the index of right child of each node should be 2*index + 2
+# Runtime: 36 ms, faster than 42.91% of Python3 online submissions for Check Completeness of a Binary Tree.
+# Memory Usage: 12.7 MB, less than 100.00% of Python3 online submissions for Check Completeness of a Binary Tree.
 class Solution:
     def isCompleteTree(self, root: TreeNode) -> bool:
         if root == None:
