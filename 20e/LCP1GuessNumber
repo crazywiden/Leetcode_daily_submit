@@ -1,0 +1,10 @@
+#LCP 1 Guess Numbers
+#time complexity: O(length of guess|answer)
+#space complexity: O(length of guess|answer)
+class Solution:
+    def game(self, guess: List[int], answer: List[int]) -> int:
+        zip_list = zip(guess,answer)
+        diff = []
+        for i, j in zip_list:
+            diff.append(abs(i-j))
+        return diff.count(0)
