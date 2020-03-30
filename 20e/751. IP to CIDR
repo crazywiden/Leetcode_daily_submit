@@ -1,0 +1,27 @@
+class Solution(object):
+    #convert the starting IP to integer(binary)
+    def ipToInt(self, ip):
+        ans = 0
+        for x in ip.split('.'):
+            ans = 256 * ans + int(x)#??????????????????????????????
+        return ans
+
+    def intToIP(self, x):
+        return ".".join(str((x >> i) % 256)
+                        for i in (24, 16, 8, 0))
+
+    def ipToCIDR(self, ip, n):
+        #convert the starting IP to integer
+        start = self.ipToInt(ip)
+        ans = []
+        while n:
+            mask = max(33 - (start & -start).bit_length(),
+                       33 - n.bit_length())#??????????????????????????????
+            # -start: the Complement representation of "start"
+            # Complement representation: the first digit represents the sign, 0 for positive, 1 for negative, and it stays the same. 2nd - last(8th) digits represent the value, and all the digits before last 1 are flipped, which means 00100-->11000. After flipping, add 1 to the last digit of the flipped number, which means 00100-->11100.
+            # &: bitwise and. Each bit of the output is 1 if the corresponding bit of x AND of y is 1, otherwise it's 0.
+            #bit_length() returns the number of bits necessary to represent an integer in binary, excluding the sign and leading zeros
+            ans.append(self.intToIP(start) + '/' + str(mask))
+            start += 1 << (32 - mask)
+            n -= 1 << (32 - mask)
+        return ans
