@@ -1,0 +1,21 @@
+# 784. Letter Case Permutation
+# time complexity: O(2^n)
+# space complexity: O(2^n)
+# reference: https://leetcode-cn.com/problems/letter-case-permutation/solution/zi-mu-da-xiao-xie-quan-pai-lie-by-leetcode/
+# description: Looping through the string. When encountering a character, the currently creating string is copyed once and add lower case character to one, add upper case charater to another.
+
+class Solution:
+    def letterCasePermutation(self, S: str) -> List[str]:
+        res = [[]]
+
+        for char in S:
+            n = len(res)
+            if char.isalpha():
+                for i in range(n):
+                    res.append(res[i][:])
+                    res[i].append(char.lower())
+                    res[n+i].append(char.upper())
+            else:
+                for i in range(n):
+                    res[i].append(char)
+        return map("".join, res)

@@ -1,0 +1,49 @@
+# 716. Max Stack
+# Method 1
+# time complexity: O(n), 260 ms, 25.00%
+# space complesity: O(n), 15.8 MB, 5.56%
+
+class MaxStack:
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.l = []
+        self.n = len(self.l)
+
+    def push(self, x: int) -> None:
+        self.l.append(x)
+        self.n = self.n + 1
+
+    def pop(self) -> int:
+        a = self.l[self.n-1]
+        del self.l[self.n-1]
+        self.n = self.n - 1
+        return a
+        
+
+    def top(self) -> int:
+        return self.l[self.n-1]
+
+    def peekMax(self) -> int:
+        return max(self.l)
+
+    def popMax(self) -> int:
+        m = max(self.l)
+        ind = []
+        for i in range(self.n):
+            if self.l[i]==m:ind.append(i)
+        indm = max(ind)
+        del self.l[indm]
+        self.n = self.n - 1
+        return m
+
+
+# Your MaxStack object will be instantiated and called as such:
+# obj = MaxStack()
+# obj.push(x)
+# param_2 = obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.peekMax()
+# param_5 = obj.popMax()
