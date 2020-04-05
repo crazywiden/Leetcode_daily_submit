@@ -1,0 +1,82 @@
+#solution 1
+# time complexity: O(n^2)
+# space complexity: )(n)
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        sum2 = {}
+        res = []
+        l = len(nums)
+        for i in range(l):
+            for j in range(l):
+                if i >= j: continue
+                add = -(nums[i]+nums[j])
+                if add not in sum2: 
+                    sum2[add] = []
+                sum2[add].append([i,j])
+        for k in range(l):
+            if nums[k] in sum2:
+                for cell in sum2[nums[k]]:
+                    if k!= cell[0] and k!= cell[1]:
+                        ind = [nums[k],nums[cell[0]],nums[cell[1]]]
+                        ind.sort()
+                        if ind not in res:
+                            res.append(ind)
+        return res
+
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        l = len(nums)
+        if l<3: return []
+        if nums[0]>0 or nums[-1]<0: return []
+        res = []
+        for i in range(1,l-1):
+            first = 0
+            last = l-1
+            while last>i and first<i:
+                if nums[first]>0 or nums[last]<0: break
+                if nums[i] == nums[i-1]: continue
+                sum_value = nums[first] + nums[i] + nums[last]
+                if  sum_value> 0:
+                    last = last - 1
+                elif sum_value < 0:
+                    first = first + 1
+                else: 
+                    ele = [nums[first],nums[i],nums[last]]
+                    # if nums[first+1] == nums[first]: first = first + 1
+                    # if nums[last-1] == nums[last]: last = last - 1
+                    # res.append([nums[first],nums[i],nums[last]])
+                    if ele not in res: res.append(ele)
+                    first = first + 1
+                    last = last - 1
+        return res
+
+
+# solution 2
+# time complexity: O(n^2)
+# space complexity: O(n)
+# description: bi-pointer
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        l = len(nums)
+        if not nums or l<3: return []
+        if nums[0]>0 or nums[-1]<0: return []
+        res = []
+
+        for i in range(l):
+            if nums[i]>0 : return res
+            if i>0 and nums[i]==nums[i-1]: continue
+            left = i+1
+            right = l-1
+            while left < right:
+                sum_value = nums[i] + nums[left] + nums[right]
+                if sum_value == 0:
+                    res.append([nums[i], nums[left], nums[right]])
+                    while left<right and nums[left+1]==nums[left]: left = left+1
+                    while left<right and nums[right-1]==nums[right]: right = right-1
+                    left = left + 1
+                    right = right - 1
+                elif sum_value > 0: right = right - 1
+                else: left = left + 1
+        return res
