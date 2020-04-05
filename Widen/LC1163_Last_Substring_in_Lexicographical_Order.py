@@ -22,7 +22,7 @@ s contains only lowercase English letters.
 """
 # big lao solution
 # Runtime: 148 ms, faster than 99.37% of Python3 online submissions for Last Substring in Lexicographical Order.
-# Memory Usage: 20.1 MB, less than 100.00% of Python3 online submissions for Last Substring in Lexicographical Order.
+# Memory Usage: 20.1 MB, less thanc 100.00% of Python3 online submissions for Last Substring in Lexicographical Order.
 class Solution:
     def lastSubstring(self, s: str) -> str:
         n = len(s)
