@@ -16,6 +16,8 @@ Example 2:
 Input: [1,2,2,3,1,4,2]
 Output: 6
 """
+# Runtime: 228 ms, faster than 95.76% of Python3 online submissions for Degree of an Array.
+# Memory Usage: 16.3 MB, less than 9.09% of Python3 online submissions for Degree of an Array.
 class Solution:
     def findShortestSubArray(self, nums: List[int]) -> int:
         ele_idx = collections.defaultdict(list)
