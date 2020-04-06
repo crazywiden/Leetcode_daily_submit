@@ -1,0 +1,40 @@
+# time complexity: O(n), n = max(len(L1),len(L2)), 68 ms, 83.79%
+# space complexity: O(n), 13.5 MB, 5.48%
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        a = l1
+        b = l2
+        c = ListNode(0)
+        s = c
+        while a and b:
+            if a.val + b.val + c.val<10:
+                c.val = a.val + b.val + c.val
+                if a.next or b.next:
+                    c.next = ListNode(0)
+            else: 
+                c.val = a.val + b.val + c.val -10
+                c.next = ListNode(1)
+            a = a.next
+            b = b.next
+            if c.next:
+                c = c.next
+        if a: d = a
+        else: d = b
+        while d:
+            if c.val + d.val<10: 
+                c.val = c.val + d.val
+                c.next = d.next
+                break
+            else:
+                c.val = c.val + d.val - 10
+                c.next = ListNode(1)
+                c = c.next
+                d = d.next
+        return s
