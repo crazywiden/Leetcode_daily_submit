@@ -1,0 +1,26 @@
+#time complexity: O(n), 40 ms, 50.29% 
+#space complexity: O(1), 13.6 MB, 5.35%
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def swapCell(self, cell:ListNode) -> ListNode:
+        if not cell.next: return cell
+        temp = cell.next
+        cell.next = temp.next
+        temp.next = cell
+        return temp
+
+    def swapPairs(self, head: ListNode) -> ListNode:
+        if not head: return []
+        res = self.swapCell(head)# here can add a start and return start.next
+        while head.next:
+            head.next = self.swapCell(head.next)
+            if head.next.next:
+                head = head.next.next
+            else: break
+        return res
