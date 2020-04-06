@@ -1,0 +1,32 @@
+#solution 1
+#time complexity: O(n), 624 ms, 11.05%
+#space complexity: O(n), 14.7 MB, 5.15%
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        l = len(nums)
+        nums.sort()
+        i = 0
+        while i < l-1:
+            if nums[i]==nums[i+1]: 
+                nums.remove(nums[i])
+                l = l-1
+                i = i - 1
+            i = i + 1
+        return l
+
+#solution 2
+#time complexity: O(n), 44 ms, 92.32%
+#space complexity: O(n), 14.7 MB, 5.15%
+#description: exchange
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        if nums == []:
+            return 0
+        lens = 0
+        tmp = nums[lens]
+        for i in range(len(nums)-1):
+            if tmp != nums[i+1] and nums[i] == tmp:
+                nums[lens+1] = nums[i+1]
+                tmp = nums[i+1]
+                lens+=1
+        return lens+1
