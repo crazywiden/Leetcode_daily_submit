@@ -1,0 +1,101 @@
+#solution1: recursive
+#time complexity:O(n),28 ms,95.40% 
+#space complexity:O(n),13.7 MB,5.05%
+
+#(a) Inorder (Left, Root, Right)
+#(b) Preorder (Root, Left, Right)
+#(c) Postorder (Left, Right, Root)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def getvalue(self, cell: TreeNode) -> List[int]:
+        cellist = []
+        if cell.left: cellist = cellist + self.getvalue(cell.left)
+        cellist.append(cell.val)
+        if cell.right: cellist = cellist + self.getvalue(cell.right)
+        return cellist
+
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root: return []
+        return self.getvalue(root)
+
+
+#solution2: iterative
+#time complexity: O(n),36 ms,69.99%
+#space complexity: O(n),13.7 MB,5.05%
+
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        res = []
+        stack = []
+        p = root
+        while p or stack:
+            while p:
+                stack.append(p)
+                p = p.left
+            p = stack.pop()
+            res.append(p.val)
+            p = p.right    
+        return res
+
+#solution3: iterative + sign
+#time complexity: O(n), 44 ms, 34.64%
+#space complexity: O(n), 13.7 MB, 5.05%
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        white, grey = 0, 1
+        res = []
+        stack = [(white, root)]
+        while stack:
+            color, node = stack.pop()
+            if node is None: continue
+            if color == white:
+                stack.append((white, node.right))
+                stack.append((grey, node))
+                stack.append((white, node.left))
+            else:
+                res.append(node.val)
+        return res
+
+#solution4: Morris iterative
+#time complexity: O(n), 44 ms, 34.64%
+#space complexity: O(n), 13.7 MB, 5.05%
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        res = []
+        p = root
+        while p:
+            if p.left is None:
+                res.append(p.val)
+                p = p.right
+            else:
+                r = p.left
+                while r.right:
+                    r = r.right
+                r.right = p
+                tmp = p
+                p = p.left
+                tmp.left = None
+        return res
