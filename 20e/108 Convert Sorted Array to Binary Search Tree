@@ -1,0 +1,22 @@
+#solution : recursive
+#time complexity: O(n), 60 ms, 75.81%
+#space complexity: O(n), 15.9 MB, 5.66%
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+        def helper(left,right) -> TreeNode:
+            if left > right:
+                return None
+            p = (left+right) // 2
+            root = TreeNode(nums[p])
+            root.left = helper(left, p - 1)
+            root.right = helper(p+1, right)
+            return root
+        return helper(0,len(nums)-1)
+	
