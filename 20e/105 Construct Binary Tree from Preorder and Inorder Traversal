@@ -1,0 +1,74 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+# Depth First Traversals:
+# (a) Inorder (Left, Root, Right) 
+# (b) Preorder (Root, Left, Right) 
+# (c) Postorder (Left, Right, Root) 
+
+#solution 1: recursive
+#time complexity: O(N), 184 ms, 72.45% 
+#space complexity: O(N), 52.4 MB, 72.22%
+class Solution:
+    def buildCell(self,preo: List[int], ino:List[int]) -> TreeNode:
+        if not preo: return None
+        if preo[0] not in ino: return None
+        root = TreeNode(preo[0])
+        m = ino.index(preo[0])
+        del preo[0]
+        del ino[m]
+        left_ino = ino[:m:]
+        right_ino = ino[m::]
+        left_node = self.buildCell(preo, left_ino)
+        right_node = self.buildCell(preo, right_ino)
+        root.left = left_node
+        root.right = right_node
+        return root
+
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        return self.buildCell(preorder, inorder)
+
+reference:https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/solution/cong-qian-xu-he-zhong-xu-bian-li-xu-lie-gou-zao-er/
+
+class Solution:
+    def buildTree(self, preorder, inorder):
+        """
+        :type preorder: List[int]
+        :type inorder: List[int]
+        :rtype: TreeNode
+        """
+        def helper(in_left = 0, in_right = len(inorder)):
+            nonlocal pre_idx
+            # if there is no elements to construct subtrees
+            if in_left == in_right:
+                return None
+            
+            # pick up pre_idx element as a root
+            root_val = preorder[pre_idx]
+            root = TreeNode(root_val)
+
+            # root splits inorder list
+            # into left and right subtrees
+            index = idx_map[root_val]
+
+            # recursion 
+            pre_idx += 1
+            # build left subtree
+            root.left = helper(in_left, index)
+            # build right subtree
+            root.right = helper(index + 1, in_right)
+            return root
+        
+        # start from first preorder element
+        pre_idx = 0
+        # build a hashmap value -> its index
+        idx_map = {val:idx for idx, val in enumerate(inorder)} 
+        return helper()
+
+
+
+	
