@@ -14,7 +14,11 @@ The input time is legal and ranges from 00:00 to 23:59.
 # Runtime: 76 ms, faster than 58.48% of Python3 online submissions for Minimum Time Difference.
 # Memory Usage: 16.7 MB, less than 100.00% of Python3 online submissions for Minimum Time Difference.
 class Solution:
+    def __init__(self):
+        self.a = 999
+
     def findMinDifference(self, timePoints: List[str]) -> int:
+        self.pre = 9
         time_in_min = []
         for t in timePoints:
             t_in_min = self.transform(t)
@@ -28,6 +32,15 @@ class Solution:
         return res
     
     def transform(self, t):
+        print(self.pre)
         h, m = t.split(":")
         return int(h) * 60 + int(m)
+
+if __name__ == "__main__":
+    sol = Solution()
+    sol.transform()
+    sol.findMinDifference(["dfs"])
+    
+
+
         
