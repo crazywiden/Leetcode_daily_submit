@@ -1,0 +1,34 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+# Binary Search Tree Rules:
+
+    # Each BST has a root node (10 in our example above), which contains data and has no parent nodes.
+    # Each node has zero to two (two hence the keyword binary in this title) child nodes.
+    # Each child node linked to the left has a data value less than or equal to the parent node.
+    # Each child node linked to the right has a data value greater than the parent node.
+
+#solution1: recursive, save all subtrees(left/right) in list and iterate through all possible root
+#time complexity: O(nGn), nGn = 4^n/(n^(1/2)), 64 ms, 44.64%
+#space complexity: O(nGn), 15.1 MB, 13.64%
+class Solution:
+    def generateTrees(self, n: int) -> List[TreeNode]:
+        def makeTree(start:int, end:int) -> List[TreeNode]:
+            all_tree = []
+            if start > end: return [None]
+            for i in range(start,end+1):
+                left_trees = makeTree(start,i-1)
+                right_trees = makeTree(i+1,end)
+                for l in left_trees:
+                    for r in right_trees:
+                        root = TreeNode(i)
+                        root.left = l
+                        root.right = r
+                        all_tree.append(root)
+            return all_tree
+        return makeTree(1,n) if n else []
+#reference: https://leetcode-cn.com/problems/unique-binary-search-trees-ii/solution/bu-tong-de-er-cha-sou-suo-shu-ii-by-leetcode/
