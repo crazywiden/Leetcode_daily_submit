@@ -18,6 +18,7 @@ S will consist of lowercase letters and have length in range [1, 500].
 """
 
 # time complexity -- O(n^2)
+
 # Runtime: 32 ms, faster than 58.26% of Python3 online submissions for Reorganize String.
 # Memory Usage: 13.9 MB, less than 14.29% of Python3 online submissions for Reorganize String.
 class Solution:
