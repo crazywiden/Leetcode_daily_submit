@@ -1,0 +1,60 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+# solution 1: dictionary, recursion
+# time complexity: O(n), 44 ms, 48.57% 
+# space complexity: O(n), 14.5 MB, 6.25%
+class Solution:
+
+    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
+        if not root: return []
+        self.NodeDict = {}
+        def addNode(cell:TreeNode, i:int) -> None:
+            if i not in self.NodeDict: 
+                self.NodeDict[i]=[cell.val]
+            else:
+                self.NodeDict[i].append(cell.val)
+            i = i + 1
+            if cell.left:
+                addNode(cell.left, i)
+            if cell.right:
+                addNode(cell.right, i)
+        addNode(root,0)
+        res = []
+        num = len(self.NodeDict.keys())
+        for ind in range(num-1,-1,-1):
+            res.append(self.NodeDict[ind])
+        return res
+
+# solution 2: queue, iteration
+# time complexity: O(n), 40 ms, 69.27%
+# space complexity: O(n), 13.8 MB, 6.25%
+class Solution(object):
+    def levelOrderBottom(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        result = []
+        if root == None:
+            return []
+        else:
+            queue = []# use the queue to save all nodes in the same level
+            queue.append(root)
+            while queue != []:
+                length = len(queue)
+                result.insert(0, [])
+		# always add to the first item list.insert(index, element)
+                for i in range(length):
+                    t = queue.pop(0)
+                    result[0].append(t.val)
+                    if t.left != None:
+                        queue.append(t.left)
+                    if t.right != None:
+                        queue.append(t.right)       
+        return result
+reference:https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii/solution/bfsdui-lie-li-yong-nei-bu-xun-huan-fen-ceng-jin-xi/
