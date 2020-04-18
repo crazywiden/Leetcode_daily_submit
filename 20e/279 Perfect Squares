@@ -1,0 +1,41 @@
+# solution 1: BFS + memorization
+# time complexity: O(n), 908 ms, 63.50%
+# space complexity: O(n), 15.2 MB, 5.00%
+
+class Node:
+    def __init__(self, x, y):
+        self.val = x
+        self.step = y
+
+class Solution:
+    def numSquares(self, n: int) -> int:
+        root = Node(n,0)
+        queue = [root]
+        mem = set([n])#using set would be faster
+
+        while queue:
+            curr = queue.pop(0)
+            resid = [curr.val - n*n for n in range(1,int(curr.val**.5)+1)]
+
+            for i in resid:
+                new = Node(i,curr.step+1)
+                if i == 0: return new.step
+                elif i not in mem:#adding to memory leads to shortest path
+                    mem.add(i)
+                    queue.append(new)
+        return 0
+#Reference: https://leetcode-cn.com/problems/perfect-squares/solution/python3zui-ji-chu-de-bfstao-lu-dai-ma-gua-he-ru-me/
+
+# solution 2: DP
+# time complexity: O(n), 2560 ms, 52.90%
+# space complexity: O(n), 13.6 MB, 25.00%
+
+class Solution:
+    def numSquares(self, n: int) -> int:
+        possi = [m**2 for m in range(1,int(n**.5)+1) ]
+        dp = [1]*(n+1)# the first is 0, taking one place, so we need n+1 space for integer n
+        for i in range(2,n+1):
+            if i in possi: dp[i] = 1
+            else: dp[i] = 1 + min([dp[i-k] for k in possi if k<i])
+        return dp[-1]
+#Reference: https://leetcode-cn.com/problems/perfect-squares/solution/dong-tai-gui-hua-kan-bu-dong-ni-gen-wo-xing-xi-lie/
