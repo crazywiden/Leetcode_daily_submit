@@ -1,0 +1,53 @@
+# solution 1: DFS
+# time complexity: O(mn)
+# space complexity: O(mn)
+
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        if not grid: return 0
+        self.visited = []# this can be removed if we switch all the visited cell to be "0"
+        res = 0
+        self.i_len = len(grid)
+        self.j_len = len(grid[0])
+        def fun(i,j) -> None:
+                    for x, y in [[i - 1, j], [i + 1, j], [i, j - 1], [i, j + 1]]:
+                        if 0<=x<self.i_len and 0<=y<self.j_len and [x,y] not in self.visited and grid[x][y] == "1":
+                            self.visited.append([i+1,j])
+                            fun(x, y)
+                
+        for i in range(self.i_len):
+            for j in range(self.j_len):
+                if [i,j] not in self.visited:
+                    self.visited.append([i,j])
+                    if grid[i][j] == "1": 
+                        fun(i,j)
+                        res = res + 1
+        return res
+
+# solution 2: BFS + stack
+# time complexity: O(mn), 72 ms, 90.87%
+# space complexity: O(min(m,n)), 14.5 MB, 6.67%
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        nr = len(grid)
+        if nr == 0:
+            return 0
+        nc = len(grid[0])
+
+        num_islands = 0
+        for r in range(nr):
+            for c in range(nc):
+                if grid[r][c] == "1":
+                    num_islands += 1
+                    grid[r][c] = "0"#so we don't need memorization
+                    neighbors = collections.deque([(r, c)])#list-like container with fast appends and pops on either end.
+                    while neighbors:
+                        row, col = neighbors.popleft()
+                        for x, y in [(row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)]:#BFS!!!!
+                            if 0 <= x < nr and 0 <= y < nc and grid[x][y] == "1":
+                                neighbors.append((x, y))
+                                grid[x][y] = "0"
+        
+        return num_islands
+
+reference: https://leetcode-cn.com/problems/number-of-islands/solution/dao-yu-shu-liang-by-leetcode/
