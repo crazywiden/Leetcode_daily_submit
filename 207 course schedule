@@ -1,0 +1,51 @@
+#207. Course Schedule
+#solution1: BFS
+#time complexity: O(n+m), n = number of nodes, m = number of edges, 80 ms, 43.53% 
+#space complexity: O(n+m), 14.2 MB, 33.33%
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        indegree = [0 for _ in range(numCourses)]
+        prerequ = [[] for _ in range(numCourses)]
+        left = numCourses
+
+        for cur,pre in prerequisites:
+            indegree[cur] = indegree[cur] + 1
+            prerequ[pre].append(cur)
+
+        queue = [i for i in range(numCourses) if not indegree[i]]
+
+        while queue:
+            now = queue.pop(0)
+            left = left - 1
+            for i in prerequ[now]:
+                indegree[i] = indegree[i] - 1
+                if indegree[i]==0:
+                    queue.append(i)
+        
+        return not left
+	
+#solution2: DFS
+#time complexity: O(m+n)
+#space complexity: O(m+n)
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        def dfs(i, adjacency, flags):
+            if flags[i] == -1: return True
+            if flags[i] == 1: return False
+            flags[i] = 1
+            for j in adjacency[i]:
+                if not dfs(j, adjacency, flags): return False
+            flags[i] = -1
+            return True
+
+        adjacency = [[] for _ in range(numCourses)]
+        flags = [0 for _ in range(numCourses)]
+        for cur, pre in prerequisites:
+            adjacency[pre].append(cur)
+        for i in range(numCourses):
+            if not dfs(i, adjacency, flags): return False
+        return True
+
+reference:https://leetcode-cn.com/problems/course-schedule/solution/course-schedule-tuo-bu-pai-xu-bfsdfsliang-chong-fa/
