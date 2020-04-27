@@ -1,0 +1,59 @@
+#542. 01 Matrix
+
+#solution1: BFS + queue
+#time complexity: O(mn), 884 ms, 52.28%
+#space complexity: O(mn), 17.5 MB, 100.00%
+
+class Solution:
+    def updateMatrix(self, matrix: List[List[int]]) -> List[List[int]]:
+        m,n = len(matrix), len(matrix[0])
+        res = [[0]*n for _ in range(m)]
+        zeros = [(i,j) for i in range(m) for j in range(n) if matrix[i][j] == 0]
+        queue = zeros
+        visited = set(zeros)
+
+        while queue:
+            x,y = queue.pop(0)
+            for (nx,ny) in [(x+1,y),(x-1,y),(x,y+1),(x,y-1)]:
+                if 0<=nx<m and 0<=ny<n and (nx,ny) not in visited:
+                    res[nx][ny] = res[x][y]+1
+                    queue.append((nx,ny))
+                    visited.add((nx,ny))
+        
+        return res
+
+
+#solution1: DP
+#time complexity: O(mn), 992 ms, 34.43% 
+#space complexity: O(1), 16.4 MB, 100.00%
+
+class Solution:
+    def updateMatrix(self, matrix: List[List[int]]) -> List[List[int]]:
+
+        m,n = len(matrix), len(matrix[0])
+
+        res = [[10**9]*n for _ in range(m)]
+        
+        for i in range(m):
+            for j in range(n):
+                if matrix[i][j]==0:
+                    res[i][j]=0
+
+        for i in range(m):
+            for j in range(n):
+                if i-1>=0: res[i][j] = min(res[i][j],res[i-1][j]+1)
+                if j-1>=0: res[i][j] = min(res[i][j],res[i][j-1]+1)
+        for i in range(m-1,-1,-1):
+            for j in range(n):
+                if i+1<m: res[i][j] = min(res[i][j],res[i+1][j]+1)
+                if j-1>=0: res[i][j] = min(res[i][j],res[i][j-1]+1)
+        for i in range(m):
+            for j in range(n-1,-1,-1):
+                if i-1>=0: res[i][j] = min(res[i][j],res[i-1][j]+1)
+                if j+1<n: res[i][j] = min(res[i][j],res[i][j+1]+1)
+        for i in range(m-1,-1,-1):
+            for j in range(n-1,-1,-1):
+                if i+1<m: res[i][j] = min(res[i][j],res[i+1][j]+1)
+                if j+1<n: res[i][j] = min(res[i][j],res[i][j+1]+1)
+        
+        return res
