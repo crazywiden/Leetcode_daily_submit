@@ -1,0 +1,50 @@
+#solution: BFS
+#time complexity:O(nm), 236 ms,31.30%, m = the number of subordinates
+#space complexcity:O(m), 14.7 MB, 25.00%
+"""
+# Definition for Employee.
+class Employee:
+    def __init__(self, id: int, importance: int, subordinates: List[int]):
+        self.id = id
+        self.importance = importance
+        self.subordinates = subordinates
+"""
+
+class Solution:
+    def getImportance(self, employees: List['Employee'], id: int) -> int:
+        val = 0
+        queue = [id]
+        while queue:
+            check = queue.pop(0)
+            for person in employees:
+                if person.id == check:
+                    val = val + person.importance
+                    queue = queue + person.subordinates
+
+        return val
+
+
+#solution: BFS + dictionary
+#time complexity:O(n), 184 ms, 58.49%
+#space complexcity:O(m), 14.7 MB, 25.00%
+"""
+# Definition for Employee.
+class Employee:
+    def __init__(self, id: int, importance: int, subordinates: List[int]):
+        self.id = id
+        self.importance = importance
+        self.subordinates = subordinates
+"""
+
+class Solution:
+    def getImportance(self, employees: List['Employee'], id: int) -> int:
+        emap = {e.id: e for e in employees}
+        val = 0
+        queue = [id]
+        while queue:
+            check = queue.pop(0)
+            person = emap[check]
+            val = val + person.importance
+            queue = queue + person.subordinates
+
+        return val           
