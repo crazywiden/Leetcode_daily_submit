@@ -1,0 +1,130 @@
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = []):
+        self.val = val
+        self.neighbors = neighbors
+"""
+
+#solution: BFS
+#m = # of elements in neighbors, n = # of nodes
+#time complexity: O(mn), 64 ms, 21.02%
+#space complexity: O(n), 13.8 MB, 100.00%
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if not node: return None
+
+        def newNode(val,cur_list) -> 'Node':
+            if val not in self.nodemap:
+                new_nn = Node(val,cur_list)
+                self.nodemap[val] = new_nn
+            else: 
+                new_nn = self.nodemap[val]
+                new_nn.neighbors = new_nn.neighbors+cur_list
+            return new_nn
+
+        queue = [node]
+        memo = set()
+        self.nodemap = {}
+        while queue:
+            cur = queue.pop(0)
+            new_nei = []
+            add_list = []
+            for i in cur.neighbors:
+                new_nei.append(newNode(i.val,[]))
+                if i.val not in memo:
+                    add_list.append(i)
+            if cur.val not in self.nodemap:
+                new_node = Node(cur.val,new_nei)
+                self.nodemap[cur.val] = new_node
+            else:
+                new_nn = self.nodemap[cur.val]
+                new_nn.neighbors = new_nei
+            memo.add(cur.val)
+            queue = queue + add_list
+        return self.nodemap[1]"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = []):
+        self.val = val
+        self.neighbors = neighbors
+"""
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if not node: return None
+
+        def newNode(val,cur_list) -> 'Node':
+            if val not in self.nodemap:
+                new_nn = Node(val,cur_list)
+                self.nodemap[val] = new_nn
+            else: 
+                new_nn = self.nodemap[val]
+                new_nn.neighbors = new_nn.neighbors+cur_list
+            return new_nn
+
+        queue = [node]
+        memo = set()
+        self.nodemap = {}
+        while queue:
+            cur = queue.pop(0)
+            if cur.val not in self.nodemap:
+                new_nei = [newNode(i.val,[]) for i in cur.neighbors]
+                new_node = Node(cur.val,new_nei)
+                self.nodemap[cur.val] = new_node
+            else:
+                new_nn = self.nodemap[cur.val]
+                new_nei = [newNode(i.val,[]) for i in cur.neighbors]
+                new_nn.neighbors = new_nei
+            memo.add(cur.val)
+            add_list = [j for j in cur.neighbors if j.val not in memo]
+            queue = queue + add_list
+        return self.nodemap[1]
+
+
+#solution2: DFS
+#time complexity:  O(n)
+#space complexity: O(n)
+"""
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val, neighbors):
+        self.val = val
+        self.neighbors = neighbors
+"""
+class Solution(object):
+
+    def __init__(self):
+        # Dictionary to save the visited node and it's respective clone
+        # as key and value respectively. This helps to avoid cycles.
+        self.visited = {}
+
+    def cloneGraph(self, node):
+        """
+        :type node: Node
+        :rtype: Node
+        """
+        if not node:
+            return node
+
+        # If the node was already visited before.
+        # Return the clone from the visited dictionary.
+        if node in self.visited:
+            return self.visited[node]
+
+        # Create a clone for the given node.
+        # Note that we don't have cloned neighbors as of now, hence [].
+        clone_node = Node(node.val, [])
+
+        # The key is original node and value being the clone node.
+        self.visited[node] = clone_node
+
+        # Iterate through the neighbors to generate their clones
+        # and prepare a list of cloned neighbors to be added to the cloned node.
+        if node.neighbors:
+            clone_node.neighbors = [self.cloneGraph(n) for n in node.neighbors]
+
+        return clone_node
+
+reference：https://leetcode-cn.com/problems/clone-graph/solution/ke-long-tu-by-leetcode/
