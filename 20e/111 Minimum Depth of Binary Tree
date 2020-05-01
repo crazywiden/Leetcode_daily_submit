@@ -1,0 +1,29 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+#solution: BFS
+#time complexity: O(n), 52 ms, 77.50% 
+#space complexity: O(n), 14.8 MB, 12.50%
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if not root: return 0
+        queue = [root]
+        depth = 1
+        nodemap = {}
+        while queue:
+            node = queue.pop(0)
+            if node not in nodemap:
+                nodemap[node] = depth
+            if (not node.left) and (not node.right):
+                return nodemap[node]
+            depth = nodemap[node]+1
+            if node.left:
+                nodemap[node.left] = depth
+                queue.append(node.left)
+            if node.right:
+                nodemap[node.right] = depth
+                queue.append(node.right)
