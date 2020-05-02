@@ -1,0 +1,40 @@
+#solution1: BFS
+#time complexity: O(mn), m and n are the dimensions of board, 128 ms, 40.80%
+#space complexity: O(mn), 19.6 MB, 7.69%
+
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        visited = set()
+        queue = []
+        m = len(board)
+        if board: 
+            n = len(board[0])
+            for i in range(m):
+                for j in range(n):
+                    wait_i = []
+                    wait_j = []
+                    if (i,j) in visited: continue
+                    if board[i][j] == 'O':
+                        queue.append((i,j))
+                        wait_i.append(i)
+                        wait_j.append(j)
+                        visited.add((i,j))
+                    while queue:
+                        cur = queue.pop(0)
+                        a = cur[0]
+                        b = cur[1]
+                        for (x,y) in [(a+1,b),(a-1,b),(a,b+1),(a,b-1)]:
+                            if 0<=x<m and 0<=y<n:
+                                if board[x][y] == 'O' and (x,y) not in visited:
+                                    queue.append((x,y))
+                                    wait_i.append(x)
+                                    wait_j.append(y)
+                                visited.add((x,y))
+                    if wait_i:
+                        if max(wait_i)<m-1 and max(wait_j)<n-1 and min(wait_i)>0 and min(wait_j)>0:
+                            for l, r in zip(wait_i, wait_j):
+                                board[l][r] = 'X'
+                    visited.add((i,j))
