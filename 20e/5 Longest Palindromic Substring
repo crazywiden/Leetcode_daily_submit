@@ -1,0 +1,68 @@
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        # s is empty
+        if s == "": return ""
+
+        # memorize the positions of each letter in s
+        n = len(s)
+        strmap = {}
+        for i in range(n):
+            if s[i] not in strmap:
+                strmap[s[i]] = [i]
+            else: strmap[s[i]].append(i)
+        
+        # all letters occur only once
+        max_len = 0
+        for j in strmap:
+            max_len = max(max_len, len(strmap[j]))
+        if max_len == 1: return s[0]
+
+        # check each possible case with the length of even number
+        res = s[0]
+        queue = []
+        for k in strmap:
+            queue.append((0,1))
+            while queue:
+                a,b = queue.pop(0)
+                print(("---",k,a,b,queue,res))
+                if b < len(strmap[k]):
+                    check = s[strmap[k][a]:strmap[k][b]+1]
+                    rever = check[::-1]
+                    if check == rever:
+                        if len(check) > len(res):
+                            res = check
+                        if a > 0 and b+1 < len(strmap[k]):
+                            a = a - 1
+                            b = b + 1
+                            queue.append((a,b))
+                    else: queue.append((b,b+1))
+
+        print(res)
+
+        # check each possible case with the length of odd number
+        for k in strmap:
+            queue.append(1)
+            while queue:
+                cur = queue.pop(0)
+                if len(strmap[k]) < 3: continue
+                if isinstance(cur, int):
+                    c = cur 
+                    queue.append((c-1,c+1))
+                    print((k,cur,queue,res))
+                else: 
+                    a = cur[0]
+                    b = cur[1]
+                    if b < len(strmap[k]):
+                        check = s[strmap[k][a]:strmap[k][b]+1]
+                        rever = check[::-1]
+                        if check == rever:
+                            if len(check) > len(res):
+                                res = check
+                            if a > 0 and b+1 < len(strmap[k]):
+                                a = a - 1
+                                b = b + 1
+                                queue.append((a,b))
+                        else: 
+                            if c+1 < len(strmap[k]):
+                                queue.append(c+1)
+        return res
