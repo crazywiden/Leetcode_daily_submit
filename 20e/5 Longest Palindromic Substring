@@ -1,68 +1,49 @@
+# solution1: spread from the center
+# time complexity: O(n^2), 1028 ms, 77.02%
+# space complexity: O(1), 13.4 MB, 9.26%
 class Solution:
+    def spread(self, s, left, right) -> str:
+        while left>=0 and right<len(s) and s[left] == s[right]:
+            left = left - 1
+            right = right + 1
+        return s[left+1:right]
+
     def longestPalindrome(self, s: str) -> str:
-        # s is empty
-        if s == "": return ""
-
-        # memorize the positions of each letter in s
-        n = len(s)
-        strmap = {}
-        for i in range(n):
-            if s[i] not in strmap:
-                strmap[s[i]] = [i]
-            else: strmap[s[i]].append(i)
-        
-        # all letters occur only once
-        max_len = 0
-        for j in strmap:
-            max_len = max(max_len, len(strmap[j]))
-        if max_len == 1: return s[0]
-
-        # check each possible case with the length of even number
+        if not s: return ""
+        l = len(s)
         res = s[0]
-        queue = []
-        for k in strmap:
-            queue.append((0,1))
-            while queue:
-                a,b = queue.pop(0)
-                print(("---",k,a,b,queue,res))
-                if b < len(strmap[k]):
-                    check = s[strmap[k][a]:strmap[k][b]+1]
-                    rever = check[::-1]
-                    if check == rever:
-                        if len(check) > len(res):
-                            res = check
-                        if a > 0 and b+1 < len(strmap[k]):
-                            a = a - 1
-                            b = b + 1
-                            queue.append((a,b))
-                    else: queue.append((b,b+1))
 
-        print(res)
-
-        # check each possible case with the length of odd number
-        for k in strmap:
-            queue.append(1)
-            while queue:
-                cur = queue.pop(0)
-                if len(strmap[k]) < 3: continue
-                if isinstance(cur, int):
-                    c = cur 
-                    queue.append((c-1,c+1))
-                    print((k,cur,queue,res))
-                else: 
-                    a = cur[0]
-                    b = cur[1]
-                    if b < len(strmap[k]):
-                        check = s[strmap[k][a]:strmap[k][b]+1]
-                        rever = check[::-1]
-                        if check == rever:
-                            if len(check) > len(res):
-                                res = check
-                            if a > 0 and b+1 < len(strmap[k]):
-                                a = a - 1
-                                b = b + 1
-                                queue.append((a,b))
-                        else: 
-                            if c+1 < len(strmap[k]):
-                                queue.append(c+1)
+        for i in range(l):
+            odd = self.spread(s,i,i)
+            even = self.spread(s,i,i+1)
+            res = max(odd,even,res,key = len)
+        
         return res
+
+
+# solution2: dp
+# time complexity: O(n^2), 4356 ms, 36.75%
+# space complexity: O(1), 22.3 MB, 5.55%
+class Solution:
+
+    def longestPalindrome(self, s: str) -> str:     
+        length = len(s)
+        if length<2: return s
+
+        dp = [[False for _ in range(length)] for _ in range(length)]
+        start = 0
+        max_len = 1
+
+        for j in range(1,length):
+            for i in range(0,j):
+                dp[i][j] = (s[i]==s[j] and (dp[i+1][j-1] or j-i<3))
+
+                if dp[i][j]:
+                    cur_len = j - i + 1
+                    if cur_len > max_len:
+                        max_len = cur_len
+                        start = i
+
+        return s[start:start+max_len]
+
+reference:https://leetcode-cn.com/problems/longest-palindromic-substring/solution/zhong-xin-kuo-san-dong-tai-gui-hua-by-liweiwei1419/
