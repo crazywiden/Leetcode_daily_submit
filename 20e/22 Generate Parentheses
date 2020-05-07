@@ -1,0 +1,36 @@
+#solution1: backwards
+#time complexity: O(4^n/sqrt(n)), 28 ms, 99.35%
+#space complexity: O(n), 13.9 MB, 6.06%
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        res = []
+        def backtrack(s,left,right):
+            if len(s) == 2*n:
+                res.append("".join(s))
+                return
+            if left < n:
+                s.append("(")
+                backtrack(s,left+1,right)
+                s.pop()
+            if right < left:
+                s.append(")")
+                backtrack(s,left,right+1)
+                s.pop()
+        
+        backtrack([],0,0)
+        return res
+
+#solution2: a+b
+#time complexity: O(4^n/sqrt(n)), 44 ms, 59.67%
+#space complexity: O(4^n/sqrt(n)), 13.9 MB, 6.06%
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        if n == 0: return [""]
+        res = []
+        for i in range(n):
+            for right in self.generateParenthesis(i):
+                for left in self.generateParenthesis(n-i-1):
+                    res.append("("+left+")"+right)
+        return res
+
+reference:https://leetcode-cn.com/problems/generate-parentheses/solution/gua-hao-sheng-cheng-by-leetcode-solution/
