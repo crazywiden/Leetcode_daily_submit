@@ -1,0 +1,28 @@
+#solution1: for loop + flag
+#time complexity: O(n), 60 ms, 64.48%
+#space complexity: O(1), 13.7 MB, 6.45%
+class Solution:
+    def romanToInt(self, s: str) -> int:
+        
+        l = len(s)
+
+        if l == 0: return 0
+        
+        note = {"I":1,
+        "V":5,
+        "X":10,
+        "L":50,
+        "C":100,
+        "D":500,
+        "M":1000
+        }
+
+        res = 0
+
+        for i in range(l):
+            if note[s[i]] < note[s[min(i+1,l-1)]]:
+                res = res - note[s[i]]
+            else: res = res + note[s[i]]
+
+        return res
+
