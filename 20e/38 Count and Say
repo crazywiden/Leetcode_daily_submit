@@ -1,0 +1,27 @@
+#solution1: recursive
+#time complexity: O(2^n), 40 ms,85.17%
+#space complexity: O(2^n), 13.7 MB,6.67%
+
+class Solution:
+    def countAndSay(self, n: int) -> str:
+
+        if n==1: return "1"
+
+        s = self.countAndSay(n-1)
+        res = ""
+        now = s[0]
+        t = 1
+        l = len(s)
+
+        for i in range(l):
+            if s[i] == now:
+                if i>0: 
+                    t = t + 1
+            else:
+                res = "".join([res,str(t),now])
+                now = s[i]
+                t = 1
+            if i == l-1:
+                    res = "".join([res,str(t),now])
+
+        return res
