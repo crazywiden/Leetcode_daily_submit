@@ -1,0 +1,39 @@
+#solution1: DFS
+#time complexity:O(nlogn), 36 ms, 90.72% 
+#space complexity:O(1), 13.7 MB, 10.00%, because there is a upper limit for the space needed
+class Solution:
+    def restoreIpAddresses(self, s: str) -> List[str]:
+
+        def comb(string:str, m:int) -> List[str]:
+
+            if not string: return None
+
+            l = len(string)
+
+            if (m == 1 and int(string)>255) or l<m or l>3*m or m==0 or (m==1 and string[0]=="0" and l>1): return None
+            possi = []
+
+            if m == 1: return string
+
+            if string[0]!= "0":
+                for i in range(1,4):
+                    if int(string[0:i])<=255: 
+                            possi1 = comb(string[i:l],m-1)
+                            if possi1:
+                                if m==2:possi.append(string[0:i]+"."+possi1)
+                                else:
+                                    for pos in possi1:
+                                        possi.append(string[0:i]+"."+pos)
+            else:
+                possi1 = comb(string[1:l],m-1)
+                if possi1:
+                    if m==2:possi.append(string[0]+"."+possi1)
+                    else:
+                        for pos in possi1:
+                            possi.append(string[0]+"."+pos)
+            return possi
+
+        res = comb(s,4)
+        return res
+            
+
