@@ -1,0 +1,24 @@
+#solution: iterative
+#time complexity:O(nm), m = len(shortest string), 95.27%, 32 ms
+#space complexity:O(m), 6.15%, 13.7 MB
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        if not strs: return ""
+
+        short = strs[0]
+        for s in strs:
+            if len(s)<len(short): 
+                short = s
+        
+        strs.remove(short)
+        res = ""
+        l = len(short)
+
+        if l == 0: return res
+
+        for i in range(l):
+            for w in strs:
+                if short[i] != w[i]: return res
+            res = res + short[i]
+        
+        return res
