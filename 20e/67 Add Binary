@@ -1,0 +1,20 @@
+#time complexity: O(n+m), 52 ms, 30.29% 
+#space complexity: O(1), 13.6 MB, 6.25%
+class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        l_a = len(a)
+        l_b = len(b)
+        d_a = 0
+        d_b = 0
+        for i_a in range(l_a):
+            d_a = d_a + int(a[i_a])*(2**(l_a - i_a -1))
+        for i_b in range(l_b):
+            d_b = d_b + int(b[i_b])*(2**(l_b - i_b -1))
+        res = d_a+d_b
+        res = str(bin(res)[2:])
+        return res
+
+#built-in function
+class Solution:
+    def addBinary(self, a, b) -> str:
+        return '{0:b}'.format(int(a, 2) + int(b, 2))
