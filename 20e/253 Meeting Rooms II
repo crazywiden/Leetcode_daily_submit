@@ -1,0 +1,33 @@
+#solution: brutal force
+#time complexity: O(n^2)
+#space complexity: O(n)
+class Solution:
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        res = 0
+
+        for interval in intervals:
+            start = interval[0]
+            end = interval[1]
+
+            s_o = len([o for o in intervals if (start>= o[0] and start<o[1])])
+            e_o = len([o for o in intervals if (end> o[0] and end<=o[1])])
+
+            res = max(s_o,e_o,res)
+
+        return res
+
+#priority queue
+#time complexity:O(nlogn), 60 ms, 41.58%
+#space complexity:O(n), 15.2 MB, 100.00%
+class Solution:
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        if not intervals: return 0
+        int_lst = sorted(intervals)
+        free = [int_lst[0][1]]
+
+        for m in int_lst[1:]:
+            if m[0]>=min(free):
+                free.remove(min(free))
+            free.append(m[1])
+        
+        return len(free)
