@@ -1,0 +1,53 @@
+#solution: sort + add to last
+#time complexity: O(nlogn), 632 ms, 8.68%
+#space complexity: O(n), 14.3 MB, 16.67%
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        
+        p_lst = []
+        p_len = len(people)
+
+        for p in range(p_len):
+            new_p = [people[p][1],people[p][0],p]
+            p_lst.append(new_p)
+
+        p_lst = sorted(p_lst)
+        print(p_lst)
+
+        res = p_lst
+
+        for p in range(1,p_len):
+            ge = p_lst[p][0]
+            h = p_lst[p][1]
+            count = 0
+            for b in range(p):
+                if count == 0 and ge == 0:
+                    break
+                if res[b][1]>= h:
+                    count = count + 1
+                if count > ge:
+                    tmp = res[b:p_len]
+                    tmp.remove(p_lst[p])
+                    res = res[0:b] + [p_lst[p]] + tmp
+                    break
+
+        fin = [0]*p_len
+
+        for p in range(p_len):
+            fin[p] = people[res[p][2]]
+
+        return fin
+
+#solution: sort*2 + index = rank
+#time complexity: O(nlogn), 116 ms, 68.98% 
+#space complexity: O(n), 14.1 MB, 16.67%
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        #sort in descending order by height and ascending order by rank
+        people.sort(key = lambda x: (-x[0], x[1]))
+        output = []
+        for p in people:
+            # list.insert(index,element)
+            output.insert(p[1], p)
+        return output
+#reference:https://leetcode-cn.com/problems/queue-reconstruction-by-height/solution/gen-ju-shen-gao-zhong-jian-dui-lie-by-leetcode/
