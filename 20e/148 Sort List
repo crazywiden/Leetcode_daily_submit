@@ -1,0 +1,40 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+#solution: fast+slow to split into two sublists -> sort sublists -> combine sublists
+#time complexity: O(nlogn), 228 ms, 64.69%
+#space complexity: O(n), 20.5 MB, 28.57%
+class Solution:
+    def sortList(self, head: ListNode) -> ListNode:
+        #stop case
+        if not head or not head.next:
+            return head
+
+        #find the mid(start of right), length(left)>= length(right)
+        #use fast and slow pointer, the speed of fast is 2*speed of slow
+        slow, fast = head, head.next
+        #becasue fast get to every other node, so the condition include fast.next and fast
+        while fast and fast.next:
+            fast, slow = fast.next.next, slow.next
+        #when fast pointer reaches None, the mid should the next of slow
+        #we split the link here
+        mid, slow.next = slow.next, None
+
+        #recursion to sort the newly-splitted sublists
+        left = self.sortList(head)
+        right = self.sortList(mid)
+
+        #combine the sorted sublists together
+        #a recorder(res) and a pointer(p) are needed
+        res = p = ListNode(0)
+        while left and right:
+            if left.val < right.val:
+                p.next, left = left, left.next
+            else: p.next, right = right, right.next
+            p = p.next
+        p.next = left if left else right
+
+        return res.next
