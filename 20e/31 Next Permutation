@@ -1,0 +1,51 @@
+#solution:
+#time complexity: O(n), 48 ms, 34.83% 
+#space complexity: O(1), 13.7 MB, 8.33%
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        comp = sorted(nums)
+        comp.reverse()
+        l = len(nums)
+        if nums == comp: 
+            nums[0:l] = sorted(nums)
+        else:
+            for i in range(l-2,-1,-1):
+                cur_lst = nums[i:l]
+                comp_lst = sorted(cur_lst)
+                comp_lst.reverse()
+                if cur_lst != comp_lst:
+                    if i == l-2: 
+                        tmp = nums[i]
+                        nums[i] = nums[i+1]
+                        nums[i+1] = tmp
+                        break
+                    after = cur_lst[1:l]
+                    cand_lst = [a for a in after if a > cur_lst[0]]
+                    cand = min(cand_lst)
+                    after.append(nums[i])
+                    nums[i] = cand
+                    after.remove(cand)
+                    nums[i+1:l] = sorted(after)
+                    break
+
+shorter version:
+#solution:
+#time complexity: O(n), 48 ms, 34.83% 
+#space complexity: O(1), 13.7 MB, 8.33%
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        for i in range(len(nums)-1, 0, -1):
+            if nums[i] > nums[i-1]:
+                nums[i:] = sorted(nums[i:])
+                for j in range(i, len(nums)):
+                    if nums[j] > nums[i-1]:
+                        nums[j], nums[i-1] = nums[i-1], nums[j]
+                        break
+                return
+        nums.sort()
