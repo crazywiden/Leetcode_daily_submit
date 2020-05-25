@@ -1,0 +1,19 @@
+#solution: monotonic stack
+#time complexity: O(n), 500 ms, 97.94%
+#space complexity: O(n), 17.3 MB, 12.50%
+
+class Solution:
+    def dailyTemperatures(self, T: List[int]) -> List[int]:
+        length = len(T)  # length of total days
+        res = [0] * length
+        stack = []
+        
+        for i in range(length):
+            while stack and T[i] > T[stack[-1]]:
+                small = stack.pop()
+                res[small] = i - small
+                
+            stack.append(i)
+        return res
+
+#reference: https://leetcode-cn.com/problems/daily-temperatures/solution/dan-diao-zhan-wen-ti-qiu-jie-by-drew-12/
