@@ -1,0 +1,9 @@
+#solution: math
+#time complexity: O(# kinds of tasks), 72 ms, 81.77% 
+#space complexity: O(# kinds of tasks), 13.9 MB, 8.33%
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        tnum=[]
+        for i in set(tasks):tnum.append(tasks.count(i))
+        maxt=max(tnum)
+        return max((n+1)*(maxt-1)+tnum.count(maxt),len(tasks))
