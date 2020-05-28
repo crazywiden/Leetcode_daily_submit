@@ -1,0 +1,36 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+#solution: iteration
+#time complexity: O(n1+n2), 124 ms, 26.17%
+#space complexity: O(n1+n2), 14.7 MB, 8.33%
+class Solution:
+    def mergeTrees(self, t1: TreeNode, t2: TreeNode) -> TreeNode:
+
+        if not (t1 or t2): return None
+        if not t1: return t2
+        if not t2: return t1
+
+        queue = [t1,t2]
+        while queue:
+            n2 = queue.pop()
+            n1 = queue.pop()
+            n1.val = n1.val + n2.val
+
+            if n1.left or n2.left:
+                if not n1.left: n1.left = TreeNode(0)
+                queue.append(n1.left)
+                if n2.left: queue.append(n2.left)
+                else: queue.append(TreeNode(0))
+
+            if n1.right or n2.right:
+                if not n1.right: n1.right = TreeNode(0)
+                queue.append(n1.right)
+                if n2.right: queue.append(n2.right)
+                else: queue.append(TreeNode(0))
+
+        return t1

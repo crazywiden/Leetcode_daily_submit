@@ -1,0 +1,38 @@
+#solution: brute force
+#time complexity:O(n^2)
+#space complexity:O(1)
+
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+
+        n = len(nums)
+        count = 0
+
+        for i in range(n):
+            for j in range(n-i+1):
+                if i+j>i and sum(nums[i:(i+j)]) == k:
+                    count = count + 1
+
+        return count
+
+
+#solution: pre-sum
+#time complexity:O(n), 48 ms, 99.71% 
+#space complexity:O(1), 15.9 MB, 11.11%
+
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+
+        count = 0
+        dic = {0:1}
+        cur = 0
+
+        for num in nums:
+            cur = cur + num
+            if cur - k in dic:
+                count = count + dic[cur-k]
+            if cur not in dic:
+                dic[cur] = 1
+            else: dic[cur] = dic[cur] + 1
+
+        return count
