@@ -1,0 +1,31 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+# The left subtree of a node contains only nodes with keys lesser than the node’s key.
+# The right subtree of a node contains only nodes with keys greater than the node’s key.
+# The left and right subtree each must also be a binary search tree.
+
+#solution: recursion
+#time complexity: O(n), 76 ms, 86.37%
+#space complexity: O(1), 15.9 MB, 16.67%
+
+class Solution:
+    
+    def convertBST(self, root: TreeNode) -> TreeNode:
+        self.cum = 0
+        def sub(node):
+            if node.right: sub(node.right)
+            node.val = node.val + self.cum
+            self.cum = node.val 
+            if node.left: sub(node.left)
+
+        if root: sub(root)
+
+        return root
+
+            
+
