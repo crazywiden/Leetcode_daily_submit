@@ -1,0 +1,20 @@
+#solution: iteration
+#time complexity:O(n), 28 ms, 98.41%
+#spce complexity:O(n), 13.7 MB, 6.67%
+#n = max(x,y)
+class Solution:
+    def hammingDistance(self, x: int, y: int) -> int:
+        if x==y: return 0
+
+        x_str = "{0:b}".format(x)
+        y_str = "{0:b}".format(y)
+        x_len = len(x_str)
+        y_len = len(y_str)
+        if x_len < y_len: x_str = "0"*(y_len - x_len)+x_str
+        if x_len > y_len: y_str = "0"*(x_len - y_len)+y_str
+
+        count = 0
+        for l in range(max(x_len,y_len)):
+            if x_str[l]!=y_str[l]: count = count + 1
+        
+        return count

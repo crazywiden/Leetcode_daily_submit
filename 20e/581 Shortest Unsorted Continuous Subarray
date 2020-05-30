@@ -1,0 +1,23 @@
+#solution: two pointers
+#time complexity: O(nlogn), 236 ms, 93.72%
+#space complexity: O(1), 14.8 MB, 5.56%
+class Solution:
+    def findUnsortedSubarray(self, nums: List[int]) -> int:
+        
+        s_nums = sorted(nums)
+
+        if nums == s_nums or not nums: return 0
+        
+        length = len(nums)
+
+        for i in range(length):
+            if nums[i]!= s_nums[i]:
+                start = i
+                break
+
+        for i in range(length-1,-1,-1):
+            if nums[i]!= s_nums[i]:
+                end = i
+                break
+        
+        return end - start + 1
