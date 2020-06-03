@@ -1,0 +1,23 @@
+#binary search
+#time complexity: O(logn), 44 ms, 47.90%
+#space complexity: O(logn), 13.6 MB, 7.69%
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        if target not in nums: return -1
+        l = len(nums)
+        mid = l//2
+        if nums[mid] == target: return mid
+        if abs(nums[0]-nums[mid])<abs(nums[l-1]-nums[mid]):
+            if nums[0] <= target and target < nums[mid]: 
+                return self.search(nums[0:mid],target)
+                
+            else: 
+                return mid + self.search(nums[mid:l],target)
+                
+        else:
+            
+            if nums[mid] < target and target <= nums[l-1]: 
+                return mid + self.search(nums[mid:l],target)
+                
+            else: 
+                return self.search(nums[0:mid],target)

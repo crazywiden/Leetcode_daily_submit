@@ -1,0 +1,6 @@
+#built-in
+#time complexity: O(n), 448 ms, 74.91%
+#space comlexity: O(1), 24.7 MB, 8.33%
+class Solution:
+    def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+        return set(range(1,len(nums)+1)).difference(set(nums))
