@@ -1,0 +1,41 @@
+#solution: recursion + binary search
+#time complexity: O(logn), 52 ms, 21.17%
+#space complexity: O(logn), 14.5 MB, 7.69%
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        if target not in nums: return [-1,-1]
+        l = len(nums)
+        m = l//2
+        s = e = m
+        if nums[m] == target:
+            for i in range(m,-1,-1):
+                if i > 0:
+                    if nums[i] != target:
+                        s = i+1
+                        break
+                else: 
+                    if nums[i] == target:
+                        s = i
+                    else: s = i + 1
+
+            for i in range(m,l):
+                if i < l-1:
+                    if nums[i] != target:
+                        e = i-1
+                        break
+                else:
+                    if nums[i] == target:
+                        e = i
+                    else:
+                        e = i-1
+                
+            return [s,e]
+
+        if nums[m] > target:
+            return self.searchRange(nums[0:m],target)
+
+        if nums[m] < target:
+            pre = self.searchRange(nums[m:l],target)
+            for i in range(len(pre)):
+                pre[i] = pre[i] + m
+            return pre

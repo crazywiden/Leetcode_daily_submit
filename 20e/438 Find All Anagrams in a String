@@ -1,0 +1,69 @@
+#solution: compare sorted
+#time complexity: O(nlogp), 4516 ms, 8.32%
+#space complexity: O(n), 14.5 MB, 9.09%
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        l_p = len(p)
+        l_s = len(s)
+
+        if l_s == 0: return []
+
+        res = []
+        for i in range(-1,l_s-l_p):
+            if i in res:
+                if s[i+l_p]==s[i]:
+                    res.append(i+1)
+            else:
+                if sorted(s[i+1:i+l_p+1]) == sorted(p):
+                    res.append(i+1)
+        
+        return res
+
+#solution: compare counter
+#time complexity: O(n), 1268 ms, 10.06%
+#space complexity: O(n), 14.5 MB, 9.09%
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        from collections import Counter
+        n = len(p)
+        p = Counter(p)
+        #create the dictionary, where the keys are the iterative and the values are the corresponding counts.
+        dp = [0] * (len(s) + 1)
+        dp[0] = Counter()
+        res = []
+        for i in range(1, len(s) + 1):
+            dp[i] = dp[i - 1].copy()
+            dp[i][s[i - 1]] += 1
+            if i >= n and dp[i] - dp[i - n] == p:
+                res.append(i - n)
+        return res
+
+#solution: slide
+#time complexity: O(n)
+#space complexity: O(1)
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        # 记录p, s字母个数
+        p_count = [0] * 26
+        s_count = [0] * 26
+        res = []
+        for a in p:
+            #The ord() function returns an integer representing the Unicode character.
+            #a = 97
+            print(ord(a))
+            p_count[ord(a) - 97] += 1
+        left = 0
+        for right in range(len(s)):
+            # print(p_count, s_count)
+            if right < len(p) - 1:
+                s_count[ord(s[right]) - 97] += 1
+                continue
+            # 窗口加一个， 减一个，维护长度为len(p)的长度
+            s_count[ord(s[right]) - 97] += 1
+            if p_count == s_count:
+                res.append(left)
+            s_count[ord(s[left]) - 97] -= 1
+            left += 1
+        return res
+
+#reference:https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/solution/duo-chong-si-lu-by-powcai-3/
