@@ -1,0 +1,20 @@
+#solution1:recursive
+#solution2:dp
+#time complexity: O(n*target), 56 ms, 80.77%
+#space complexity:O(n*target), 13.8 MB, 5.00%
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        
+        l = len(candidates)
+        dp = [[] for _ in range(target+1)]
+
+
+        for i in sorted(candidates,reverse = True):
+            for j in range(i,target+1):
+                if j == i:
+                    dp[j] = [[i]]
+                    continue
+                dp[j].extend([x+[i] for x in dp[j - i]])
+                #The extend() method adds all the elements of an iterable (list, tuple, string etc.) to the end of the list.
+
+        return dp[-1]
