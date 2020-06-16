@@ -1,0 +1,62 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+#solution1: queue
+#time complexity: O(n^2), 832 ms, 43.43%
+#space complexity: O(n^2), 33.5 MB, 8.33%
+
+class Solution:
+    def pathSum(self, root: TreeNode, sum: int) -> int:
+        #dp = [0]*2001
+        if not root: return 0
+
+        queue = [root]
+        node_dic = {}
+        count = 0
+
+        while queue:
+
+            node = queue.pop(0)
+
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+
+            if node in node_dic:
+
+                cur = node_dic[node]
+                length = len(cur)
+
+                if node.left:
+                    node_dic[node.left] = [node.left.val]
+                    if node.left.val == sum: count = count + 1
+                    for i in range(length):
+                        node_dic[node.left].append(cur[i] + node.left.val) 
+                        if cur[i] + node.left.val == sum: count = count + 1
+
+                if node.right:
+                    node_dic[node.right] = [node.right.val]
+                    if node.right.val == sum: count = count + 1
+                    for i in range(length):
+                        node_dic[node.right].append(cur[i] + node.right.val) 
+                        if cur[i] + node.right.val == sum: count = count + 1
+
+            else: 
+                node_dic[node] = [node.val]
+                if node.val == sum: count = count + 1
+                if node.right:
+                    node_dic[node.right] = [node.right.val, node.right.val+node.val]
+                    if node.right.val == sum: count = count + 1
+                    if  node.right.val+node.val == sum: count = count + 1
+                if node.left:
+                    node_dic[node.left] = [node.left.val, node.left.val+node.val]
+                    if node.left.val == sum: count = count + 1
+                    if node.left.val+node.val == sum: count = count + 1
+
+        return count
+

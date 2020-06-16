@@ -1,0 +1,17 @@
+# solution: dp
+# time complexity: O(n), 1144 ms, 62.81%
+# space complexity: O(n), 13.8 MB, 33.33%
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        if not nums: return True
+        if len(nums) == 1: return False
+        target1 = sum(nums)
+        if target1%2 == 1 or max(nums)>target1/2: return False
+        target = int(target1/2)
+        dp = [0]*(target+1)
+        for num in nums:
+            dp_old = list(dp)
+            for i in range(target):
+                if dp_old[i] > 0 and i+num <= target: dp[i+num] = 1
+            if num <= target: dp[num] = 1
+        return dp[target]==1
