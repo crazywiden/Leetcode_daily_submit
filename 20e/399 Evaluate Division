@@ -1,0 +1,54 @@
+#solution: calculation
+#time complexity: O(n*x+m), n = # unique value in equations, x = max(len(linked values)),
+                            # m = # unique value in queries, 36 ms, 87.93%
+#space complexity: O(logn*x+m), 13.7 MB, 14.29%
+class Solution:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        
+        res_len = len(queries)
+        res = [-1.0]*res_len
+        dic_list = []
+        dic_seen = {}
+        length = len(equations)
+        for i in range(length):
+            item = equations[i]
+            if item[0] not in dic_seen and item[1] not in dic_seen:
+                dic_seen[item[0]] = len(dic_list)
+                dic_seen[item[1]] = len(dic_list)
+                node = {}
+                node[item[1]] = 1
+                node[item[0]] = values[i]
+                dic_list.append(node)
+
+            if item[1] in dic_seen and item[0] not in dic_seen:
+                dic_list[dic_seen[item[1]]][item[0]] = dic_list[dic_seen[item[1]]][item[1]]*values[i]
+                dic_seen[item[0]] = dic_seen[item[1]]
+            
+            if item[0] in dic_seen and item[1] not in dic_seen:
+                prev = dic_list[dic_seen[item[0]]][item[0]]
+                for k in dic_list[dic_seen[item[0]]]: 
+                    dic_list[dic_seen[item[0]]][k] = dic_list[dic_seen[item[0]]][k] * values[i]
+                dic_list[dic_seen[item[0]]][item[1]] = prev
+                dic_seen[item[1]] = dic_seen[item[0]]
+
+            if item[0] in dic_seen and item[1] in dic_seen:
+                if dic_seen[item[0]] != dic_seen[item[1]]:
+                    mul = values[i] * dic_list[dic_seen[item[1]]][item[1]]
+                    for k in dic_list[dic_seen[item[0]]]: 
+                        dic_list[dic_seen[item[0]]][k] = dic_list[dic_seen[item[0]]][k] * mul 
+                    prev = dic_seen[item[1]]
+                    for k in dic_list[dic_seen[item[1]]]: 
+                        dic_list[dic_seen[item[0]]][k] = dic_list[dic_seen[item[1]]][k]
+                        dic_seen[k] = dic_seen[item[0]]
+                    del dic_list[prev]
+            print(dic_list)
+        
+        for j in range(res_len):
+            que = queries[j]
+            if que[0] in dic_seen and que[1] in dic_seen:
+                if dic_seen[que[0]]==dic_seen[que[1]]:
+                    res[j] = dic_list[dic_seen[que[0]]][que[0]]/dic_list[dic_seen[que[0]]][que[1]]
+        
+        return res
+
+
