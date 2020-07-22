@@ -1,0 +1,38 @@
+#solution: string to sorted list in dictionary
+#time complexity: O(NKlogK), N words, K = len(word), 56 ms, 87.48% 
+#space complexity: O(NK), 16.5 MB, 57.14%
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        seen = {}
+        for word in strs:
+            now = "".join(sorted(list(word)))
+            if now not in seen:
+                seen[now]=[word]
+            else: seen[now].append(word)
+        
+        res = []
+        for saw in seen:
+            res.append(seen[saw])
+
+        return res
+
+
+#solution: count characters in word
+#time complexity: O(NK), N words, K = len(word), 88 ms, 18.26% 
+#space complexity: O(NK), 18.3 MB, 14.29%
+#reference: https://leetcode-cn.com/problems/group-anagrams/solution/zi-mu-yi-wei-ci-fen-zu-by-leetcode/
+
+class Solution(object):
+    def groupAnagrams(self, strs):
+        """
+        :type strs: List[str]
+        :rtype: List[List[str]]
+        """
+        dic = {}
+        for s in strs:
+            count = [0] * 26
+            for c in s:
+                count[ord(c) - ord('a')] += 1
+            dic[tuple(count)] = dic.get(tuple(count), []) + [s]
+
+        return list(dic.values())

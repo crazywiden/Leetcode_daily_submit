@@ -1,0 +1,14 @@
+#solutionn: count as key, sort key
+#time complexity: O(nlogn), 2396 ms, 5.06% 
+#space complexity: O(n), 16.5 MB, 100.00%
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        book = {}
+        for i in set(nums):
+            c = nums.count(i)
+            book[c] = book.get(c,[]) + [i]
+        sort_book = sorted(book,reverse = True)[0:k]
+        res = []
+        for i in sort_book:
+            res = res + book[i]
+        return res[0:k]
