@@ -1,0 +1,26 @@
+#solution: brutal force
+#time complexity: O(n), 176 ms, 12.72%
+#space complexity: O(n), 20.5 MB, 11.11%
+class Solution:
+    def countBits(self, num: int) -> List[int]:
+        num = list(range(num+1))
+        size = len(num)
+        for i in range(size):
+            num[i] = bin(num[i])[2:]
+            num[i] = num[i].count("1")
+        return num
+
+#solution: dp
+#time complexity: O(n), 100 ms, 64.39%
+#space complexity: O(n), 20.4 MB, 11.11%
+class Solution:
+    def countBits(self, num: int) -> List[int]:
+        dp=[0]*(num+1)
+        for i in range(1,num+1):
+            if(i%2==1):
+                dp[i]=dp[i-1]+1
+            else:
+                dp[i]=dp[i//2]
+        return dp
+
+#reference:https://leetcode-cn.com/problems/counting-bits/solution/dong-tai-gui-hua-wei-yun-suan-xing-zhi-python3-by-/
