@@ -1,0 +1,18 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+#solution: DFS
+#time complexity: O(n), 68 ms, 48.14%
+#space complexity: O(n), 15.6 MB, 50.00%
+class Solution:
+    def hehe(self, root) -> [int]:
+        if not root: return [0,0]
+        left, left_not = self.hehe(root.left)
+        right, right_not = self.hehe(root.right)
+        return [root.val+left_not+right_not,max(left+right,left+right_not, left_not+right, left_not+right_not)]
+    def rob(self, root: TreeNode) -> int:
+        return max(self.hehe(root))

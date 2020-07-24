@@ -1,0 +1,74 @@
+#solution: brutal force
+#time complexity: O(n), 36 ms, 88.76%
+#space complexity: O(n), 13.7 MB, 8.33%
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        l = len(nums)
+        two = 0
+        zero = 0
+        one = 0
+        for i in range(l):
+            now = nums[i]
+            if now == 2: two = two + 1
+            if now == 0: zero = zero + 1
+            if now == 1: one = one + 1
+        
+        for i in range(zero):
+            nums[i] = 0
+
+        for i in range(zero, zero+one):
+            nums[i] = 1
+
+        for i in range(zero+one, zero+one+two):
+            nums[i] = 2
+        
+
+#solution: switch
+#time complexity: O(n^2), N/A ms
+#space complexity: O(n), N/A MB
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        l = len(nums)
+        j = 0
+
+        while j < l-1:
+            i = j
+
+            while nums[i]>min(nums[i+1:]):
+                tmp = nums[i]
+                nums[i] = nums[i+1]
+                nums[i+1] = tmp
+                i = i + 1
+                if not nums[i+1:]: break
+            
+            if i == j: j = j + 1
+        
+#solution: 3 pointers
+#time complexity: O(n), 36 ms, 88.76%
+#space complexity: O(1), 13.7 MB, 8.33%
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        # 对于所有 idx < p0 : nums[idx < p0] = 0
+        # curr是当前考虑元素的下标
+        p0 = curr = 0
+        # 对于所有 idx > p2 : nums[idx > p2] = 2
+        p2 = len(nums) - 1
+
+        while curr <= p2:
+            if nums[curr] == 0:
+                nums[p0], nums[curr] = nums[curr], nums[p0]
+                p0 += 1
+                curr += 1
+            elif nums[curr] == 2:
+                nums[curr], nums[p2] = nums[p2], nums[curr]
+                p2 -= 1
+            else:
+                curr += 1
+
+#reference: https://leetcode-cn.com/problems/sort-colors/solution/yan-se-fen-lei-by-leetcode/
