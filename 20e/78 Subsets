@@ -1,0 +1,43 @@
+#Lessons:
+#1. this is a problem of subset, which means each element has two possibilities, 0 or 1, so this is at least O(2^n), then we go through each element in computation => O(n*2^n)
+#2. to get the bitmask, from 0..00 to 1..1:
+        (1) for i in range(2**n, 2**(n + 1)):
+            # generate bitmask, from 0..00 to 1..11
+            bitmask = bin(i)[3:]
+	(2) nth_bit = 1 << n
+		for i in range(2**n):
+		# generate bitmask, from 0..00 to 1..11
+	        	bitmask = bin(i | nth_bit)[3:]
+#3.x << y Returns x with the bits shifted to the left by y places (and new bits on the right-hand-side are zeros). This is the same as multiplying x by 2**y.
+
+
+
+#DFS
+#time complexity: O(n^2), 60 ms, 7.20%
+#space complexity: O(n^2), 13.8 MB, 5.72%
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        l = len(nums)
+        if l < 1: return [[]]
+        prev = self.subsets(nums[:l-1])
+        new = [ele+[nums[l-1]] for ele in prev] + prev
+        return new
+
+#dictionary
+#time complexity: O(n*2^n), 60 ms, 7.20%
+#space complexity: O(n*2^n), 13.8 MB, 5.72%
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        n = len(nums)
+        output = []
+        
+        for i in range(2**n, 2**(n + 1)):
+            # generate bitmask, from 0..00 to 1..11
+            bitmask = bin(i)[3:]
+            
+            # append subset corresponding to that bitmask
+            output.append([nums[j] for j in range(n) if bitmask[j] == '1'])
+        
+        return output
+
+#reference: https://leetcode-cn.com/problems/subsets/solution/zi-ji-by-leetcode/
