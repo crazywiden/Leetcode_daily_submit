@@ -1,0 +1,21 @@
+#step1:product = product(prefix) * product(suffix)
+#step2:use res to replace the array of prefix
+#step3:use variable to replace the array of suffix
+#time complexity: O(n), 52 ms, 95.00% 
+#space complexiyt: O(1), 17.8 MB, 100.00% 
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        res = [1]
+        after = 1
+        l = len(nums)
+
+        for i in range(0,l-1,1):
+            res.append(res[-1]*nums[i])
+
+        for i in range(l-1,0,-1):
+            res[i] = res[i]*after
+            after = after*nums[i]
+        
+        res[0] = res[0]*after
+
+        return res
