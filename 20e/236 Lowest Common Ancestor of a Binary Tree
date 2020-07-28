@@ -1,0 +1,46 @@
+#solution:DFS to save the parents into a dictionary
+#time complexity: O(n), 92 ms, 56.42%
+#space complexity: O(n), 17.8 MB, 100.00%
+
+# Definition for a binary tree node.
+
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        queue = [root]
+        dic = {}
+        dic[root] = root
+        stop = 0
+        while queue:
+            cur = queue.pop(0)
+            
+            if stop == 2: break
+            if cur.left:
+                dic[cur.left] = cur
+                if cur.left.val == p.val or cur.left.val == q.val:
+                    stop = stop + 1
+                queue.append(cur.left)
+            if cur.right:
+                dic[cur.right] = cur
+                if cur.right.val == p.val or cur.right.val == q.val:
+                    stop = stop + 1
+                queue.append(cur.right)
+
+        cur = p
+        p_list = []
+        while dic[cur] != cur:
+            p_list.append(cur)
+            cur = dic[cur]
+        p_list.append(cur)
+
+        cur = q
+        while dic[cur] != cur:
+            if cur in p_list: 
+                return cur
+            cur = dic[cur]
+        return cur
