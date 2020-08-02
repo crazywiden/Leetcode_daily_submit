@@ -1,0 +1,21 @@
+#solution: compare the original one and the reversed one
+#time complexity: O(n), the list.reverse() is O(n), 88 ms, 52.35%
+#space complexity: O(n), 24 MB, 10.43%
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def isPalindrome(self, head: ListNode) -> bool:
+        cur = head
+        vals = []
+        while cur:
+            vals.append(cur.val)
+            cur = cur.next
+
+        orig = list(vals)
+        vals.reverse()
+        if vals == orig:return True
+        return False
