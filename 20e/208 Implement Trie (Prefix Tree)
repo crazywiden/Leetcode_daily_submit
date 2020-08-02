@@ -1,0 +1,59 @@
+#solution: use dictionary instead of list
+#time complexity: O(n), 236 ms, 26.57%, n = len(word)
+#space complexity: O(l), 32.1 MB, 17.92%, l = len(max(n))
+
+#Need to know: What is Trie
+#Each TrieNode contains a list of 26(26 character), here because python doesn't have a empty list of length 26, I use dictionary
+#the index of which non-Null cells of the list indicates which charater is the next character
+#In the cell/dictionary, it contains the next Node
+#So, importance feature of Trie:
+#The structure and size is the same, depends of the longest word.
+class TrieNode:
+    def __init__(self):
+        self.later = defaultdict(TrieNode)
+        self.is_End = False
+
+class Trie:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.node = TrieNode()
+
+    def insert(self, word: str) -> None:
+        """
+        Inserts a word into the trie.
+        """
+        tmp = self.node
+        for s in word:
+            tmp = tmp.later[s]
+        tmp.is_End = True
+
+    def search(self, word: str) -> bool:
+        """
+        Returns if the word is in the trie.
+        """
+        tmp = self.node
+        for s in word:
+            if s not in tmp.later: return False
+            tmp = tmp.later[s]
+        return tmp.is_End == True
+
+    def startsWith(self, prefix: str) -> bool:
+        """
+        Returns if there is any word in the trie that starts with the given prefix.
+        """
+        tmp = self.node
+        for s in prefix:
+            if s not in tmp.later: return False
+            tmp = tmp.later[s]
+        return True
+
+
+
+# Your Trie object will be instantiated and called as such:
+# obj = Trie()
+# obj.insert(word)
+# param_2 = obj.search(word)
+# param_3 = obj.startsWith(prefix)

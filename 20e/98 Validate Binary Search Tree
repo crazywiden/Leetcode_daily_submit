@@ -1,0 +1,91 @@
+#solution: Inorder Traversal (LDR)
+#time complexity: O(n), 60 ms, 53.02%
+#space complexity: O(logn), 16.2 MB, 41.77% 
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def isValidBST(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        stack, inorder = [], float('-inf')
+        
+        while stack or root:
+            while root:
+                stack.append(root)
+                root = root.left
+            root = stack.pop()
+            # 如果中序遍历得到的节点的值小于等于前一个 inorder，说明不是二叉搜索树
+            if root.val <= inorder:
+                return False
+            inorder = root.val
+            root = root.right
+
+        return True
+
+#reference: https://leetcode-cn.com/problems/validate-binary-search-tree/solution/yan-zheng-er-cha-sou-suo-shu-by-leetcode-solution/
+
+
+#solution: recursion
+#time complexity: O(n), 60 ms, 53.02%
+#space complexity: O(n), 16.5 MB, 26.04%
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def helper(self, root) -> list:
+        right_check = True
+        left_check = True
+        right_min_val = root.val
+        right_max_val = root.val
+        left_max_val = root.val
+        left_min_val = root.val
+
+        if root.right:
+            right = self.helper(root.right)
+            right_min_val = right[2]
+            right_max_val = right[1]
+            if not right[0] or root.val>=right_min_val:
+                right_check = False
+            
+        if root.left:
+            left = self.helper(root.left)
+            left_max_val = left[1]
+            left_min_val = left[2]
+            if not left[0] or root.val<=left_max_val:
+                left_check = False
+
+        return [(right_check and left_check), right_max_val, left_min_val]
+        
+    def isValidBST(self, root: TreeNode) -> bool:
+
+        if not root: 
+            return True
+
+        if root.right:
+            right = self.helper(root.right)
+            if not right[0] or root.val>=right[2]: 
+                return False
+        if root.left:
+            left = self.helper(root.left)
+            if not left[0] or root.val<=left[1]: 
+                return False
+        
+        return True
+
+
+
+        
+        
