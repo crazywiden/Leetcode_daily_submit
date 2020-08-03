@@ -1,0 +1,105 @@
+#solution: DP,  keep the min and max for each call, swap min and max when the num<0
+#time complexity: O(n), 48 ms, 83.86%
+#space complexity: O(1), 13.7 MB, 95.54%
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        if not nums: return 
+        res = nums[0]
+        pre_max = nums[0]
+        pre_min = nums[0]
+        for num in nums[1:]:
+            cur_max = max(pre_max * num, pre_min * num, num)
+            cur_min = min(pre_max * num, pre_min * num, num)
+            res = max(res, cur_max)
+            pre_max = cur_max
+            pre_min = cur_min
+        return res
+
+
+#solution: the # of negative sign
+#time complexity: O(n), 52 ms, 68.86% 
+#space complexity: O(n), 14.6 MB, 39.61%
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        reverse_nums = nums[::-1]
+        for i in range(1, len(nums)):
+            #here or 1 is to deal with 0, if the previous is 0, then restart
+            nums[i] *= nums[i - 1] or 1
+            reverse_nums[i] *= reverse_nums[i - 1] or 1
+        print(nums,reverse_nums)
+        return max(nums + reverse_nums)
+
+
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        if not nums: return
+        # 目前的累乘
+        cur_pro = 1
+        # 前面最小的正数
+        min_pos = 1
+        # 前面最大的负数
+        max_neg = float("-inf")
+        # 结果
+        res = float("-inf")
+        for num in nums:
+            cur_pro *= num
+            # 考虑三种情况
+            # 大于0
+            if cur_pro > 0:
+                res = max(res, cur_pro // min_pos)
+                min_pos = min(min_pos, cur_pro)
+            # 小于0
+            elif cur_pro < 0:
+                if max_neg != float("-inf"):
+                    res = max(res, cur_pro // max_neg)
+                else:
+                    res = max(res, num)
+                max_neg = max(max_neg, cur_pro)
+            # 等于0 
+            else:
+                cur_pro = 1
+                min_pos = 1
+                max_neg = float("-inf")
+                res = max(res, num)
+        return res 
+
+#reference：https://leetcode-cn.com/problems/maximum-product-subarray/solution/duo-chong-si-lu-qiu-jie-by-powcai-3/
+
+
+class Solution:
+    def helper(self, nums: List[int]) -> int:
+
+        l = len(nums)
+
+        if l == 0: return None
+        if l == 1: return nums[0]
+
+        start = 0
+        end = l - 1
+        
+        left = [nums[start]]*l
+        right = [nums[end]]*l
+
+        for i in range(1, l, 1):
+            left[i] = left[i-1] * nums[i]
+            right[l-1-i] = right[l-i] * nums[l-1-i]
+        return max(max(left),max(right),max(nums))
+
+    def maxProduct(self, nums: List[int]) -> int:
+
+        l = len(nums)
+
+        if l == 0: return 0
+        if l == 1: return nums[0]
+
+        start = 0
+        end = l
+        res =[]
+
+        while start <= end:
+            if self.helper(nums[start:end])!= None:
+                res.append(self.helper(nums[start:end]))
+            start = start + 1
+            end = end - 1
+        return max(res)
+        
