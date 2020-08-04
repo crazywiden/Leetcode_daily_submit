@@ -1,0 +1,58 @@
+#solution: iteration + set + seen
+#time complexity: O(n), 48 ms, 99.56%
+#space complexity: O(n), 17.2 MB, 5.22% 
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        if not head: return None
+        seen = set()
+        while head:
+            if head in seen: return head
+            else: seen.add(head)
+            head = head.next
+        return None
+
+
+#solution: quick and slow pointer
+#time complexity: O(n), 68 ms, 47.24% 
+#space complexity: O(1), 16.7 MB, 61.66%
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        if not head: return None
+
+        pt1 = head
+        pt2 = head
+        sign = 0
+
+        while pt2 and pt2.next:
+            pt2 = pt2.next.next
+            pt1 = pt1.next
+            # the location of comparison has to be here, 
+            # if reverse, then it will give the head....
+            if pt2 == pt1:
+                sign = 1
+                break
+        
+        print(pt1 == pt2, pt1.val)
+        if sign == 0:return None
+
+        pt3 = head
+        while pt3 != pt2:
+            pt3 = pt3.next
+            pt2 = pt2.next
+        
+        return pt3
+
