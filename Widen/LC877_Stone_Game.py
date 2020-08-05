@@ -30,6 +30,31 @@ piles.length is even.
 sum(piles) is odd.
 """
 
+# revisit -- dp
+# Runtime: 904 ms, faster than 17.15% of Python3 online submissions for Stone Game.
+# Memory Usage: 19.7 MB, less than 50.00% of Python3 online submissions for Stone Game.
+class Solution:
+    def stoneGame(self, piles: List[int]) -> bool:
+        N = len(piles)
+        if N <= 2:
+            return True
+        
+        dp = [[0 for _ in range(N)] for _ in range(N)]
+        for i in range(N):
+            dp[i][i] = piles[i]
+        for i in range(N-1):
+            dp[i][i+1] = max(piles[i], piles[i+1])
+        
+        for i in range(N-2, -1, -1):
+            for j in range(i+2, N):
+                take_left = min(dp[i+1][j-1], dp[i+2][j]) + piles[i]
+                take_right = min(dp[i+1][j-1], dp[i][j-2]) + piles[j]
+                dp[i][j] = max(take_left, take_right)
+            
+        return dp[0][-1]*2 >= sum(piles)
+                
+        
+
 # this one is exactly the same as LC464 Can I win
 # method 1:  minMax strategy
 # Runtime: 676 ms, faster than 21.20% of Python3 online submissions for Stone Game.
