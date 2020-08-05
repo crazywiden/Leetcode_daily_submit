@@ -15,7 +15,29 @@ Input:
 Output: 7
 Explanation: Because the path 1→3→1→1→1 minimizes the sum.
 """
-
+# simple dp
+# Runtime: 124 ms, faster than 44.36% of Python3 online submissions for Minimum Path Sum.
+# Memory Usage: 15.4 MB, less than 29.06% of Python3 online submissions for Minimum Path Sum.
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        if len(grid) == 0:
+            return 0
+        n_row, n_col = len(grid), len(grid[0])
+        if n_col == 0:
+            return 0
+        dp = [[float("inf") for _ in range(n_col)] for _ in range(n_row)]
+        dp[0][0] = grid[0][0]
+        for i in range(1, n_col):
+            dp[0][i] = dp[0][i-1] + grid[0][i]
+        for i in range(1, n_row):
+            dp[i][0] = dp[i-1][0] + grid[i][0]
+        
+        for i in range(1, n_row):
+            for j in range(1, n_col):
+                dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + grid[i][j]
+        return dp[-1][-1]
+    
+         
 # simple dp again
 # Runtime: 96 ms, faster than 90.54% of Python3 online submissions for Minimum Path Sum.
 # Memory Usage: 14.4 MB, less than 75.44% of Python3 online submissions for Minimum Path Sum.
