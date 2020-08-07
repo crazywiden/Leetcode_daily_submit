@@ -1,0 +1,91 @@
+# solution: topological sort
+# time complexity: O(n*m), n words, m = max(len(word)), 36 ms, 69.33% 
+# space complexity: O(n*m), 13.8 MB, 72.19%
+
+
+
+class Solution:
+    def alienOrder(self, words: List[str]) -> str:
+        l = len(words)
+        if l == 1:
+            return words[0]
+        if l == 0:
+            return ""
+        
+        chars_rules = set()
+        chars_other = set()
+
+        gt = defaultdict(set)
+        lt = defaultdict(set)
+        
+        for i in range(l-1):
+            w1 = words[i]
+            l1 = len(w1)
+            w2 = words[i+1]
+            l2 = len(w2)
+            chars_other = chars_other | set(list(w1)) | set(list(w2))
+            
+            for j in range(min(l1,l2)):
+
+                if w1[j] != w2[j]:
+
+                    if w1[j] in lt[w2[j]]: 
+                        # print(1111)
+                        return ""
+                    
+                    #gt uses the smaller one as key, get the larger one
+                    #lt uses the larger one as key, get the smaller one
+                    gt[w2[j]].add(w1[j])
+                    lt[w1[j]].add(w2[j])
+                    chars_rules.add(w1[j])
+                    chars_rules.add(w2[j])
+                    queue = set(w1[j])
+                    while queue:
+                        cur = queue.pop()
+                        queue = queue | gt[cur]
+                        if w2[j] in queue: 
+                            # print(22222)
+                            return ""
+                        gt[w2[j]] = gt[w2[j]] | gt[cur]
+                    
+                    
+                    break
+                    
+                if j == l2-1 and l2<l1:
+                    # print(33333)
+                    return ""
+                       
+        chars_other = chars_other -  chars_rules
+        
+        start = list(chars_other)
+        
+        while chars_rules:
+            for char in chars_rules:
+                if char not in lt:
+                    start.append(char)
+                elif len(lt[char]) == 0:
+                    start.append(char)
+            
+            if (len(start)==0) : 
+                # print(44444)
+                return ""
+            
+            chars_rules = chars_rules - set(start)
+            for s in start:
+                for g in gt[s]:
+                    lt[g] = lt[g] - set([s])
+
+        # print(555555)            
+        start.reverse()
+        return "".join(start)
+        
+    
+# ["wrt","wrf","er","ett","rftt"]
+# ["za","zb","ca","cb"] 
+# ["z","x"]
+# ["abc","ab"]
+# ["z","z"]
+# ["wrt","wrtkj"]
+# ["ri","xz","qxf","jhsguaw","dztqrbwbm","dhdqfb","jdv","fcgfsilnb","ooby"]
+# ["bsusz","rhn","gfbrwec","kuw","qvpxbexnhx","gnp","laxutz","qzxccww"]
+# ["wnlb"]
