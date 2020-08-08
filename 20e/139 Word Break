@@ -1,0 +1,41 @@
+#solution: DFS + memory
+#time complexity: O(n^2), 40 ms,  78.36%
+#space complexity: O(n), 15 MB, 5.03%
+
+#lesson: 
+#1. the memory may not be put as the global variable, because it might mess up the later cases with the memory for previous cases.
+#2. save the start/end position instead of the object, which can save space#lesson: the memory may not be put as the global variable, because it might mess up the later cases with the memory for previous cases.
+
+#other methods: BFS, DP
+class Solution:
+    
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        memo = {}
+        w = "".join(wordDict)
+        w_c = set(w)
+        def word_break(s):    
+            if not s: return True
+            if s in wordDict: return True
+            
+            s_c = set(s)
+            if not s_c.issubset(w_c): return False
+                
+            l = len(s)
+            for i in range(l):
+                cur = s[:i+1]
+                if cur in wordDict:
+                    memo[cur] = True
+                    rest = s[i+1:]
+                    if rest in memo:
+                        if memo[rest] == True: return True
+                        else:continue
+                    else:
+                        if word_break(rest): return True
+                        else: memo[rest] = False
+                else: 
+                    memo[cur] = False
+                
+            return False
+        return word_break(s)
+# "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+# ["aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa","ba"]
