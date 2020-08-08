@@ -79,4 +79,26 @@ class Solution:
                 return True
             num_freq[A[i]] += 1
         return False
+
+# dp solution
+# Runtime: 592 ms, faster than 25.00% of Python3 online submissions for Split Array With Same Average.
+# Memory Usage: 46.2 MB, less than 15.69% of Python3 online submissions for Split Array With Same Average.
+class Solution:
+    def splitArraySameAverage(self, A: List[int]) -> bool:
+        N = len(A)
+        S = sum(A)
+        target = S/N
+        dp = [set() for _ in range(N//2+1)]
+        dp[0].add(0)
+        for num in A:
+            for i in range(N//2, 0, -1):
+                for ele in dp[i-1]:
+                    dp[i].add(ele + num)
+        for l in range(1, len(dp)):
+            for ele in dp[l]:
+                if abs(ele/l-target) < 0.00001:
+                    return True
+        return False
+        
+        
         

@@ -26,6 +26,37 @@ Output: false
 Explanation: The array cannot be partitioned into equal sum subsets.
 """
 
+# dp solution
+# time complexity -- O(n*sum(nums))
+# Runtime: 3360 ms, faster than 11.09% of Python3 online submissions for Partition Equal Subset Sum.
+# Memory Usage: 18 MB, less than 13.54% of Python3 online submissions for Partition Equal Subset Sum.
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        n = len(nums)
+        S = sum(nums)
+        if S % 2 != 0:
+            return False
+        target = S // 2
+        
+        dp = [[False for _ in range(target+1)] for _ in range(n+1)]
+        dp[0][0] = True
+        for i in range(1, n+1):
+            dp[i][0] = True
+            if nums[i-1] > target:
+                return False
+        for i in range(1, n+1):
+            for j in range(1, target+1):
+                dp[i][j] = dp[i-1][j]
+                if j < nums[i-1]:
+                    continue
+                dp[i][j] = dp[i-1][j-nums[i-1]] or dp[i][j]
+        
+        for i in range(1, n+1):
+            if dp[i][-1]:
+                return True
+        return False
+
+
 # first try -- dfs
 # time complexity -- O(N^2)
 # space complexity -- O(N)
