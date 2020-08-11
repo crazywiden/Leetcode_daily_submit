@@ -1,0 +1,86 @@
+#solution: counter_dict
+#time complexity: O(nlogn), 64 ms,  53.23% 
+#space complexity: O(n), 13.8 MB, 82.29%
+class Solution:
+    def topKFrequent(self, words: List[str], k: int) -> List[str]:
+        uni_l = len(set(words))
+        #Constructing counter time O(n)
+        tmp = Counter(words).most_common(uni_l)
+        res_d = defaultdict(list)
+        max_l = 0
+        for i in tmp:
+            res_d[i[1]].append(i[0])
+            max_l = max(max_l,i[1])
+        res = []
+        for l in range(max_l+1,-1,-1):
+            tmp_l = res_d[l]
+            #O(n log n)
+            tmp_l.sort()
+            res = res+tmp_l
+        return res[:k]
+
+
+#solution: counter_dict
+#time complexity: O(nlogk), 60 ms,  70.46%
+#space complexity: O(n), 13.9 MB, 49.84%
+
+#Lesson:
+
+#1. definition
+#heap kinda prioritized queue, the heap would be invariant, when new items added/popped. Heaps are binary trees for which every parent node has a value less than or equal to any of its children.
+
+#2. functions
+#(1) heapq.heappush(heap, item): Push the value item onto the heap, maintaining the heap invariant.
+#(2) heapq.heappop(heap): Pop and return the smallest item from the heap, maintaining the heap invariant. If the heap is empty, IndexError is raised. To access the smallest item without popping it, use heap[0].
+#(3)heapq.heapify(x): Transform list x into a heap, in-place, in linear time.
+
+#2. methods
+#(1) override __lt__ to customize the comparing rule between two objects of the created class
+
+
+
+class Word:
+    def __init__(self, freq, word):
+        self.freq = freq
+        self.word = word
+
+# personally, I think __lt__ can be reversed and not pop out the smallest one since the k largest one can be popped into the list
+    def __lt__(self, other):
+        if self.freq == other.freq:
+            return self.word > other.word
+        return self.freq < other.freq
+
+
+class Solution:
+    def topKFrequent(self, words: List[str], k: int) -> List[str]:
+        # logK => heap
+        # minimum heap
+        heap = []
+        frequence_dic = collections.Counter(words)
+        #O(nlogk)
+        for key, fre in frequence_dic.items():
+            heapq.heappush(heap, Word(fre, key))
+            #keep the k-largest Word's
+            if len(heap) > k:
+                heapq.heappop(heap)
+           
+        #O(klogk)
+        res = []
+        for i in range(k):
+            res.append((heapq.heappop(heap)).word)
+        return res[::-1]
+
+#reference: https://leetcode-cn.com/problems/top-k-frequent-words/solution/python-heap-by-frankchen250-2/
+
+#solution: counter_dict
+#time complexity: O(nlogk), 56 ms,  86.10%
+#space complexity: O(n), 14 MB, 31.17%
+
+
+class Solution(object):
+    def topKFrequent(self, words, k):
+        count = collections.Counter(words)
+        heap = [(-freq, word) for word, freq in count.items()]
+        heapq.heapify(heap)
+        return [heapq.heappop(heap)[1] for _ in range(k)]
+#reference: https://leetcode.com/problems/top-k-frequent-words/solution/
