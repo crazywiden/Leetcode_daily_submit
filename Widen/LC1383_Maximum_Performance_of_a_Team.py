@@ -23,7 +23,23 @@ Example 3:
 Input: n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 4
 Output: 72
 """
-
+# revisit
+# Runtime: 416 ms, faster than 87.10% of Python3 online submissions for Maximum Performance of a Team.
+# Memory Usage: 29.9 MB, less than 86.45% of Python3 online submissions for Maximum Performance of a Team.
+class Solution:
+    def maxPerformance(self, n: int, speed: List[int], efficiency: List[int], k: int) -> int:
+        heap = []
+        res = sSum = 0
+        
+        for e, s in sorted(zip(efficiency, speed), reverse=True):
+            sSum += s
+            res = max(res, sSum * e)
+            heapq.heappush(heap, s)
+            if len(heap) >= k: sSum -= heapq.heappop(heap)
+        return res % (10**9 + 7)
+        
+    
+        
 # first time do a leetcode contest
 # should have solved this problem
 # at first thought it was dp, but turns out just a simple heap problem
