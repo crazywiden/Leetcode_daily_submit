@@ -1,0 +1,107 @@
+#Lesson:
+# If only track the start, it might avoid some comparison and assigning values.
+
+# sort-check require & availability
+# time complexity: O(n), 4580 ms, 5.38% 
+# space complexity: O(n), 15.1 MB, 5.55%
+class Solution:
+    def isPossible(self, nums: List[int]) -> bool:
+        nums = sorted(nums)
+        set_nums = set(nums)
+        cnt = [(x,nums.count(x)) for x in set_nums]
+        heapq.heapify(cnt)
+        # print(cnt)
+        require = defaultdict(int)
+        available = {}
+        while cnt:
+            x, c = heapq.heappop(cnt)
+            # print("..",x, require,available)
+            if require:
+                m = min(require, key=require.get)
+                if x>m: 
+                    # print(1,x,require,available)
+                    return False
+            available[x] = c
+            if x-1 not in available:
+                require[x+1] = c
+                require[x+2] = c
+            else:
+                c_prev = available[x-1]
+                if c_prev >= c: 
+                    available[x-1] = c_prev - c
+                else: 
+                    available[x-1] = 0
+                    require[x+1] = require[x+1] + c - c_prev
+                    require[x+2] = require[x+2] + c - c_prev
+                if x in require:
+                    r_prev = require[x]
+                    # print(",,",x, require,r_prev,available)
+                    if r_prev > c:
+                        # print(2,require,x,available)
+                        return False
+                    else:
+                        del require[x]
+
+        if require: 
+            # print(3, require)
+            return False
+        return True
+#[2,2,3,3,3,4,4,4,4,5,5,5,6,6,7]
+
+# check the difference between each start and end pair > 2
+# time complexity: O(n), 700 ms, 66.37% 
+# space complexity: O(n), 66.37%,  55.55%
+class Solution(object):
+    def isPossible(self, nums):
+        prev, prev_count = None, 0
+        starts = collections.deque()
+        for t, grp in itertools.groupby(nums):
+            count = len(list(grp))
+            if prev is not None and t - prev != 1:
+                for _ in range(prev_count):
+                    if prev < starts.popleft() + 2:
+                        return False
+                prev, prev_count = None, 0
+
+            if prev is None or t - prev == 1:
+                if count > prev_count:
+                    for _ in range(count - prev_count):
+                        starts.append(t)
+                elif count < prev_count:
+                    for _ in range(prev_count - count):
+                        if t-1 < starts.popleft() + 2:
+                            return False
+
+            prev, prev_count = t, count
+
+        return all(nums[-1] >= x+2 for x in starts)
+
+# solution: greedy about extending chains
+# time complexity: O(n), 664 ms, 85.20% 
+# space complexity: O(n), 85.20%,  55.55%
+class Solution(object):
+    def isPossible(self, nums):
+        count = collections.Counter(nums)
+        tails = collections.Counter()
+        for x in nums:
+            if count[x] == 0:
+                continue
+            elif tails[x] > 0:
+                # if tails[x] > 0, then x is added to one of the chains ending before x
+                # which is extending this chain from ending before x to ending before x+1
+                # because when we find a new start, we assume it ends at x+2, before x+3
+                # like the next elif
+                tails[x] -= 1
+                tails[x+1] += 1
+            elif count[x+1] > 0 and count[x+2] > 0:
+                count[x+1] -= 1
+                count[x+2] -= 1
+                tails[x+3] += 1
+            else:
+                return False
+            count[x] -= 1
+        return True
+
+
+#reference：https://leetcode-cn.com/problems/split-array-into-consecutive-subsequences/solution/fen-ge-shu-zu-wei-lian-xu-zi-xu-lie-by-leetcode/
+
