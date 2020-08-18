@@ -1,0 +1,20 @@
+#solution: DFS
+#time complexity: O(N^N + ElogE), 968 ms, 30.24%, E = len(Times)
+#space complexity: O(N+E), 16.7 MB, 9.96%
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:
+        graph = defaultdict(list)
+        for start, end, distance in times:
+            graph[start].append((distance, end))
+
+        dist = {node: float('inf') for node in range(1, N+1)}
+
+        def dfs(node, elapsed):
+            if elapsed >= dist[node]: return None
+            dist[node] = elapsed
+            for time, nei in sorted(graph[node]):
+                dfs(nei, elapsed + time)
+
+        dfs(K, 0)
+        ans = max(dist.values())
+        return ans if ans < float('inf') else -1
