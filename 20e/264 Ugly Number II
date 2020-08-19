@@ -1,0 +1,29 @@
+#In this case, the max(n) is specified. So, we can set create a list containing all possible answers as a global variable.
+#solution: heap
+#time complexity: O(nlogn), 788 ms, 10.71%
+#space complexity: O(n), 13.7 MB, 61.86%
+class Solution:
+    def nthUglyNumber(self, n: int) -> int:
+        pd = [1]
+        heapq.heapify(pd)
+        for i in range(n-1):
+            cur = heapq.heappop(pd)
+            for add in (cur*2,cur*3,cur*5):
+                if add not in pd:
+                    heapq.heappush(pd,add)
+        return heapq.heappop(pd)
+
+#solution: dp
+#time complexity: O(n), 196 ms, 48.59%
+#space complexity: O(n), 48.59%, 61.12%
+class Solution:
+    def nthUglyNumber(self, n: int) -> int:
+        dp = [1]
+        p2 = p3 = p5 = 0
+        for i in range(1,n):
+            cur = min(2*dp[p2],3*dp[p3],5*dp[p5])
+            dp.append(cur)
+            if 2*dp[p2] == cur: p2 = p2+1
+            if 3*dp[p3] == cur: p3 = p3+1
+            if 5*dp[p5] == cur: p5 = p5+1
+        return dp[-1]

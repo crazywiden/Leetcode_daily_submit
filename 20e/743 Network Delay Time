@@ -18,3 +18,61 @@ class Solution:
         dfs(K, 0)
         ans = max(dist.values())
         return ans if ans < float('inf') else -1
+	
+#solution: Dijkstra's
+#time complexity: O(N^2), 528 ms, 98.37%
+#space complexity: O(N+E), 15.6 MB, 38.53%
+#The main logic is that, the later nodes wouldn't be be able to give a shorter distance.
+#However, this means, we need to go through the reachable nodes first.
+#Personally, I think this is a combination of BFS + DFS, using BFS to go through nodes and using DFS to find out distance
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:
+        graph = defaultdict(list)
+        for start, end, distance in times:
+            graph[start].append((end, distance))
+
+        dist = {node: float('inf') for node in range(1, N+1)}
+        seen = [False] * (N+1)
+        dist[K] = 0
+
+        while True:
+            cand_node = -1
+            cand_dist = float('inf')
+            for i in range(1, N+1):
+                if not seen[i] and dist[i] < cand_dist:
+                    cand_dist = dist[i]
+                    cand_node = i
+            #the loop breaks only when all nodes possible have been seen (or the distances  for all nodes are inf, but this is impossible).
+            #the second condition is to make sure the current node is directly reachable from the nodes in the "seen" dictionary
+            if cand_node < 0: break
+            seen[cand_node] = True
+            for nei, d in graph[cand_node]:
+                dist[nei] = min(dist[nei], dist[cand_node] + d)
+
+        ans = max(dist.values())
+        return ans if ans < float('inf') else -1
+
+#solution:Dijkstra's+heap
+#time complexity: O(ElogE), 600 ms, 64.64%
+#space complexity: O(N+E), 15.3 MB, 94.63%
+#The main logic is that, the later nodes wouldn't be be able to give a shorter distance.
+#However, this means, we need to go through the reachable nodes first.
+#Personally, I think this is a combination of BFS + DFS, using BFS to go through nodes and using DFS to find out distance
+class Solution(object):
+    def networkDelayTime(self, times, N, K):
+        graph = collections.defaultdict(list)
+        for u, v, w in times:
+            graph[u].append((v, w))
+
+        pq = [(0, K)]
+        dist = {}
+        while pq:
+            d, node = heapq.heappop(pq)
+            if node in dist: continue
+            dist[node] = d
+            for nei, d2 in graph[node]:
+                if nei not in dist:
+                    heapq.heappush(pq, (d+d2, nei))
+
+        return max(dist.values()) if len(dist) == N else -1
+

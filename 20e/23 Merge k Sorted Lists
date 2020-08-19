@@ -1,0 +1,71 @@
+#solution: heap
+#time complexity: O(n*klogk), n = len(lists), k = max(len(element)), 120 ms, 39.10% 
+#space complexity: O(k), 17.2 MB, 43.98%
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        heap = []
+        sign = 0
+        n = len(lists)
+        if n == 0: return None
+        for i in range(n):
+            if lists[i]:
+                val = lists[i].val
+                heapq.heappush(heap,(val,i,lists[i]))
+        if not heap: return lists[0]
+        while heap:
+            val, red, cur = heapq.heappop(heap)
+            if sign == 0:
+                res = cur
+                note = res
+                sign = 1
+            else:
+                res.next = cur
+                res = res.next
+            if cur.next:
+                cur = cur.next
+                val = cur.val
+                heapq.heappush(heap,(val,red,cur))
+        return note
+            
+
+
+#lesson: the idea of divide and conquer is try to half the direct object to the smallest element and combine 2 => combine 2 => combine 2 => combine 2 => ...
+#solution: divide and conquer
+#time complexity: O(sum_{i=1}^{logn}n/(2^{i})*2^{i}k)=O(nklogn), n = len(lists), k = max(len(element)), 160 ms, 25.17% 
+#space complexity: O(logn), 23.7 MB, 5.27%
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        if not lists:return 
+        n = len(lists)
+        return self.merge(lists, 0, n-1)
+    def merge(self,lists, left, right):
+        if left == right:
+            return lists[left]
+        mid = left + (right - left) // 2
+        l1 = self.merge(lists, left, mid)
+        l2 = self.merge(lists, mid+1, right)
+        return self.mergeTwoLists(l1, l2)
+    def mergeTwoLists(self,l1, l2):
+        if not l1:return l2
+        if not l2:return l1
+        if l1.val < l2.val:
+            l1.next = self.mergeTwoLists(l1.next, l2)
+            return l1
+        else:
+            l2.next = self.mergeTwoLists(l1, l2.next)
+            return l2
+
+
+#reference: https://leetcode-cn.com/problems/merge-k-sorted-lists/solution/leetcode-23-he-bing-kge-pai-xu-lian-biao-by-powcai/
+
