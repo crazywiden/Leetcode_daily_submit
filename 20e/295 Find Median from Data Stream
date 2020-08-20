@@ -1,0 +1,106 @@
+#solution: two heaps
+#time complexity: O(n^2), too slow
+#space complexity: O(n)
+class MedianFinder:
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.max_h = []
+        self.min_h = []
+        self.l = 0
+
+    def addNum(self, num: int) -> None:
+        self.max_h.append(num*(-1))
+        self.min_h.append(num)
+        self.l = self.l + 1
+
+    def findMedian(self) -> float:
+        tmp_max = list(self.max_h)
+        tmp_min = list(self.min_h)
+        heapq.heapify(tmp_max)
+        heapq.heapify(tmp_min)
+        m = self.l//2
+        for i in range(m):
+            heapq.heappop(tmp_max)
+            heapq.heappop(tmp_min)
+        return (heapq.heappop(tmp_max)*(-1)+heapq.heappop(tmp_min))/2
+
+
+# Your MedianFinder object will be instantiated and called as such:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
+
+#lesson: heap[0] gives the element at the top but doesn't pop out that element
+#solution: two heaps
+#time complexity: O(nlogn), 284 ms, 39.78%
+#space complexity: O(n), 25.2 MB, 17.43%
+class MedianFinder:
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.max_h = []
+        self.min_h = []
+        self.l = 0
+
+    def addNum(self, num: int) -> None:
+        self.l = self.l + 1
+        heapq.heappush(self.max_h, (num*(-1), num))
+        _, max_h_top = heapq.heappop(self.max_h)
+        heapq.heappush(self.min_h, max_h_top)
+        if self.l & 1:
+            min_h_top = heapq.heappop(self.min_h)
+            heapq.heappush(self.max_h, (min_h_top*(-1),min_h_top))
+
+    def findMedian(self) -> float:
+        if self.l & 1:
+            return self.max_h[0][1]
+        else:
+            print(self.max_h[0][1])
+            return (self.max_h[0][1] + self.min_h[0])/2
+
+
+# Your MedianFinder object will be instantiated and called as such:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
+
+#lesson:
+
+#1. sort and insert so that the sort after every insertion is avoided. but the insertion is O(n), which dominates this operation. The sort here is a binary search, so O(logn).
+
+#2. bisect.insort_left(a, x, lo=0, hi=len(a)): this method has one assumption and two functions. The two funtions are locating where to put x in a and inserting x there. And it assumes a is a sorted object. In this case, since we are sort-&-insert from the second element, a must be sorted.
+
+#solution: sort & insert
+#time complexity: O(n), 292 ms, 37.36% 
+#space complexity: O(n), 25 MB, 49.79%
+
+class MedianFinder:
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.store = []
+
+    def addNum(self, num: int) -> None:
+        if not self.store:
+            self.store.append(num)
+        else:
+            bisect.insort_left(self.store, num) # 插入
+
+    def findMedian(self) -> float:
+        n = len(self.store)
+        if n & 1 == 1:  # n是奇数
+            return self.store[n // 2]
+        else:
+            return (self.store[n // 2] + self.store[n // 2 - 1]) / 2
+
+#reference: https://leetcode-cn.com/problems/find-median-from-data-stream/solution/tu-jie-pai-xu-er-fen-cha-zhao-you-xian-dui-lie-by-/
+
+#other optimization directions:
+# binary search for the location can be replaced by the multiset(within any set, the numbers are sorted, and betweenn these sets, they are sorted as well). However, building the set( deciding the size of each set and the number of sets might take more time to consider)
