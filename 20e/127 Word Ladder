@@ -1,0 +1,77 @@
+#Lesson about fasten the process
+#1. build a pre-saved dictionary for (intermediate) result
+#2. smallen the size of the objects for each calculation, for example, do the calculation for each unit, instead of the whole group
+#3. take more advantage of the O(1) of getting item from dictionary
+#4. another improvement is to do this bidirectionally, half the time.
+
+
+#solution: BFS+memory+pre-save dictionary
+#time complexity: O(n*e), n = len(wordList), e = len(beginWord), 752 ms, 14.65%
+#space complexity: O(n*e), 17.5 MB, 8.86%
+class Solution:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        
+        if endWord not in wordList: return 0
+
+        res = 1
+        prev = set([beginWord])
+        step = set()
+        seen = set()
+        l = len(beginWord)
+
+        dict_comb = defaultdict(list)
+
+        for w in wordList:
+            for i in range(l):
+                dict_comb[w[:i]+'*'+w[i+1:]].append(w)
+
+        while True:
+            for w in prev:
+                for i in range(l):
+                    step = step | set(dict_comb[w[:i]+'*'+w[i+1:]])
+            res = res + 1
+            step = step - seen
+
+            if len(step) == 0: return 0
+            if endWord in step: return res
+
+            seen = seen | step
+            prev = list(step)
+
+
+
+
+
+#solution: BFS+memory+pre-save dictionary
+#time complexity: O(n*e), n = len(wordList), e = len(beginWord), 148 ms, 73.69%
+#space complexity: O(n*e), 17.3 MB, 18.44%
+class Solution:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        
+        if endWord not in wordList: return 0
+
+        prev = [(beginWord,1)]
+        step = set()
+        seen = {beginWord:True}
+        l = len(beginWord)
+
+        dict_comb = defaultdict(list)
+
+        for w in wordList:
+            for i in range(l):
+                dict_comb[w[:i]+'*'+w[i+1:]].append(w)
+
+        while prev:
+            w,t = prev.pop(0)
+            for i in range(l):
+                step = w[:i]+'*'+w[i+1:]
+                step_res = dict_comb[step]
+                dict_comb[step] = []
+                for s in step_res:
+                    if s == endWord: return t+1
+                    if s not in seen:
+                        seen[s] = True
+                        prev.append((s,t+1))
+        return 0
+
+reference: https://leetcode-cn.com/problems/word-ladder/solution/dan-ci-jie-long-by-leetcode/
