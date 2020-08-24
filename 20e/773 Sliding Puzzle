@@ -1,0 +1,129 @@
+#lesson:
+#1. pass the values of a list instead of the location of the list: queue.append(cur_board[:]) instead of queue.append(cur_board)
+#2. make the list to be the key of dictionary: tuple(list)
+#3. However, both operations require the list unested!!!!
+#4. In this case, we need to make sure the movement is valid by looking at the posn//3-neigh//3+posn%3-neigh%3. Because: eg, if posn = 2, d = 1, then nei = 3, however, this is not a valid move. I think this might apply to all grid-looking cases.
+5. complexity: how many possible cases there are?
+
+
+
+
+# class Solution:
+#     ans = {}
+#     ans["123450"] = 0
+#     directions =[1,-1,3,-3] 
+#     queue = collections.deque()
+#     orig = [1,2,3 ,4,5,0]
+#     queue.append((orig,5,0))
+#     while queue:
+#         cur_board, cur_i, cur_k = queue.popleft()
+#         for nex in directions:
+#             if 0 <= cur_i + nex < 5:
+#                 x = cur_i + nex
+#                 tmp = cur_board[x]
+#                 cur_board[x] = 0
+#                 cur_board[cur_i] = tmp
+#                 s = [str(i) for i in cur_board]
+#                 s = "".join(s)
+#                 if s not in ans:
+#                     ans[s]= cur_k + 1
+#                     queue.append((cur_board[:],x,cur_k+1))
+#                 cur_board[x] = tmp
+#                 cur_board[cur_i] = 0
+
+#     def slidingPuzzle(self, board: List[List[int]]) -> int:
+#         print(self.ans)
+#         t = [str(i) for i in board[0]+board[1]]
+#         if "".join(t) not in self.ans: return -1
+#         return self.ans["".join(t)]
+
+
+#solution: BFS
+#time complexity: O(4^N),48 ms, 95.84%
+#space complexity: 13.6 MB, 86.11%
+class Solution:
+        def slidingPuzzle(self, board: List[List[int]]) -> int:
+            board = board[0]+board[1]
+            visited = {}
+            target = [1,2,3,4,5,0]
+            queue = collections.deque()
+            queue.append(board)
+            neighbor = {0:[1,3],1:[0,2,4],2:[1,5],3:[0,4],4:[1,3,5],5:[2,4]}
+            step = -1
+            while(queue):
+                step = step+1
+                length = len(queue)                
+                while(length>0):
+                    length = length-1
+                    cur_board = queue.popleft()                    
+                    visited[tuple(cur_board)] =True
+                    if cur_board == target:
+                        return step
+                    zero_index = cur_board.index(0)
+                    for i in neighbor[zero_index]:
+                        cur_board[i],cur_board[zero_index] = cur_board[zero_index],cur_board[i]                       
+                        if not visited.get(tuple(cur_board),None):                  
+                            queue.append(cur_board[:])
+                        cur_board[i],cur_board[zero_index] = cur_board[zero_index],cur_board[i]                    
+            return -1
+
+
+#solution: BFS
+#time complexity: O(6*6!), 60 ms, 58.73%
+#space complexity: O(6*6!),13.5 MB, 100.00% 
+class Solution(object):
+    def slidingPuzzle(self, board):
+        start = tuple(itertools.chain(*board))
+        queue = collections.deque([(start, start.index(0), 0)])
+        seen = {start}
+
+        target = tuple(list(range(1, 2*3)) + [0])
+
+        while queue:
+            board, posn, depth = queue.popleft()
+            if board == target: return depth
+            for d in (-1, 1, -3, 3):
+                nei = posn + d
+                #this is check whether the posn is one step away from the neighbour
+                if abs(nei//3 - posn//3) + abs(nei%3 - posn%3) != 1:
+                    continue
+                if 0 <= nei < 2*3:
+                    newboard = list(board)
+                    newboard[posn], newboard[nei] = newboard[nei], newboard[posn]
+                    newt = tuple(newboard)
+                    if newt not in seen:
+                        seen.add(newt)
+                        queue.append((newt, nei, depth+1))
+
+        return -1#solution: BFS
+#time complexity: O(6*6!), 60 ms, 58.73%
+#space complexity: O(6*6!),13.5 MB, 100.00% 
+class Solution(object):
+    def slidingPuzzle(self, board):
+        start = tuple(itertools.chain(*board))
+        queue = collections.deque([(start, start.index(0), 0)])
+        seen = {start}
+
+        target = tuple(list(range(1, 2*3)) + [0])
+
+        while queue:
+            board, posn, depth = queue.popleft()
+            if board == target: return depth
+            for d in (-1, 1, -3, 3):
+                nei = posn + d
+                #this is check whether the posn is one step away from the neighbour
+                #because: eg, if posn = 2, d = 1, then nei = 3, however, this is not a valid move
+                if abs(nei//3 - posn//3) + abs(nei%3 - posn%3) != 1:
+                    print(board,nei,posn,d)
+                    continue
+                if 0 <= nei < 2*3:
+                    newboard = list(board)
+                    newboard[posn], newboard[nei] = newboard[nei], newboard[posn]
+                    newt = tuple(newboard)
+                    if newt not in seen:
+                        seen.add(newt)
+                        queue.append((newt, nei, depth+1))
+
+        return -1
+
+#reference:https://leetcode-cn.com/problems/sliding-puzzle/solution/hua-dong-mi-ti-by-leetcode/
