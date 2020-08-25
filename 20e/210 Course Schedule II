@@ -1,0 +1,76 @@
+#lesson:
+#personally, I think the difference between BFS/DFS and topological sort is when the result is updated. This avoid the updating all later courses.
+#solution: similar approach like the alian dictionary
+#solution: BFS
+#time complexity: O(n^2 + k), n = numCourses, k = # of levels, 1664 ms, 5.01%
+#space complexity: O(n), 15.4 MB, 31.62%
+
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        if numCourses == 0:
+            if not prerequisites: return [0]
+            else: return
+        if prerequisites:
+            if  max(max(prerequisites, key=lambda x: x[1])[1],max(prerequisites)[0]) >= numCourses: return 
+
+        level = {}
+        after = defaultdict(set)
+        update_level = []
+        res = defaultdict(list)
+        result = []
+        for p in prerequisites:
+            # print(p)
+            after[p[1]].add(p[0])
+            if p[1] not in level and p[0] not in level:
+                # print(1,p)
+                level[p[1]] = 0
+                level[p[0]] = 1
+            elif p[0] not in level:
+                # print(2,p)
+                level[p[0]]  = level[p[1]] + 1
+            elif p[1] not in level:
+                # print(3,p)
+                level[p[1]] = level[p[0]]
+                update_level.append(p[0])
+                # print('up',p[0],level[p[0]])
+                while update_level:
+                    cur = update_level.pop(0)
+                    # print('in',cur,level[cur])
+                    level[cur] = level[cur] + 1
+                    # print('out',cur,level[cur])
+                    update_level = update_level + list(after[cur])
+                    # print(update_level)
+            else:
+                # print(4,p)
+                if level[p[0]]>level[p[1]]:
+                    continue
+                else: 
+                    # print(p,level[p[0]],level[p[1]])
+                    update_level.append(p[0])
+                    seen = []
+                    add = level[p[1]] + 1 - level[p[0]]
+                    # print('up',p[0],level[p[0]])
+                    while update_level:
+                        cur = update_level.pop(0)
+                        if cur == p[1]: return []
+                        if cur in seen:  continue
+                        seen.append(cur)
+                        # print('in',cur,level[cur])
+                        level[cur] = level[cur] + add
+                        # print('out',cur,level[cur])
+                        update_level = update_level + list(after[cur])
+                        # print(update_level)
+        # print(level,after)
+
+        for k in level:
+            res[level[k]].append(k)
+
+        for r in sorted(res):
+            result = result + res[r]
+
+        full = set(list(range(numCourses)))
+        current = set(result)
+
+        return result+list(full-current)
+# 7
+# [[1,0],[2,0],[3,1],[3,2],[4,0],[1,4],[5,4],[6,5],[7,6],[5,7]]
