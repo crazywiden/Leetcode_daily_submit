@@ -1,0 +1,83 @@
+#thought:
+#1. looking for pattern:
+# connections on the loop are not critical
+# connections not on the loop are critical
+#2. DFS to find loops
+#3. Union set to assign ids for nodes on loops
+#catch here: update the result as soon as possible
+
+
+#solution: DFS+Tarjan
+#time complexity: O(V+E), V = # of nodes, E = # of edges, 2892 ms, 39.44%
+#space complexity: O(V+E), 102 MB, 14.93%
+class Solution:
+    def criticalConnections(self, n: int, connections: List[List[int]]) -> List[List[int]]:
+        edges = defaultdict(set)
+        ids = [-1]*n
+        res = []
+        
+        #restore all connections
+        for c in connections:
+            edges[c[0]].add(c[1])
+            edges[c[1]].add(c[0])
+
+        #update the id for all nodes
+        def dfs(node_id, node, ids, parent_node):
+            #node_id is determined by the parent_node_id
+            ids[node] = node_id
+            for n in edges[node]:
+                #skip the parent_node
+                if n == parent_node: continue
+                #take the min(all neighbour except for the parent_node)
+                #if the neighbour not visited, then run dfs on it
+                if ids[n] == -1: ids[node] = min(ids[node], dfs(node_id+1, n, ids, node))
+                else: ids[node] = min(ids[node], ids[n])
+            #the result has to be updated before determining the id for all nodes
+            #because the some nodes can be part of multiple loop, so for the final situation, the id for nodes on the same loop can be different
+            if ids[node] == node_id and node !=0 : res.append([node,parent_node])
+            return ids[node]
+        
+        #for the starting node, it doesn't have a parent, so the parent node is set to be -1
+        dfs(0,0,ids,-1)
+
+#reference: https://www.bilibili.com/video/BV15t4y197eq/
+
+        return res
+
+
+#slight changed to fasten the process...
+#but it gets slower...
+
+
+class Solution:
+    def criticalConnections(self, n: int, connections: List[List[int]]) -> List[List[int]]:
+        edges = defaultdict(set)
+        ids = [-1]*n
+        res = []
+        
+        #restore all connections
+        for c in connections:
+            edges[c[0]].add(c[1])
+            edges[c[1]].add(c[0])
+
+        #update the id for all nodes
+        def dfs(node_id, node, parent_node):
+            #node_id is determined by the parent_node_id
+            ids[node] = node_id
+            for n in edges[node]:
+                #skip the parent_node
+                if n != parent_node: 
+                #take the min(all neighbour except for the parent_node)
+                #if the neighbour not visited, then run dfs on it
+                    if ids[n] == -1: 
+                        dfs(node_id+1, n, node)
+                        if ids[n]>node_id: res.append([n,node])
+                    ids[node] = min(ids[node], ids[n])
+                    #the result has to be updated before determining the id for all nodes
+                    #because the some nodes can be part of multiple loop, so for the final situation, the id for nodes on the same loop can be different
+        
+        #for the starting node, it doesn't have a parent, so the parent node is set to be -1
+        dfs(0,0,-1)
+
+        return res
+#reference: https://www.bilibili.com/video/BV15t4y197eq/
