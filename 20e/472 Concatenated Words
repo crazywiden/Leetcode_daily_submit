@@ -1,0 +1,29 @@
+#Lesson:
+#use Trie to shorten the processing time
+#use Hash table
+
+#solution: DFS
+#time complexity:O(n*e),too long
+#space compelxity:O(n)
+class Solution:
+    def findAllConcatenatedWordsInADict(self, words: List[str]) -> List[str]:
+
+        res = []
+
+        def dfs(word,j):
+            tmp = words[:j] + words[j+1:]
+
+            l = len(word)
+            if word in tmp: return True
+
+            for i in range(l):
+                if word[:i] in tmp:
+                    if dfs(word[i:],j): return True
+
+        l_w = len(words)
+
+        for j in range(l_w):
+            if dfs(words[j],j):
+                res.append(words[j])
+
+        return res

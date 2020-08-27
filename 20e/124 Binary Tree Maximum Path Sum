@@ -1,0 +1,60 @@
+#solution: DFS + kinda like divide and conquer
+#time complexity: O(n), 96 ms, 95.85%
+#space complexity: O(n), 21.4 MB, 5.02%
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def maxPathSum(self, root: TreeNode) -> int:
+        #initialize the tmp_max, which is a global variable
+        self.tmp_max = root.val
+
+        def dfs(node) -> int:
+            
+            """
+            @input: current node
+            @output: max(current_sum_include_current_node_with either_child)
+            @other function: update tmp_max
+            """
+
+            #initialize the cur, left, right
+            #however, left = right = 0 might messed up in the case of no child and negative cur
+            cur = node.val
+            left = right = 0
+
+            if cur <0:
+                if (not node.left) and (not node.right): 
+                    self.tmp_max = max(self.tmp_max, cur)
+                    return cur
+
+                if not node.left: 
+                    right = dfs(node.right)
+                    self.tmp_max = max(self.tmp_max, right, right+cur, cur)
+                    return max(right+cur,cur)
+
+                if not node.right:
+                    left = dfs(node.left)
+                    self.tmp_max = max(self.tmp_max, left, left+cur, cur)
+                    return max(left+cur,cur)
+            
+            if node.left: left = dfs(node.left)
+            if node.right: right = dfs(node.right)
+
+            self.tmp_max = max(self.tmp_max, left, right, left+cur, right+cur, cur, left+cur+right)
+
+            return max(left+cur,right+cur,cur)
+        
+        dfs(root)
+
+        return self.tmp_max
+
+"""test cases:
+[-13,2,3,4,5,6,-7,null,-90,10,11,null,null,14,150,16,17,8,null,null,null,null,null,-19,-20]
+[-3]
+[-6,null,3,2]
+"""
