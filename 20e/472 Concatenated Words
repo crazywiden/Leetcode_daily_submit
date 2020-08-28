@@ -1,3 +1,116 @@
+#lesson:
+#to be more efficient:
+#1.use set to save all words. find in a list = O(n), find in a set = O(1)
+#2. use trie
+
+#the main structure of a trie
+#class Trie and class Trie_Node
+#for each Trie_Node, it has a child which is another Trie_Node, and a is_end
+#Trie usually has two functions: insert and search
+
+
+class Solution(object):
+    def findAllConcatenatedWordsInADict(self, words):
+        """
+        :type words: List[str]
+        :rtype: List[str]
+        """
+        self.trie = Trie()
+        ans = []
+        for word in words:
+            self.trie.insert(word)
+        for word in words:
+            if self.search(word):
+                ans.append(word)
+        return ans
+
+    def search(self, word):
+        node = self.trie.root
+        for idx, letter in enumerate(word):
+            node = node.children.get(letter)
+            if node is None:
+                return False
+            suffix = word[idx+1:]
+            if node.isWord and (self.trie.search(suffix) or self.search(suffix)):
+                return True
+        return False
+
+class TrieNode:
+    def __init__(self):
+        self.children = dict()
+        self.isWord = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        node = self.root
+        for letter in word:
+            child = node.children.get(letter)
+            if child is None:
+                child = TrieNode()
+                node.children[letter] = child
+            node = child
+        node.isWord = True
+
+    def search(self, word):
+        node = self.root
+        for letter in word:
+            node = node.children.get(letter)
+            if node is None:
+                return False
+        return node.isWord
+#lesson:
+#to be more efficient:
+#1.use set to save all words. find in a list = O(n), find in a set = O(1)
+#2. use trie
+
+#the main structure and feature of a trie
+#for each Trie_Node, it has a child which is another Trie_Node, and a is_end
+#Trie usually has search and add functions
+
+
+class Solution:
+    def findAllConcatenatedWordsInADict(self, words: List[str]) -> List[str]:
+        trie = {}
+        for word in words:
+            if not word: continue
+            cur = trie
+            for w in word:
+                #dict.setdefault(a,b)
+                #if a in dict: return dict[a]
+                #else: dict[a] = b and return dict[a]
+                #so here it works like child
+                #{a:{b:{c:{end:end}}}} for the word 'abc'
+                #if there is another word abcd {a:{b:{c:{end:end, d:{end:end}}}}}
+                cur = cur.setdefault(w, {})
+            cur["#"] = "#"  # as the end
+        res = []
+
+        def dfs(word, idx, cnt, cur):
+            if idx == len(word):
+                # 组成个数 > 2, 并且以#结束的
+                if cnt >= 1 and "#" in cur:
+                    return True
+                return False
+            if "#" in cur:
+                if dfs(word, idx, cnt + 1, trie):
+                    return True
+            if word[idx] not in cur:
+                return False
+            if dfs(word, idx + 1, cnt, cur[word[idx]]):
+                return True
+            return False
+
+        for word in words:
+            # 参数分别为, 单词word, 位置idx, 目前为止有几个单词组成了cnt, 字典树trie
+            if dfs(word, 0, 0, trie):
+                res.append(word)
+        return res
+
+#reference:https://leetcode-cn.com/problems/concatenated-words/solution/trie-ha-xi-by-powcai/
+
 #Lesson:
 #use Trie to shorten the processing time
 #use Hash table
