@@ -1,0 +1,51 @@
+# solution: dfs
+# time complexity: O(N*E), 64 ms, 29.23%, N = # of airports, E = # of tickets
+# space complexity: O(E), 14 MB, 81.25%
+
+class Solution:
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+
+        t_dict = defaultdict(list)
+        visited = {}
+        l = len(tickets)
+        cnt = 0
+
+        for i in range(l):
+            t_dict[tickets[i][0]].append(tickets[i][1])
+            # visited[(tickets[i][0], tickets[i][1], i)] = 0
+
+        # print(t_dict)
+
+        def dfs(cur,cnt):
+            """
+            input: 
+            current airport
+            current count in the list ending with current airport
+            output: 
+            the list of afterwards airports
+            """
+            if cnt == l-1 and t_dict[cur]:
+                return t_dict[cur]
+
+            # print(0,cur,t_dict[cur],cnt)
+            t_dict[cur] = sorted(t_dict[cur])
+            l_next = len(t_dict[cur])
+            
+            for i_next in range(l_next):
+
+                nei = t_dict[cur].pop(i_next)
+                # print(cur,nei,cnt,t_dict)
+
+                tmp = dfs(nei,cnt+1)
+                if tmp:
+                    # print(1,[nei],cnt)
+                    # print(2,tmp,cnt)
+                    return [nei] + tmp
+
+                else: 
+                    t_dict[cur] = sorted(t_dict[cur] + [nei])
+
+        return ['JFK'] + dfs('JFK',0)
+            
+
+#[["JFK","SFO"],["SFO","ATL"],["ATL","JFK"],["JFK","BBC"],["BBC","CCD"],["CCD","JFK"],["JFK","ATL"],["ATL","SFO"],["SFO","CCD"],["CCD","SFO"]]
