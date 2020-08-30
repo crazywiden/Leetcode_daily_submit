@@ -1,3 +1,40 @@
+# lesson: 
+# 1. Every time we add a node into the result, which also means this node is removed from the graph, there would only one dead end and this dead end should be add to the result. Also, this is keep finding the new dead end, so, the adding is in reverse order.
+# 1.1 this must work because: there is an at least one Eulerian Path.
+# 1.2 the marked step works becuase. After we find the dead end in the current graph, we remove the link be this dead end and the other part, which will be equivalent to removing one inward move to the dead end and also a outward move from another node. And this other node would have one more inward move (before it has the same number of inward moves and outward moves). This is why the next dead end found must be a valid.
+# 2. use heap to pop the element we want
+# 3. sort before use the dictionary
+
+# solution: dfsHierholzer
+# time complexity: O(ElogE), 64 ms, 29.23%, E = # of tickets
+# space complexity: O(E), 14 MB, 81.25%
+
+class Solution:
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        def dfs(curr: str):
+            while vec[curr]:
+                tmp = heapq.heappop(vec[curr])
+                dfs(tmp)
+            stack.append(curr)
+
+        vec = collections.defaultdict(list)
+        for depart, arrive in tickets:
+            vec[depart].append(arrive)
+        for key in vec:
+            heapq.heapify(vec[key])
+        
+        stack = list()
+        dfs("JFK")
+        return stack[::-1]
+
+# reference: https://leetcode-cn.com/problems/reconstruct-itinerary/solution/zhong-xin-an-pai-xing-cheng-by-leetcode-solution/
+# visualize what happens: https://www.youtube.com/watch?v=8MpoO2zA2l4
+
+
+
+
+
+
 # solution: dfs
 # time complexity: O(N*E), 64 ms, 29.23%, N = # of airports, E = # of tickets
 # space complexity: O(E), 14 MB, 81.25%
