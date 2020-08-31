@@ -1,0 +1,44 @@
+#solution: bfs
+#time complexity: O(N), 44 ms, 87.89%
+#space complexity: O(N), 13.9 MB, 69.93%
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, K: int) -> List[int]:
+        if K == 0: return [target.val]
+
+        nei_dict = defaultdict(set)
+        queue = [root]
+        while queue:
+            cur = queue.pop(0)
+            if cur.left:
+                nei_dict[cur].add(cur.left)
+                nei_dict[cur.left].add(cur)
+                queue.append(cur.left)
+            if cur.right:
+                nei_dict[cur].add(cur.right)
+                nei_dict[cur.right].add(cur)
+                queue.append(cur.right)
+
+        visited = set()
+        cnt = 0
+        visited.add(target)
+        prev = visited
+        for i in range(K):
+            nei = set()
+            for p in prev:
+                nei = nei | nei_dict[p]
+                nei = nei - visited
+            prev = nei
+            visited = visited | prev
+        
+        res = []
+        for n in nei:
+            res.append(n.val)
+        return res

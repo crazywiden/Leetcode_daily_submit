@@ -1,0 +1,112 @@
+# Lesson:
+# The functools module in Python deals with higher-order functions, that is, functions operating on(taking as arguments) or returning functions and other such callable objects. The functools module provides a wide array of methods such as cached_property(func), cmp_to_key(func), lru_cache(func), wraps(func), etc. It is worth noting that these methods take functions as arguments.
+
+# solution: dfs
+# time complexity: O(N*M), 732 ms, 9.44%
+# space complexity: O(N*M), 18.1 MB, 27.73%
+class Solution:
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        self.res = 1
+        i_l = len(matrix)
+        if i_l == 0: return 0
+        j_l = len(matrix[0])
+        if j_l == 0: return 0
+        dict_l = {}
+
+	#@lru_cache(None)
+	#this can fasten the process
+        def dfs(i,j):
+            """
+            @input: 
+            the row number and column number of current number
+            @output: 
+            the length of the longest path starting from current number
+            """
+
+            #check the visited dictionary
+            if (i,j) in dict_l:
+                return dict_l[(i,j)]
+
+            cur = matrix[i][j]
+
+            #end condition
+            #this is looking for start of the path
+            pos = []
+            pos_n = []
+            if i+1 < i_l:
+                pos.append(matrix[i+1][j])
+                pos_n.append((i+1,j))
+            if j+1 < j_l:
+                pos.append(matrix[i][j+1])
+                pos_n.append((i,j+1))
+            if i-1 > -1:
+                pos.append(matrix[i-1][j])
+                pos_n.append((i-1,j))
+            if j-1 > -1:
+                pos.append(matrix[i][j-1])
+                pos_n.append((i,j-1))
+
+            if not pos:return 1
+            if cur <= min(pos):
+                dict_l[(i,j)] = 1
+                return 1
+
+            #status change
+            tmp = 1
+            for nei in pos_n:
+                if cur > matrix[nei[0]][nei[1]]:
+                    self.res = max(self.res, 1 + dfs(nei[0],nei[1]))
+                    tmp = max(tmp, 1 + dfs(nei[0],nei[1]))
+
+            dict_l[(i,j)] = tmp
+            return tmp
+
+        for i in range(i_l):
+            for j in range(j_l):
+                dfs(i,j)
+        
+        # print(dict_l)
+        return self.res
+
+
+# solution: bfs
+# time complexity: O(N*M), 564 ms, 41.36%
+# space complexity: O(N*M), 14 MB, 92.35%
+class Solution:
+
+    DIRS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        if not matrix:
+            return 0
+        
+        rows, columns = len(matrix), len(matrix[0])
+        outdegrees = [[0] * columns for _ in range(rows)]
+        queue = collections.deque()
+
+        #looking for all starting points
+        for i in range(rows):
+            for j in range(columns):
+                for dx, dy in Solution.DIRS:
+                    newRow, newColumn = i + dx, j + dy
+                    if 0 <= newRow < rows and 0 <= newColumn < columns and matrix[newRow][newColumn] > matrix[i][j]:
+                        outdegrees[i][j] += 1
+                if outdegrees[i][j] == 0:
+                    queue.append((i, j))
+
+        ans = 0
+        #ans is recording how far away these points are from the starting points
+        #use the outdegrees to check if this point still has other undeleted paths
+        while queue:
+            ans += 1
+            size = len(queue)
+            for _ in range(size):
+                row, column = queue.popleft()
+                for dx, dy in Solution.DIRS:
+                    newRow, newColumn = row + dx, column + dy
+                    if 0 <= newRow < rows and 0 <= newColumn < columns and matrix[newRow][newColumn] < matrix[row][column]:
+                        outdegrees[newRow][newColumn] -= 1
+                        if outdegrees[newRow][newColumn] == 0:
+                            queue.append((newRow, newColumn))
+        
+        return ans
