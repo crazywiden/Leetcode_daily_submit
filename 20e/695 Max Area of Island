@@ -1,0 +1,46 @@
+# solution: dfs + memory
+# time complexity: O(n*m), 172 ms, 63.12%
+# space complexity: O(n*m), 17.7 MB, 5.15%
+
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        if not grid: return 0
+        if not grid[0]: return 0
+
+        tmp_max = 0
+        i_max = len(grid)
+        j_max = len(grid[0])
+        self.visited = set()
+        self.direction = [(1,0), (-1,0), (0,1), (0,-1)]
+
+        #dfs function
+        def dfs(i, j, area):
+            self.visited.add((i,j))
+            if grid[i][j] == 1:
+                area = area + 1
+            for (x,y) in self.direction:
+                x = i+x
+                y = j+y
+                if x < i_max and x > -1 and y < j_max and y > -1 and (x,y) not in self.visited:
+                    if grid[x][y] == 1:
+                        area = dfs(x,y,area)
+            return area
+
+        #looping through the grid to find all starting points
+        for i in range(i_max):
+            for j in range(j_max):
+                if grid[i][j] == 1 and (i,j) not in self.visited:
+                    tmp_max = max(tmp_max,dfs(i,j,0))
+   
+        return tmp_max
+
+"""
+test cases:
+
+[[1,1,0,0,0],[1,1,0,0,0],[0,0,0,1,1],[0,0,0,1,1]]
+
+[[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]
+
+[[0,0,0,0,0,0,0,0]]
+"""
+

@@ -1,0 +1,50 @@
+# using recursion can make the process more efficient. Possible reason for this might be recursion enabling to avoid the extend method which should be O(x) and x = len(list)
+
+# solution: dfs
+# time complexity: O(n*m), 244 ms, 38.30%
+# space complexity: O(n*m), 13.9 MB, 84.57%
+
+class Solution:
+    dir = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1]]
+    def updateBoard(self, board: List[List[str]], click: List[int]) -> List[List[str]]:
+        # print(1)
+        if board[click[0]][click[1]] == 'M':
+            board[click[0]][click[1]] = 'X'
+            return board
+        # print(2)
+        i_max = len(board)
+        j_max = len(board[0])
+        visited = set()
+
+        queue = [(click[0],click[1])]
+
+        while queue:
+
+            i,j = queue.pop(0)
+            # print(i,j)
+            board[i][j] = 'B'
+            pos = []
+
+            for d in self.dir:
+                if i+d[0] < i_max and i+d[0] > -1 and j+d[1] < j_max and j+d[1] > -1:
+                    if (i+d[0],j+d[1]) not in visited and (i+d[0],j+d[1]) not in queue and board[i+d[0]][j+d[1]] == 'E':
+                        pos.append((i+d[0],j+d[1]))
+                    if board[i+d[0]][j+d[1]] == 'M':
+                        if board[i][j] == 'B':
+                            board[i][j] = '1'
+                        else: 
+                            board[i][j] = str(int(board[i][j]) + 1)
+            if board[i][j] == 'B':
+                queue.extend(pos)
+            visited.add((i,j))  
+
+        return board
+
+# test cases:
+#[["E","E","E","E","E"],["E","E","M","E","E"],["E","E","M","M","E"],["E","E","E","E","E"],["E","E","E","M","E"]]
+[1,0]
+#[["B","1","E","1","B"],["B","1","M","1","B"],["B","1","1","1","B"],["B","B","B","B","B"]]
+[0,2]
+#[["B","1","E","1","B"],["B","1","M","1","B"],["B","1","1","1","B"],["B","B","B","B","B"]]
+[1,2]
+
