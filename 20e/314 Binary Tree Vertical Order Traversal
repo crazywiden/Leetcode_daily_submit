@@ -1,0 +1,36 @@
+#solution: BFS
+#time complexity: O(nlogn), 32 ms, 85.97%
+#space complexity: O(n), 13.9 MB, 35.49%
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def verticalOrder(self, root: TreeNode) -> List[List[int]]:
+        
+        if not root: return []
+        
+        dis_dic = defaultdict(list)
+
+        queue = [(root,0)]
+        
+        while queue:
+            
+            current_node, current_layer = queue.pop(0)
+            if current_node:
+                dis_dic[current_layer].append(current_node.val)
+                queue.append((current_node.left, current_layer - 1))
+                queue.append((current_node.right, current_layer + 1))
+
+        return [dis_dic[k] for k in sorted(dis_dic.keys())]
+    
+"""
+test cases:
+examples
+[]
+[1]
+
+"""
