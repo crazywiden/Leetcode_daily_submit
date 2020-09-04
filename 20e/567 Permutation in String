@@ -1,0 +1,51 @@
+#solution: counter set + slide window
+#time complexity: O(n2), 80 ms, 85.64%
+#space complexity: O(n1), 13.7 MB, 52.74%
+
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        s1_l = len(s1)
+
+        if s1_l == 0: 
+            return True
+
+        s2_l = len(s2)
+
+        if s2_l < s1_l: 
+            return False
+
+        s1_d = defaultdict(int)
+        tmp_d = defaultdict(int)
+        for i in range(s1_l):
+            s1_d[s1[i]] = s1_d[s1[i]] + 1
+            tmp_d[s2[i]] = tmp_d[s2[i]] + 1
+            if s2[i] not in s1_d:
+                s1_d[s2[i]] = 0
+            if s1[i] not in s2:
+                return False
+
+        # print(1, s1_d)
+        # print(tmp_d)
+
+        for j in range(s2_l-s1_l+1):
+            if j > 0:
+                tmp_d[s2[j-1]] = tmp_d[s2[j-1]] - 1
+                tmp_d[s2[j+s1_l-1]] = tmp_d[s2[j+s1_l-1]] + 1
+                if s2[j+s1_l-1] not in s1_d:
+                    s1_d[s2[j+s1_l-1]] = 0
+            # print(1, s1_d)
+            # print(tmp_d)
+            if tmp_d == s1_d: return True
+        
+        return False
+
+"""
+test case:
+s1 = "ab" s2 = "eidbaooo"
+s1 = "ab" s2 = "eidboaoo"
+s1 = "ab" s2 = "baeidboaoo"
+s1 = "" s2 = "baeidboaoo"
+s1 = "adc" s2 = "dcda"
+s1 = "adc" s2 = "kcdhsdsgdcdajshgslfvjj"
+s1 = "adc" s2 = "cdahsdsgdcdajshgslfvcdsjj"
+"""
