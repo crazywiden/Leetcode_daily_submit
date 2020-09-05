@@ -15,6 +15,48 @@ Explanation: 13 = 4 + 9.
 """
 
 
+# linear search solution space 
+# worst time complexity -- O(N * N)
+# but because of early stop, converge very fast
+class Solution:
+    def numSquares(self, n: int) -> int:
+        perfect_num = set([i for i in range(1, n+1) if int(math.sqrt(i))**2 == i])
+        for cnt in range(1, n+1):
+            if self.is_divide(n, cnt, perfect_num):
+                return cnt
+    
+    def is_divide(self, n, k, perfect_num):
+        if k == 1:
+            return n in perfect_num
+        for num in perfect_num:
+            if self.is_divide(n-num, k-1, perfect_num):
+                return True
+        return False
+
+
+# better dp solution
+# time complextity -- O(n^1.5)
+# Runtime: 4668 ms, faster than 40.47% of Python3 online submissions for Perfect Squares.
+# Memory Usage: 13.9 MB, less than 65.33% of Python3 online submissions for Perfect Squares.
+
+import math
+class Solution:
+    def numSquares(self, n: int) -> int:
+        # dp[i] is the least number of perfect square numbers for i 
+        dp = [float("inf") for _ in range(n+1)]
+        dp[0] = 1
+        dp[1] = 1
+        perfect_square = set([1])
+        for i in range(2, n+1):
+            if int(math.sqrt(i))**2 == i:
+                dp[i] = 1
+                perfect_square.add(i)
+                continue
+            for j in perfect_square:
+                dp[i] = min(dp[i], dp[i-j] + dp[j])
+        return dp[-1]
+
+
 # Runtime: 4732 ms, faster than 5.04% of Python3 online submissions for Perfect Squares.
 # Memory Usage: 12.8 MB, less than 100.00% of Python3 online submissions for Perfect Squares.
 
