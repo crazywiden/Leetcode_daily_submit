@@ -1,0 +1,85 @@
+# solution: use one of the engineer as the bar in the case
+# time complexity: O(n^2), passed 52 / 53, exceeded the time restriction for the last one
+# space complexity: O(n)
+class Solution:
+    def maxPerformance(self, n: int, speed: List[int], efficiency: List[int], k: int) -> int:
+
+        """
+        use one of the engineer as the bar in the case
+        """
+
+        def helper(sub_speed):
+            l = len(sub_speed)
+            if l<k: return sum(sub_speed)
+            else: return sum(sorted(sub_speed, reverse=True)[0:k-1])
+
+        res = 0
+
+        for i in range(n):
+            sub_speed = [speed[s] for s in range(n) if (efficiency[s]>=efficiency[i] and s != i)]
+            res = max(res, (helper(sub_speed)+speed[i])*efficiency[i])
+         
+        return res%1000000007
+"""
+test case
+44
+[2,10,3,1,5,8,8,9,4,6,11,3, 4,62,6,7,8,8,8,8,8,8,2,10,3,1,5,8,8,9,4,6,11,3, 4,62,6,7,8,8,8,8,8,8]
+[5, 4,3,9,7,2,84,5,23,6,3, 10,3,446, 2,5,78,7,17,7,75,7,105, 4,3,9,7,2,744,5,3,6,3, 10,3,6, 2,5,1,107,3,17,8,457]
+35
+
+1
+[8109]
+[15]
+1
+"""
+
+
+# solution: bar + heap
+# adding: use heap to keep the sorted structure and avoid the loop of getting the engineers whose efficiency satisfies the demand
+# time complexity: O(nlogn), 436 ms, 20.20%
+# space complexity: O(n), 43.3 MB, 6.00%
+class Solution:
+    class engineer:
+        def __init__(self, s,e):
+            self.s = s
+            self.e = e
+        def __lt__(self,that):
+            return self.s < that.s
+    
+    def maxPerformance(self, n: int, speed: List[int], efficiency: List[int], k: int) -> int:
+
+        """
+        use one of the engineer as the bar in the case
+        """
+        engineers = []
+        for i in range(n):
+            engineers.append(Solution.engineer(speed[i],efficiency[i]))
+        engineers.sort(key = lambda x: -x.e)
+
+        res = 0
+        queue = []
+        tmp_sum_s = 0
+
+        for i in range(n):
+            bar = engineers[i].e
+            sum_s = tmp_sum_s + engineers[i].s
+            res = max(res, sum_s * bar)
+            heapq.heappush(queue, engineers[i])
+            tmp_sum_s = tmp_sum_s + engineers[i].s
+            if len(queue) == k:
+                remove = heapq.heappop(queue)
+                tmp_sum_s = tmp_sum_s - remove.s
+         
+        return res%1000000007
+"""
+test case
+44
+[2,10,3,1,5,8,8,9,4,6,11,3, 4,62,6,7,8,8,8,8,8,8,2,10,3,1,5,8,8,9,4,6,11,3, 4,62,6,7,8,8,8,8,8,8]
+[5, 4,3,9,7,2,84,5,23,6,3, 10,3,446, 2,5,78,7,17,7,75,7,105, 4,3,9,7,2,744,5,3,6,3, 10,3,6, 2,5,1,107,3,17,8,457]
+35
+
+1
+[8109]
+[15]
+1
+"""
