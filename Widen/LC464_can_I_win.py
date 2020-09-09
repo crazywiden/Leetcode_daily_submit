@@ -26,7 +26,37 @@ If the first player choose 1, the second player can only choose integers from 2 
 The second player will win by choosing 10 and get a total = 11, which is >= desiredTotal.
 Same with other integers chosen by the first player, the second player will always win.
 """
-
+# Runtime: 868 ms, faster than 61.70% of Python online submissions for Can I Win.
+# Memory Usage: 18.8 MB, less than 94.68% of Python online submissions for Can I Win.
+class Solution(object):
+    def canIWin(self, maxChoosableInteger, desiredTotal):
+        """
+        :type maxChoosableInteger: int
+        :type desiredTotal: int
+        :rtype: bool
+        """
+        if (1 + maxChoosableInteger) * maxChoosableInteger/2 < desiredTotal:
+            return False
+        self.memo = {}
+        return self.helper(range(1, maxChoosableInteger + 1), desiredTotal)
+ 
+         
+    def helper(self, nums, desiredTotal):
+         
+        key = str(nums)
+        if key in self.memo:
+            return self.memo[key]
+         
+        if nums[-1] >= desiredTotal:
+            return True
+             
+        for i in range(len(nums)):
+            if not self.helper(nums[:i] + nums[i+1:], desiredTotal - nums[i]):
+                self.memo[key]= True
+                return True
+        self.memo[key] = False
+        return False
+        
 
 # this problem is not very good...
 # sort of brutal force with memorization
