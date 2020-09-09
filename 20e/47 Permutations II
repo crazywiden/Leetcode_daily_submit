@@ -1,0 +1,60 @@
+# solution: dfs
+# time complexity: O(n!n*n^2)
+# space complexity: O(n!n*n^2)
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        if len(nums) == 1: 
+            return [nums]
+        cur = nums[0]
+        new = nums[1:]
+        prev = self.permuteUnique(new)
+        res = []
+        seen = set()
+
+        for p in prev:
+            l = len(p)
+            for i in range(l):
+                tmp = p[0:i]+[cur]+p[i:]
+                if tuple(tmp) not in seen:
+                    seen.add(tuple(tmp))
+                    res.append(tmp)
+            tmp = p+[cur]
+            if tuple(tmp) not in seen:
+                seen.add(tuple(tmp))
+                res.append(tmp)
+        return res
+
+# solution: dfs + backtrack pruning
+# time complexity: O(n*n!), 52 ms, 69.48%
+# space complexity: O(C^n_n), 13.8 MB, 80.69%
+class Solution:
+
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+
+        def dfs(nums, size, depth, path, used, res):
+            if depth == size:
+                res.append(path.copy())
+                return
+            for i in range(size):
+                if not used[i]:
+
+                    if i > 0 and nums[i] == nums[i - 1] and not used[i - 1]:
+                        continue
+
+                    used[i] = True
+                    path.append(nums[i])
+                    dfs(nums, size, depth + 1, path, used, res)
+                    used[i] = False
+                    path.pop()
+
+        size = len(nums)
+        if size == 0:
+            return []
+
+        nums.sort()
+
+        used = [False] * len(nums)
+        res = []
+        dfs(nums, size, 0, [], used, res)
+        return res
+#https://leetcode-cn.com/problems/permutations-ii/solution/hui-su-suan-fa-python-dai-ma-java-dai-ma-by-liwe-2/
