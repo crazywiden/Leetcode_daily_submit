@@ -13,7 +13,57 @@ Output: 0
 Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
 """
 
-# similar solutiont to prefix_sum
+
+# i was so great before...
+# prefix sum to solve in O(N)
+# Runtime: 56 ms, faster than 77.80% of Python3 online submissions for Maximum Product Subarray.
+# Memory Usage: 14.8 MB, less than 18.07% of Python3 online submissions for Maximum Product Subarray.
+
+class Solution(object):
+    def maxProduct(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        max_prod = float("-inf")
+        idx = 0
+        tmp = []
+        is_met_zero = False
+        while idx < len(nums):
+            if nums[idx] == 0:
+                is_met_zero = True
+                max_prod = max(max_prod, 0)
+                curr_max_prod = self.cal_max_prod(tmp)
+                max_prod = max(max_prod, curr_max_prod)
+                tmp = []
+            else:
+                tmp.append(nums[idx])
+            idx += 1
+        if is_met_zero:
+            return max(max_prod, self.cal_max_prod(tmp))
+        max_prod = self.cal_max_prod(nums)
+        return max_prod
+    
+    def cal_max_prod(self, nums):
+        n = len(nums)
+        if n == 0:
+            return 0
+        prefix_prd = [1 for _ in range(n+1)]
+        for i in range(1, n+1):
+            prefix_prd[i] = prefix_prd[i-1] * nums[i-1]
+        res = float("-inf")
+        max_neg = float("-inf")
+        for i in range(1, n+1):
+            if prefix_prd[i] > 0:
+                res = max(res, prefix_prd[i])
+            else:
+                if max_neg != float("-inf"):
+                    res = max(res, prefix_prd[i]/max_neg)
+                else:
+                    res = max(res, prefix_prd[i])
+                max_neg = max(prefix_prd[i], max_neg)
+        return res
+# similar solution to prefix_sum
 # time complexity -- O(N)
 # Runtime: 40 ms, faster than 99.91% of Python3 online submissions for Maximum Product Subarray.
 # Memory Usage: 12.8 MB, less than 100.00% of Python3 online submissions for Maximum Product Subarray.
