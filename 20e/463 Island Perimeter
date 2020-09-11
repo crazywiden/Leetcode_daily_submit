@@ -1,0 +1,21 @@
+#solution: DFS
+#time complexity: O(mn), 688 ms, 37.55%
+#space complexity: O(1), 13.9 MB, 46.76%
+class Solution:
+    def islandPerimeter(self, grid: List[List[int]]) -> int:
+        row = len(grid)
+        col = len(grid[0])
+        res = 0
+        for i in range(row):
+            for j in range(col):
+                if grid[i][j] == 1:
+                    for x, y in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
+                        tmp_i, tmp_j = i + x, j + y
+                        if  not (0 <= tmp_i < row and 0 <= tmp_j < col) or grid[tmp_i][tmp_j] == 0:
+                            res += 1
+                    
+        return res
+
+# improve:
+# can look at only two directions [-1,0], [0,-1] or the other two. And every time an overlapping is found, the additive part can be changed from 4 to 2 or 2 to 0. since we only look at 2 directions instead of 2, so, all would be visited.
+      
