@@ -1,0 +1,41 @@
+class Solution:
+    def solveSudoku(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        rows = defaultdict(set)
+        cols = defaultdict(set)
+        cubs = defaultdict(set)
+        dots = []
+
+
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] == ".":
+                    dots.append((i,j))
+                if board[i][j] !=".":
+                    rows[i].add(int(board[i][j]))
+                    cols[j].add(int(board[i][j]))
+                    cubs[(i//3,j//3)].add(int(board[i][j]))
+                            
+        def helper(cur):
+            if cur == len(dots): 
+                return True
+
+            i, j = dots[cur]
+            for p in range(1,10,1):
+                if p in rows[i] or p in cols[j] or p in cubs[(i//3,j//3)]:
+                    continue
+                else:
+                    board[i][j] = str(p)
+                    rows[i].add(p)
+                    cols[j].add(p)
+                    cubs[(i//3,j//3)].add(p)
+                    if helper(cur+1):
+                        return True
+                    # board[i][j] = "."
+                    rows[i].remove(p)
+                    cols[j].remove(p)
+                    cubs[(i//3,j//3)].remove(p)
+
+        helper(0)
