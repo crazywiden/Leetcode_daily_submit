@@ -1,0 +1,39 @@
+# # time complexity: O(n)
+# # space complexity: O(n)
+# class Solution:
+#     def rearrangeArray(self, nums: List[int]) -> List[int]:
+#         l = len(nums)
+#         if l == 3:
+#             if 2*nums[1] == nums[0] + nums[2]:
+#                 return [nums[2]] + [nums[0], nums[1]]
+#             else: return nums
+#         prev = self.rearrangeArray(nums[:l-1])
+#         if prev[-1]*2 == prev[-2]+nums[l-1]:
+#             return [nums[l-1]] + prev
+#         else: return prev + [nums[l-1]]
+
+# # big small big small
+# # time complexity: O(nlogn)
+# # space complexity: O(n)
+# class Solution:
+#     def rearrangeArray(self, nums: List[int]) -> List[int]:
+#         nums = sorted(nums)
+#         l = len(nums)
+#         res = []
+#         while nums:
+#             a1 = s.pop(0)
+#             res.append(a1)
+#             if s:
+#                 a2 = s.pop(-1)
+#                 res.append(a2)
+#         return res
+    
+# big small big small
+# time complexity: O(nlogn)
+# space complexity: O(n)
+class Solution:
+    def rearrangeArray(self, nums: List[int]) -> List[int]:
+        nums = sorted(nums)
+        for i in range(1, len(nums), 2):
+            nums[i], nums[i-1] = nums[i-1], nums[i]
+        return nums
