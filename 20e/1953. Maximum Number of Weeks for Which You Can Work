@@ -1,0 +1,9 @@
+# solution: find the trend
+# time complexity: O(1)
+# space complexity: O(1)
+class Solution:
+    def numberOfWeeks(self, milestones: List[int]) -> int:
+        if max(milestones) <= sum(milestones) - max(milestones):
+            return sum(milestones)
+        else:
+            return 2*(sum(milestones) - max(milestones)) + 1
