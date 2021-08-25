@@ -1,11 +1,23 @@
-# time complexity: O(n)
-# space complexity: O(n)
+# simplify the question to before and after
+# # time complexity: O(n)
+# # space complexity: O(n)
+# class Solution:
+#     def maxProfit(self, prices: List[int]) -> int:
+#         n = len(prices)
+#         s = list(prices)
+#         r = [0]*n
+#         for i in range(n-2,-1,-1):
+#             s[i] = max(s[i],s[i+1])
+#             r[i] = max([s[i] - prices[i],0])
+#         return max(r)
+
+# # time complexity: O(n)
+# # space complexity: O(1)
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        n = len(prices)
-        s = list(prices)
-        r = [0]*n
-        for i in range(n-2,-1,-1):
-            s[i] = max(s[i],s[i+1])
-            r[i] = max([s[i] - prices[i],0])
-        return max(r)
+        max_profit, min_price = 0, float('inf')
+        for price in prices:
+            min_price = min(min_price, price)
+            profit = price - min_price
+            max_profit = max(max_profit, profit)
+        return max_profit
