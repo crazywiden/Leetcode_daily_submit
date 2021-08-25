@@ -1,0 +1,58 @@
+# BFS
+# time complexity: O(n)
+# space complexity: O(n)
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+# class Solution:
+#     def maxDepth(self, root: Optional[TreeNode]) -> int:
+#         if not root:
+#             return 0
+#         queue = [root]
+#         dep_dict = {}
+#         dep_dict[root] = 1
+#         while queue:
+#             cur = queue.pop(0)
+#             if cur.left:
+#                 queue.append(cur.left)
+#                 dep_dict[cur.left] = dep_dict[cur] + 1
+#             if cur.right:
+#                 queue.append(cur.right)
+#                 dep_dict[cur.right] = dep_dict[cur] + 1
+#         res = 0
+#         for i in dep_dict:
+#             if res < dep_dict[i]:
+#                 res = dep_dict[i]
+#         return res
+    
+# # recursion
+# # time complexity: O(n)
+# # space complexity: O(n)
+# class Solution:
+#     def maxDepth(self, root: Optional[TreeNode]) -> int:
+#         return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right)) if root else 0
+
+# # stack level (fastest)
+# # time complexity: O(n)
+# # space complexity: O(n)
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:    
+        if not root:
+            return 0
+        
+        tstack,h = [root],0
+        
+        while tstack: #count number of levels 
+            nextlevel = []
+            while tstack:
+                top = tstack.pop()
+                if top.left:
+                    nextlevel.append(top.left)
+                if top.right:
+                    nextlevel.append(top.right)
+            tstack = nextlevel
+            h+=1
+        return h
