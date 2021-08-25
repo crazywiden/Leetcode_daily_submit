@@ -14,3 +14,24 @@
         #         if res < dp[i][j]:
         #             res = dp[i][j]
         # return max(dp[-1])
+        
+# bi-directional dp
+# kinda like online learning keep the temporary result next to the one we are looking at
+# time complexity: O(m*n)
+# space complexity: O(1)
+class Solution:
+    def maxPoints(self, points: List[List[int]]) -> int:
+        m = len(points)
+        n = len(points[0])
+        
+        for i in range(m-1):
+            for j in range(n-2, -1, -1):
+                points[i][j] = max(points[i][j], points[i][j+1]-1) #when looking to the right, possible largest value for poins[i][j]
+                a
+            for j in range(n):
+                points[i][j] = amax(points[i][j], points[i][j-1]-1 if j else 0) #when looking to the left, possible largest value for poins[i][j]
+                points[i+1][j] = points[i+1][j] + points[i][j]
+                
+        return max(points[-1])
+    
+#     # [[5,3],[3,5],[3,1]] # this solution makes sure that we use one element per column/row
