@@ -1,0 +1,43 @@
+# dp
+# time complexity: O(n^2)
+# space complexity: O(n)
+# class Solution:
+#     def maxProfit(self, prices: List[int]) -> int:
+#         l = len(prices)
+#         dp = [0]*l
+#         if l > 1:
+#             dp[1] = max([prices[1] - prices[0], 0])
+#         for i in range(2,l):
+#             tmp = []
+#             for j in range(i):
+#                 if prices[j]<prices[i] and j >= 2:
+#                     tmp.append(dp[j-2] + prices[i] - prices[j])
+#                 else:
+#                     tmp.append(max([prices[i] - prices[j],0]))
+#             dp[i] = max(tmp+[dp[i-1]])
+#         return dp[l-1]
+
+# dp with 3 state 
+# time complexity: O(n)
+# space complexity: O(n)
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        l = len(prices)
+        
+        if l <= 1:
+            return 0
+        
+        s1 = [0]*l
+        s2 = [0]*l
+        s3 = [0]*l
+        
+        s1[0] = 0# after sell -> cool down or cool down
+        s2[0] = -prices[0]# after buy or cool down
+        s3[0] = 0# after sell
+        
+        for i in range(1,l):
+            s1[i] = max([s1[i-1], s3[i-1]])
+            s2[i] = max([s2[i-1], s1[i-1]-prices[i]])
+            s3[i] = s2[i-1] + prices[i]
+        
+        return max([s1[l-1], s3[l-1]])
