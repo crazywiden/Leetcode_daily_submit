@@ -1,0 +1,15 @@
+# time complexity: O(n)
+# space complexity: O(1)
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        imax = nums[0]
+        imin = nums[0]
+        res = nums[0]
+        l = len(nums)
+        for i in range(1,l):
+            cur_imax = max(nums[i], imax*nums[i], imin*nums[i])
+            cur_imin = min(nums[i], imin*nums[i], imax*nums[i])
+            imax = cur_imax
+            imin = cur_imin
+            res = max(imax, res)
+        return res
