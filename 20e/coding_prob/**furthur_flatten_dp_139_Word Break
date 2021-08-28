@@ -1,0 +1,16 @@
+# time complexity: O(n*m), n = len(s), m = len(wordDict)
+# space complexity: O(n)
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        l = len(s)
+        dp = [0]*(l+1)
+        dp[0] = 1
+        lens = set()
+        for i in range(l):
+            for w in wordDict:
+                j = len(w)
+                if s[i:(i+j)] in wordDict and i+j <= l and dp[i] == 1:
+                    dp[i+j] = 1
+                    if dp[l] == 1:
+                        return True
+        return False
