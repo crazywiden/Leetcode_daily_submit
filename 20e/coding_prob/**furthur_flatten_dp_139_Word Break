@@ -3,13 +3,13 @@
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         l = len(s)
-        dp = [0]*(l+1)
+        dp = [0]*(l+1) # can use True / False instead of 1/0
         dp[0] = 1
         lens = set()
         for i in range(l):
             for w in wordDict:
                 j = len(w)
-                if s[i:(i+j)] in wordDict and i+j <= l and dp[i] == 1:
+                if s[i:(i+j)] == w and i+j <= l and dp[i] == 1: #faster than s[] IN list
                     dp[i+j] = 1
                     if dp[l] == 1:
                         return True
