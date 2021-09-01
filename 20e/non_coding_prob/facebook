@@ -31,3 +31,22 @@ E[Var(X)]
  = E[E[X^2] - E^2[X]]
  = E[X^2] - E^2[X]
  = Var(X)
+
+
+# Active User Probability
+# How would you test whether having more friends now increases the probability that a Facebook member is still an active user after 6 months?
+# Answer
+- do a retro analysis first, historically whether customers with more friends 6 months ago has a higher probablity of being active now
+- based on the retro analysis, form hypothsis about:
+  - define positive and negative case, active? more friends
+  - how to segment traffics, each segment has a different pattern regarding to this
+  - the distribution of probablity of being active 6 months after 
+     => define the minimal significant difference, 
+     => what the control/significant group distribution should look like
+     => what's the sample size needed to determine significance
+     => any periodical change need to be covered?
+     => decide which and how many traffic and how long would be needed
+  - Bar plot visualizations
+  - Correlation between #friends and binary active users after 6 months classification -> Point-biserial correlation. 
+  - Logistic regression: predict user activity with a 6-month time delay based on #friends and evaluate the model.
+  - Hypothesis test: ANOVA with ratios of active users after 6 months and #friends at t = 0.
