@@ -50,3 +50,27 @@ E[Var(X)]
   - Correlation between #friends and binary active users after 6 months classification -> Point-biserial correlation. 
   - Logistic regression: predict user activity with a 6-month time delay based on #friends and evaluate the model.
   - Hypothesis test: ANOVA with ratios of active users after 6 months and #friends at t = 0.
+
+
+*** split paths
+# Mean, Median Age in Mexico [statistics]
+# In Mexico, if you take the mean and the median age, which one will be higher and why?
+Solution:
+- step one: Distribution
+  if it is normaly distribution (symetrically), mean == median
+  if it is right-skewed, mean > median
+  if it is left-skewed, mean < median
+- check the data
+  what the distribution of Age in Mexico => constantly right-skewed
+  list some quantiles to show the distribution:
+    - Age xxx-xxx takes xxx%
+- conclusion: Thus, mean > median
+
+
+
+# Three Ants
+# Three ants are sitting at the three corners of an equilateral triangle. 
+# Each ant starts randomly picks a direction and starts to move along the edge of the triangle. 
+# What is the probability that none of the ants collide?
+Answer:
+Pr = 2 / 2^3 = 0.25
