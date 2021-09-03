@@ -74,3 +74,49 @@ Solution:
 # What is the probability that none of the ants collide?
 Answer:
 Pr = 2 / 2^3 = 0.25
+
+
+# Unfair Coin (probability)
+# You randomly draw a coin from 100 coins 
+# 1 unfair coin (head-head), 
+# 99 fair coins (head-tail) and roll it 10 times. 
+# If the result is 10 heads, what's the probability that the coin is unfair?
+Answer:
+Pr(10 heads & unfair|10 heads) 
+= Pr(10 heads & unfair) / (Pr(10 heads & unfair) +  Pr(10 heads & fair))
+= (1/100) * 1 / ((1/100) * 1 + (99/100)*(1/2)^10)
+= 0.9118
+Solution: the same
+
+****combination and permutation
+****if some information I consider necessary to move on, just assume it is X to move forward
+****then give an example
+****\sum_1^n i*p^i = p*(n*p^(n+1) - (n+1)*p^n + 1) / (p-1)^2
+****\sum_1^\inf i*p^(i-1) = 1/(1-p)^2
+# Expected Payout (probability)
+# You're at a casino with two dice, 
+# if you roll a 5 you win, and get paid $10. 
+# What is your expected payout? 
+# If you play until you win (however long that takes) then stop, what is your expected payout?
+Answer:
+1. Expected_payout = 1/(8/36) = 5
+2. Expected_payout = 1*(2/9) + 2*(7/9)*(2/9) + 3*(7/9)^2*(2/9) +...
+= (2/9) * \sum_i*(7/9)^(i-1)
+= (2/9) * (1/(1-7/9)^2)
+= 9/2
+Solution:
+1. p = 4/36 = 1/9 (not 2/9, it's combination not arrangement!!!!)
+=> term of payout = 9
+2. Assume each round charges x, expected payout = 9*(-x) + 10
+
+
+
+**** hypo, process, result
+# Used by Different Groups (statics)
+# We have a product that is getting used differently by two different groups. 
+# What is your hypothesis about why and how would you go about testing it?
+Answer
+set some outcome metrics
+hypothesis: null hypo, outcome metrics is the same between groups. alter hypo, outcome metrics is different between groups.
+test: retro analysis + business acumen => significance level & sample size => collect data to do two-sample t-test
+result: if difference is greater than significance level => alter wins, otherwise, null wins
