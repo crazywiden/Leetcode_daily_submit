@@ -147,4 +147,4 @@ pr(B wins in nth rounds) = pr(B ties at 1st rounds) * pr(B ties at 2~(n - 1)th r
 # If we go with option 2, what is the chance a user will be shown only a single ad in 100 stories?
 Answer:
 1. E(x1) = 4, E(x2) = 4
-2. 0.96^99*0.04^1*99 (why 100?)
+2. 0.96^99*0.04^1*100
