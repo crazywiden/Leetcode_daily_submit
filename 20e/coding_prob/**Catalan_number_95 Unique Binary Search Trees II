@@ -1,0 +1,41 @@
+# [95] Unique Binary Search Trees II
+#
+
+# recursive
+# there are Gn trees, Gn proportion to 4^n / (n^(3/2))
+# geneating one tree: time O(n)
+# => time complexity: O(n*Gn) => O(4^n / (n^(1/2))
+
+# there are Gn trees
+# each tree has n nodes, recursive function need O(n) space
+# => space complexity: O(n*Gn) => O(4^n / (n^(1/2))
+
+# Catalan number
+# https://zh.wikipedia.org/wiki/%E5%8D%A1%E5%A1%94%E5%85%B0%E6%95%B0
+# https://leetcode-cn.com/circle/article/lWYCzv/
+# @lc code=start
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
+        def node(val, left, right):
+            cur = TreeNode(val)
+            cur.left = left
+            cur.right = right
+            return cur
+
+        def trees(first, last):
+            res = [node(root, left, right)
+            for root in range(first, last+1)
+            for left in trees(first, root-1)
+            for right in trees(root+1, last)]
+            return res or [None]
+        
+        return trees(first = 1, last = n)
+            
+# @lc code=end
