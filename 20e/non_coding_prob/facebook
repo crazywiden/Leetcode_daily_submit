@@ -120,3 +120,18 @@ set some outcome metrics
 hypothesis: null hypo, outcome metrics is the same between groups. alter hypo, outcome metrics is different between groups.
 test: retro analysis + business acumen => significance level & sample size => collect data to do two-sample t-test
 result: if difference is greater than significance level => alter wins, otherwise, null wins
+
+
+**** need to think each status step by step
+# Stones Game
+# Consider a game with 2 players, A and B. Player A has 8 stones, player B has 6. 
+# Game proceeds as follows. 
+# First, A rolls a fair 6-sided die, and the number on the die determines how many stones A takes over from B. 
+# Next, B rolls the same die, and the exact same thing happens in reverse. 
+# This concludes the round. Whoever has more stones at the end of the round wins and the game is over. 
+# If players end up with equal # of stones at the end of the round, it is a tie and another round ensues. 
+# What is the probability that B wins in 1, 2, ..., n rounds?
+Answer:
+pr(B wins in 1st rounds) = (10/36)
+pr(B ties in 1st rounds) = (5/36)
+pr(B wins in nth rounds) = pr(B ties at 1st rounds) * pr(B ties at 2~(n - 1)th rounds) * pr(B wins nth rounds) = (5/36) * (6/36)^(n-2) * (15/36)
