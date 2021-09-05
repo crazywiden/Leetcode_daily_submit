@@ -1,0 +1,26 @@
+# [96] Unique Binary Search Trees
+#
+
+# dp
+# time complexity: O(n^2)
+# space complexity: O(n)
+# @lc code=start
+class Solution:
+    def numTrees(self, n: int) -> int:
+        if n == 1:
+            return 1
+        dp = [1, 1]+[0]*(n-1)
+        for i in range(2,n+1):
+            dp[i] = dp[i-1]
+            # one attribute of BST is:
+            # when looking at root,
+            # all nodes on the left < all nodes on the right
+            # so we can consider one BST as left BST + root + right BST
+            for j in range(1,i):
+                dp[i] = dp[i] + dp[j-1]*dp[i-j] 
+                #most important part: 
+                # the root node: dp[j]
+                # dp[j-1], the number of unique BST on the left
+                # dp[i-j], the number of unique BST on the right
+        return dp[n]
+# @lc code=end
