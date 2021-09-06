@@ -1,0 +1,71 @@
+# [91] Decode Ways
+#
+# dp
+# time complexity: O(n)
+# space complexity: O(n)
+# @lc code=start
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        if s[0] == "0":
+            return 0
+        n = len(s)
+        if n == 1:
+            return 1
+        poss = [str(i) for i in range(1, 27)]
+        dp = [0]*(n+1)
+        dp[1] = 1
+        
+        if s[:2] in poss and s[1] != "0":
+            dp[2] = 2
+        elif s[:2] not in poss and s[1] == "0":
+            return 0
+        else:
+            dp[2] = 1
+            
+        for i in range(3, n+1):
+            comp1 = s[i-1:i]
+            if comp1 in poss:
+                addition1 = 1
+            else: 
+                addition1 = 0
+            comp2 = s[i-2:i]
+            
+            if comp2 in poss:
+                addition2 = 1
+            else: 
+                addition2 = 0
+                
+            dp[i] = dp[i-1]*addition1 + dp[i-2]*addition2
+            
+            if dp[i] == 0: 
+                return 0
+            
+        return dp[n]
+# @lc code=end
+
+
+
+# dp
+# time complexity: O(n)
+# space complexity: O(1)
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        n = len(s)
+        if s[0] == "0" or n == 0:
+            return 0
+        if n == 1:
+            return 1
+        poss = [str(i) for i in range(1, 27)]
+        p1 = 1 # number of ways to decade till s[i-1], inclusive
+        p2 = 1 # number of ways to decade till s[i-2], inclusive
+            
+        for i in range(1, n):
+            if s[i] == "0":
+                p1 = 0
+            if s[i-1] == "1" or (s[i-1] == "2" and s[i] <= "6"):
+                p1 = p1 + p2
+                p2 = p1 - p2
+            else: 
+                p2 = p1
+
+        return p1
