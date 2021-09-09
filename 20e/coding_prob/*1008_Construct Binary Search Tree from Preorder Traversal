@@ -1,0 +1,43 @@
+# [1008] Construct Binary Search Tree from Preorder Traversal
+#
+
+# @lc code=start
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def bstFromPreorder(self, preorder: List[int]) -> Optional[TreeNode]:
+        nums = sorted(preorder)
+        l = len(preorder)
+        dic = {}
+        seen = {}
+
+        for i in range(l):
+            dic[nums[i]] = i
+        
+        for i in range(l):
+            cur = TreeNode(preorder[i])
+            if i == 0:
+                root = cur
+            elif cur.val < prev.val:
+                prev.left = cur
+            else:
+                pos = dic[cur.val]
+                for j in range(1,pos+1):
+                    if nums[pos-j] in seen:
+                        prev = seen[nums[pos-j]]
+                        break
+                prev.right = cur
+            seen[cur.val] = cur
+            prev = cur
+        return root
+
+
+
+# @lc code=end
+
+# [8,4,1,6,5,7,10,9,12,13]
+# [4,10,7,9,11]
