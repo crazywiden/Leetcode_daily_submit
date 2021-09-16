@@ -148,3 +148,27 @@ pr(B wins in nth rounds) = pr(B ties at 1st rounds) * pr(B ties at 2~(n - 1)th r
 Answer:
 1. E(x1) = 4, E(x2) = 4
 2. 0.96^99*0.04^1*100
+
+
+********Central Limit Theorem, the Law of Large Number
+# Sample Size
+# Let's say the population on Facebook clicks ads with a click-through-rate of P. 
+# We select a sample of size N and examine the sample's conversion rate, denoted by hat{P}, 
+# what is the minimum sample size N such that Probability( ABS(hat{P} - P) < DELTA ) = 95%? 
+# In other words, find the minimum sample size N such that our sample estimate hat{P} is 
+# within DELTA of the true click-through rate P, with 95% confidence.
+Answer:
+Probability( ABS(hat{P} - P) < DELTA ) = 95%
+=> Probability( hat{P} < DELTA + p ) + Probability( P - hat{P} < DELTA ) = 95%
+=> Probability( hat{P} < DELTA + p ) + Probability( hat{P} > P - DELTA ) = 95%
+# Central Limit Theorem: iid random variables x, x ~ distribution average = \mu, variance = \sigma^2, \sqrt(n)(x_hat-\mu) follows a normal distribution N(0, \sigma^2) 
+# the Law of Large Number: the sample average convege to the population average
+=> var(P) = (1-P)*P
+=> var(hat{P}) = (1-hat{P})*hat{P}/n
+=> DELTA = 1.96*\sqrt((1-hat{P})*hat{P}/n)
+=> DELTA^2/1.96^2 = (1-hat{P})*hat{P}/n
+=> 1.96^2/DELTA^2 = n/((1-hat{P})*hat{P})
+=> n = 1.96^2*(1-hat{P})*hat{P}/DELTA^2
+
+
+
