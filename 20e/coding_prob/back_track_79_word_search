@@ -1,0 +1,38 @@
+# [79] Word Search
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        directions = [(1,0), (-1,0), (0,1), (0,-1)]
+        m = len(board)
+        n = len(board[0])
+        l = len(word)
+        def check(seen, cur_b, cur_w):
+            i = cur_b[0]
+            j = cur_b[1]
+            for d_i, d_j in directions:
+                if i+d_i >= 0 and i+d_i < m and j+d_j >= 0 and j+d_j < n and ((i+d_i, j+d_j) not in seen):
+                    if cur_w+1 < l-1:
+                        if board[i+d_i][j+d_j] == word[cur_w+1]:
+                            seen.add((i+d_i, j+d_j))
+                            if check(seen, (i+d_i, j+d_j), cur_w+1):
+                                return True
+                            seen.remove((i+d_i, j+d_j))
+                    if cur_w+1 == l-1:
+                        if board[i+d_i][j+d_j] == word[cur_w+1]:
+                            return True
+            return False
+        
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == word[0]:
+                    if l > 1:
+                        seen = set()
+                        seen.add((i,j))
+                        if check(seen, (i,j), 0):
+                            return True
+                    if l == 1:
+                        return True
+                
+        if m == 1 and n == 1:
+            return board[0][0] == word
+        
+        return False
